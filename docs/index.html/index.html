@@ -47,7 +47,6 @@
 
       <div>
         <div class="muted">学校/项目 School</div>
-        <!-- 如果你不想下拉，可以把 select 换回 input -->
         <select id="schoolSelect"></select>
       </div>
     </div>
@@ -68,17 +67,24 @@
     <div id="quizBox"></div>
   </div>
 
+  <!-- 注意顺序：先 questions.js 再 app.js -->
   <script src="./questions.js"></script>
   <script src="./app.js"></script>
 
+  <!-- 下拉选项填充：填完后主动触发 change，避免 startBtn 卡灰 -->
   <script>
-    // 下拉选项：来自 questions.js 的 PROJECT_OPTIONS（如果你删了 PROJECT_OPTIONS，这里就改成写死 options）
     const sel = document.getElementById("schoolSelect");
-    if (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS)) {
-      sel.innerHTML = PROJECT_OPTIONS.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
+
+    if (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS) && PROJECT_OPTIONS.length) {
+      sel.innerHTML = PROJECT_OPTIONS
+        .map(o => `<option value="${o.value}">${o.label}</option>`)
+        .join("");
     } else {
       sel.innerHTML = `<option value="CIS">CIS</option><option value="Hohhot">Hohhot</option>`;
     }
+
+    // ✅ 关键修复：让 app.js 立刻重新判断按钮状态
+    sel.dispatchEvent(new Event("change"));
   </script>
 </body>
 </html>
