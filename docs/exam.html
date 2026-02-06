@@ -3,49 +3,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>中文分级测评 - 考试</title>
+  <title>来华研学插班中文分级测评 - 考试</title>
   <style>
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:1000px;margin:24px auto;padding:0 16px;}
     .muted{color:#666;font-size:14px;line-height:1.6}
     .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
-    .actionsRow{display:flex;gap:12px;align-items:center;margin:8px 0 14px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
     .btn{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
     .btnPrimary{background:#111;color:#fff;border-color:#111}
-    .progressBar{width:100%;height:10px;background:#eee;border-radius:999px;overflow:hidden;margin:10px 0}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .q{border:1px solid #eee;border-radius:14px;padding:14px;margin:12px 0}
+    .qHead{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .tag{font-size:12px;border:1px solid #ddd;border-radius:999px;padding:4px 10px;color:#444;background:#fafafa}
+    .choices label{display:block;margin:8px 0;cursor:pointer}
+    textarea{width:100%;min-height:70px;border:1px solid #ddd;border-radius:12px;padding:10px;font-size:15px}
+    .progressBar{height:10px;background:#f2f2f2;border-radius:999px;overflow:hidden}
     .progressFill{height:100%;width:0%;background:#111}
-    .progressText{font-size:12px;color:#666;margin-bottom:12px}
-    .sectionTitle{margin:18px 0 8px}
-    .qCard{border:1px solid #eee;border-radius:14px;padding:14px;margin:10px 0}
-    .qMeta{font-size:12px;color:#777;margin-bottom:6px}
-    .qPrompt{font-size:16px;margin-bottom:10px}
-    .choices{display:flex;flex-direction:column;gap:8px}
-    .choiceItem{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid #eee;border-radius:12px;cursor:pointer}
-    .choiceItem:hover{background:#fafafa}
-    a{color:#111}
+    .resultBox{border:1px solid #111;border-radius:14px;padding:14px;margin-top:14px}
+    .resultBig{font-size:18px;font-weight:800}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+    .pill{border:1px solid #ddd;border-radius:12px;padding:10px;background:#fafafa}
+    .link{color:#111;text-decoration:underline;cursor:pointer}
   </style>
 </head>
-
 <body>
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-    <div>
-      <h1 style="margin:0 0 6px;">中文分级测评（考试）</h1>
-      <p id="who" class="muted" style="margin:0;"></p>
+  <h1>来华研学插班中文分级测评（考试）</h1>
+
+  <div class="card">
+    <div class="row">
+      <div class="muted">姓名：</div><div id="metaName" style="font-weight:700"></div>
+      <div class="muted">项目：</div><div id="metaSchool" style="font-weight:700"></div>
+      <div style="margin-left:auto" class="muted link" id="backToInfo">返回修改信息</div>
     </div>
-    <div class="muted"><a href="/china-placement-test/">← 返回填写信息</a></div>
+
+    <div class="progressBar" style="margin-top:10px;">
+      <div id="progress" class="progressFill"></div>
+    </div>
+    <div id="progressText" class="muted" style="margin-top:6px;">0 / 0</div>
   </div>
 
   <div class="card">
-    <div class="actionsRow">
-      <button id="submitBtn" class="btn btnPrimary" disabled>提交并出结果</button>
+    <div class="row">
+      <button id="submitBtn" class="btn btnPrimary">提交并出结果</button>
+      <span id="status" class="muted"></span>
     </div>
-
-    <div class="progressBar">
-      <div id="progress" class="progressFill"></div>
-    </div>
-    <div id="progressText" class="progressText">0 / 0</div>
-
     <div id="quizBox"></div>
+    <div id="result"></div>
   </div>
 
   <script src="./questions.js"></script>

@@ -46,7 +46,7 @@
     const btn = document.getElementById("startBtn");
     const tip = document.getElementById("tip");
 
-    // 下拉：如果你 questions.js 里有 PROJECT_OPTIONS 就用它；没有就写死两个
+    // 下拉：后期你只改 questions.js 里的 PROJECT_OPTIONS 就行
     if (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS) && PROJECT_OPTIONS.length) {
       sel.innerHTML = '<option value="" disabled selected>请选择…</option>' +
         PROJECT_OPTIONS.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
@@ -66,7 +66,9 @@
     btn.addEventListener("click", () => {
       localStorage.setItem("quiz_name", nameEl.value.trim());
       localStorage.setItem("quiz_school", sel.value);
-      location.href = "./exam.html";
+
+      // ✅ 关键：用相对路径，永远不会出现 /index.html/exam.html 这种鬼路径
+      location.href = "exam.html";
     });
 
     update();
