@@ -3,62 +3,66 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>考试进行中</title>
+  <title>考试 | 来华研学插班中文分级测评</title>
   <style>
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:1000px;margin:24px auto;padding:0 16px;}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;}
     .muted{color:#666;font-size:14px;line-height:1.6}
-    .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid #eee;border-radius:999px;padding:6px 10px;background:#fafafa;font-size:13px;color:#444}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap}
-    .tab{padding:8px 12px;border:1px solid #ddd;border-radius:999px;background:#fff;cursor:pointer}
-    .tab.active{background:#111;color:#fff;border-color:#111}
+    .topRow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid #ddd;border-radius:999px;padding:8px 12px;background:#fff}
     .btn{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
     .btnPrimary{background:#111;color:#fff;border-color:#111}
     .btn:disabled{opacity:.5;cursor:not-allowed}
-    .q{border:1px solid #eee;border-radius:14px;padding:14px;margin:12px 0}
-    .qtitle{font-weight:700;margin-bottom:8px}
+    .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+    .tab{padding:8px 12px;border-radius:999px;border:1px solid #ddd;background:#fff;cursor:pointer}
+    .tab.active{background:#111;color:#fff;border-color:#111}
+    .progressBar{height:10px;border-radius:999px;background:#eee;overflow:hidden}
+    .progressFill{height:100%;width:0%}
+    .q{padding:14px;border:1px solid #eee;border-radius:14px;margin:10px 0}
+    .qTitle{font-weight:700;margin-bottom:10px}
     .choices label{display:block;margin:8px 0;cursor:pointer}
-    textarea{width:100%;min-height:120px;border:1px solid #ccc;border-radius:12px;padding:10px;font-size:15px}
-    .navrow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    .progress{height:8px;background:#f1f1f1;border-radius:999px;overflow:hidden}
-    .bar{height:8px;background:#111;width:0%}
+    audio{width:100%}
+    .navRow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+    textarea{width:100%;min-height:120px;border:1px solid #ccc;border-radius:12px;padding:10px;font-size:14px}
   </style>
 </head>
+
 <body>
-  <div class="topbar">
+  <div class="topRow">
     <div>
       <h1 style="margin:0;">考试进行中</h1>
-      <div class="muted">分区：听力 → 阅读 → 书写。可返回上一页，答案会自动保存。</div>
+      <div class="muted">分段：听力 → 阅读 → 写作。可返回上一段，答案会自动保存。</div>
     </div>
     <div class="pill">
-      <span id="who"></span>
-      <button class="btn" id="backInfoBtn">返回信息页</button>
+      <span id="who" class="muted"></span>
+      <button class="btn" id="backBtn">返回信息页</button>
     </div>
   </div>
 
   <div class="card">
     <div class="tabs">
-      <button class="tab" data-sec="listening">听力</button>
-      <button class="tab" data-sec="reading">阅读</button>
-      <button class="tab" data-sec="writing">书写</button>
+      <button class="tab" data-section="listening">听力</button>
+      <button class="tab" data-section="reading">阅读</button>
+      <button class="tab" data-section="writing">写作</button>
     </div>
-    <div style="margin-top:10px" class="progress"><div id="bar" class="bar"></div></div>
-    <div class="muted" id="progressText" style="margin-top:8px;"></div>
-  </div>
 
-  <div class="card">
+    <div class="progressBar">
+      <div id="progress" class="progressFill"></div>
+    </div>
+    <div id="progressText" class="muted" style="margin-top:8px;">0 / 0</div>
+
     <div id="quizBox"></div>
-    <div class="navrow" style="margin-top:12px;">
-      <button class="btn" id="prevBtn">上一页</button>
-      <button class="btn btnPrimary" id="nextBtn">下一页</button>
+
+    <div class="navRow">
+      <button id="prevBtn" class="btn">上一页</button>
+      <button id="nextBtn" class="btn btnPrimary">下一页</button>
     </div>
   </div>
 
   <div class="card">
-    <div class="muted">完成全部分区后，点击提交进入成绩页。</div>
-    <button class="btn btnPrimary" id="submitBtn">提交并出结果</button>
-    <div class="muted" id="status" style="margin-top:8px;"></div>
+    <div class="muted">完成全部分段后，点击提交进入成绩页。</div>
+    <button id="submitBtn" class="btn btnPrimary">提交并出结果</button>
+    <div id="submitTip" class="muted" style="margin-top:8px;"></div>
   </div>
 
   <script src="./questions.js"></script>

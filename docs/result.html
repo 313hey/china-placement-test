@@ -3,34 +3,53 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>成绩单</title>
+  <title>成绩 | 来华研学插班中文分级测评</title>
   <style>
     body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;}
-    .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
     .muted{color:#666;font-size:14px;line-height:1.6}
-    .big{font-size:22px;font-weight:800}
+    .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
+    .big{font-size:28px;font-weight:800}
     .row{display:flex;gap:12px;flex-wrap:wrap}
-    .k{min-width:140px;color:#666}
     .btn{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
     .btnPrimary{background:#111;color:#fff;border-color:#111}
+    pre{white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:12px;border:1px solid #eee}
   </style>
 </head>
+
 <body>
-  <h1>成绩单</h1>
+  <h1 style="margin:0;">成绩结果</h1>
+  <div class="muted">已提交后生成（若网络/权限导致 Google Form 提交失败，也不影响页面显示）。</div>
+
   <div class="card">
-    <div class="row"><div class="k">姓名</div><div id="name"></div></div>
-    <div class="row"><div class="k">项目</div><div id="school"></div></div>
-    <hr style="border:none;border-top:1px solid #eee;margin:12px 0"/>
-    <div class="big" id="total"></div>
-    <div class="muted" id="breakdown" style="margin-top:10px;"></div>
-    <div class="muted" id="submitStatus" style="margin-top:10px;"></div>
+    <div id="headline" class="big">—</div>
+    <div id="meta" class="muted" style="margin-top:6px;"></div>
   </div>
 
   <div class="card">
-    <button class="btn" id="retryBtn">重新开始</button>
-    <button class="btn btnPrimary" id="backExamBtn">返回考试页</button>
+    <div class="row">
+      <button class="btn" onclick="location.href='./exam.html'">返回试卷</button>
+      <button class="btn btnPrimary" onclick="location.href='./index.html'">回到信息页</button>
+    </div>
   </div>
 
-  <script src="./app.js"></script>
+  <div class="card">
+    <div class="muted">分项明细：</div>
+    <pre id="breakdown">—</pre>
+  </div>
+
+  <script>
+    const raw = localStorage.getItem("quiz_result");
+    if (!raw) {
+      document.getElementById("headline").textContent = "没有找到成绩记录";
+      document.getElementById("meta").textContent = "请返回试卷提交后再查看。";
+      document.getElementById("breakdown").textContent = "";
+    } else {
+      const r = JSON.parse(raw);
+      document.getElementById("headline").textContent = `总分：${r.totalScore} / ${r.totalPossible}`;
+      document.getElementById("meta").textContent =
+        `姓名：${r.name || "-"} ｜ 项目：${r.school || "-"} ｜ 时间：${new Date(r.ts).toLocaleString()}`;
+      document.getElementById("breakdown").textContent = JSON.stringify(r.breakdown, null, 2);
+    }
+  </script>
 </body>
 </html>

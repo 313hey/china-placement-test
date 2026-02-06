@@ -18,13 +18,13 @@
 
 <body>
   <h1>来华研学插班中文分级测评（在线）</h1>
-  <p class="muted">请先填写信息，点击开始后进入考试页面。题库对所有项目通用。</p>
+  <p class="muted">请先填写信息，点击开始后进入考试页面。</p>
 
   <div class="card">
     <div class="row">
       <div>
         <div class="muted">姓名 Name</div>
-        <input id="name" placeholder="例如：Alex" autocomplete="name"/>
+        <input id="name" placeholder="例如：Alex" />
       </div>
 
       <div>
@@ -46,12 +46,16 @@
     const btn = document.getElementById("startBtn");
     const tip = document.getElementById("tip");
 
-    // 下拉选项来自 questions.js 里的 PROJECT_OPTIONS（你后期随便改）
-    sel.innerHTML =
-      '<option value="" disabled selected>请选择…</option>' +
-      (Array.isArray(window.PROJECT_OPTIONS) ? window.PROJECT_OPTIONS : []).map(o =>
-        `<option value="${o.value}">${o.label}</option>`
-      ).join("");
+    // 下拉选项：后期你只改 questions.js 里的 PROJECT_OPTIONS
+    if (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS) && PROJECT_OPTIONS.length) {
+      sel.innerHTML =
+        '<option value="" disabled selected>请选择…</option>' +
+        PROJECT_OPTIONS.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
+    } else {
+      sel.innerHTML =
+        '<option value="" disabled selected>请选择…</option>' +
+        '<option value="CIS">CIS</option><option value="Hohhot">Hohhot</option>';
+    }
 
     function update() {
       const ok = nameEl.value.trim() && sel.value;
@@ -64,13 +68,7 @@
     btn.addEventListener("click", () => {
       localStorage.setItem("quiz_name", nameEl.value.trim());
       localStorage.setItem("quiz_school", sel.value);
-
-      // 清理上次答案
-      localStorage.removeItem("quiz_answers");
-      localStorage.removeItem("quiz_result");
-      localStorage.setItem("quiz_section", "listening"); // 从听力开始
-
-      // 同目录跳转（别写 index.html/exam.html 这种）
+      // 关键：用相对路径，避免出现你之前那种 index.html/exam.html 的鬼链接
       location.href = "./exam.html";
     });
 
