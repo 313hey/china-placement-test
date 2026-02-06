@@ -3,52 +3,81 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>来华研学插班中文分级测评 - 考试</title>
+  <title>考试 | 来华研学插班中文分级测评</title>
   <style>
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:1000px;margin:24px auto;padding:0 16px;}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:980px;margin:20px auto;padding:0 16px;background:#fff;}
+    h1{margin:12px 0 4px}
     .muted{color:#666;font-size:14px;line-height:1.6}
     .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
-    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+    .pill{display:inline-flex;gap:10px;align-items:center;border:1px solid #eee;padding:10px 12px;border-radius:999px}
     .btn{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
     .btnPrimary{background:#111;color:#fff;border-color:#111}
+    .btnGhost{background:#f7f7f7}
     .btn:disabled{opacity:.5;cursor:not-allowed}
-    .q{border:1px solid #eee;border-radius:14px;padding:14px;margin:12px 0}
-    .qHead{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .tag{font-size:12px;border:1px solid #ddd;border-radius:999px;padding:4px 10px;color:#444;background:#fafafa}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .tab{padding:10px 12px;border:1px solid #ddd;border-radius:999px;background:#fff;cursor:pointer}
+    .tab.active{background:#111;color:#fff;border-color:#111}
+    .progressBar{height:10px;background:#eee;border-radius:999px;overflow:hidden;margin-top:10px}
+    .progressFill{height:10px;background:#111;width:0%}
+    .q{margin:12px 0;padding:12px;border:1px solid #eee;border-radius:12px}
+    .qhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .qtitle{font-weight:700}
     .choices label{display:block;margin:8px 0;cursor:pointer}
-    textarea{width:100%;min-height:70px;border:1px solid #ddd;border-radius:12px;padding:10px;font-size:15px}
-    .progressBar{height:10px;background:#f2f2f2;border-radius:999px;overflow:hidden}
-    .progressFill{height:100%;width:0%;background:#111}
-    .resultBox{border:1px solid #111;border-radius:14px;padding:14px;margin-top:14px}
-    .resultBig{font-size:18px;font-weight:800}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
-    .pill{border:1px solid #ddd;border-radius:12px;padding:10px;background:#fafafa}
-    .link{color:#111;text-decoration:underline;cursor:pointer}
+    .audioRow{margin:10px 0}
+    textarea{width:100%;min-height:72px;padding:10px;border:1px solid #ccc;border-radius:10px}
+    .token{display:inline-block;padding:6px 10px;border:1px solid #ddd;border-radius:999px;margin:4px 6px 0 0;background:#fafafa}
+    .footerNav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .danger{color:#b00020}
   </style>
 </head>
 <body>
-  <h1>来华研学插班中文分级测评（考试）</h1>
-
-  <div class="card">
-    <div class="row">
-      <div class="muted">姓名：</div><div id="metaName" style="font-weight:700"></div>
-      <div class="muted">项目：</div><div id="metaSchool" style="font-weight:700"></div>
-      <div style="margin-left:auto" class="muted link" id="backToInfo">返回修改信息</div>
+  <div class="topbar">
+    <div>
+      <h1>考试进行中</h1>
+      <div class="muted">分区：听力 → 阅读 → 书写。可返回上一页，答案会自动保存。</div>
+      <div class="tabs">
+        <button class="tab" data-section="listening">听力</button>
+        <button class="tab" data-section="reading">阅读</button>
+        <button class="tab" data-section="writing">书写</button>
+      </div>
+      <div class="progressBar">
+        <div id="progressFill" class="progressFill"></div>
+      </div>
+      <div id="progressText" class="muted" style="margin-top:6px;"></div>
     </div>
 
-    <div class="progressBar" style="margin-top:10px;">
-      <div id="progress" class="progressFill"></div>
+    <div class="pill">
+      <div>
+        <div class="muted">姓名</div>
+        <div id="who" style="font-weight:700"></div>
+      </div>
+      <div>
+        <div class="muted">项目</div>
+        <div id="which" style="font-weight:700"></div>
+      </div>
+      <button id="backHome" class="btn btnGhost">返回信息页</button>
     </div>
-    <div id="progressText" class="muted" style="margin-top:6px;">0 / 0</div>
   </div>
 
   <div class="card">
-    <div class="row">
-      <button id="submitBtn" class="btn btnPrimary">提交并出结果</button>
-      <span id="status" class="muted"></span>
-    </div>
-    <div id="quizBox"></div>
-    <div id="result"></div>
+    <div id="sectionTitle" style="font-size:18px;font-weight:800;margin-bottom:6px;"></div>
+    <div id="sectionHint" class="muted"></div>
+  </div>
+
+  <div id="quizBox"></div>
+
+  <div class="card footerNav">
+    <button id="prevBtn" class="btn">上一页</button>
+    <div class="muted" id="needTip"></div>
+    <button id="nextBtn" class="btn btnPrimary">下一页</button>
+  </div>
+
+  <div class="card">
+    <div class="muted">完成全部分区后，点击提交进入成绩页。</div>
+    <button id="submitBtn" class="btn btnPrimary">提交并出结果</button>
+    <div id="submitTip" class="muted" style="margin-top:8px;"></div>
+    <div id="err" class="muted danger" style="margin-top:8px;"></div>
   </div>
 
   <script src="./questions.js"></script>
