@@ -5,25 +5,22 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>来华研学插班中文分级测评</title>
   <style>
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
-      max-width: 960px; margin: 24px auto; padding: 0 16px;
-    }
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;}
     h1{margin:8px 0 6px}
-    .muted{color:#666;font-size:14px; line-height:1.6}
+    .muted{color:#666;font-size:14px;line-height:1.6}
     .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
-    .row{display:flex; gap:12px; flex-wrap:wrap;}
-    input{padding:10px;border:1px solid #ccc;border-radius:10px; min-width: 240px;}
-    .result{font-size:18px; font-weight:700;}
+    .row{display:flex;gap:12px;flex-wrap:wrap;}
+    input,select{padding:10px;border:1px solid #ccc;border-radius:10px;min-width:260px;background:#fff;}
 
-    /* New exam UI */
     .actionsRow{display:flex;gap:12px;align-items:center;margin:8px 0 14px}
     .btn{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
     .btn:disabled{opacity:.5;cursor:not-allowed}
     .btnPrimary{background:#111;color:#fff;border-color:#111}
+
     .progressBar{width:100%;height:10px;background:#eee;border-radius:999px;overflow:hidden;margin:10px 0}
     .progressFill{height:100%;width:0%;background:#111}
     .progressText{font-size:12px;color:#666;margin-bottom:12px}
+
     .sectionTitle{margin:18px 0 8px}
     .qCard{border:1px solid #eee;border-radius:14px;padding:14px;margin:10px 0}
     .qMeta{font-size:12px;color:#777;margin-bottom:6px}
@@ -31,6 +28,7 @@
     .choices{display:flex;flex-direction:column;gap:8px}
     .choiceItem{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid #eee;border-radius:12px;cursor:pointer}
     .choiceItem:hover{background:#fafafa}
+
     .hint{color:#666;line-height:1.6}
     .error{color:#b00020;line-height:1.6}
   </style>
@@ -38,31 +36,30 @@
 
 <body>
   <h1>来华研学插班中文分级测评（在线）</h1>
-  <p class="muted">说明：包含听力（音频）+ 选择题。完成后自动出分，并提交到老师的记录表（下一步我们接入收集结果）。</p>
+  <p class="muted">先填写信息 → 点击开始考试 → 完成所有题目后提交出分。</p>
 
-  <!-- Basic info -->
   <div class="card">
     <div class="row">
       <div>
         <div class="muted">姓名 Name</div>
         <input id="name" placeholder="例如：Alex" />
       </div>
+
       <div>
         <div class="muted">学校/项目 School</div>
-        <input id="school" placeholder="例如：CIS / 2026 Winter Camp" />
+        <!-- 如果你不想下拉，可以把 select 换回 input -->
+        <select id="schoolSelect"></select>
       </div>
+    </div>
+
+    <div class="actionsRow" style="margin-top:14px;">
+      <button id="startBtn" class="btn btnPrimary" disabled>开始考试</button>
+      <button id="submitBtn" class="btn" disabled>提交并出结果</button>
+      <span id="tip" class="muted"></span>
     </div>
   </div>
 
-  <!-- Quiz -->
   <div class="card">
-    <h2>开始答题</h2>
-
-    <div class="actionsRow">
-      <button id="startBtn" class="btn">开始考试</button>
-      <button id="submitBtn" class="btn btnPrimary">提交并出结果</button>
-    </div>
-
     <div class="progressBar">
       <div id="progress" class="progressFill"></div>
     </div>
@@ -71,8 +68,17 @@
     <div id="quizBox"></div>
   </div>
 
-  <!-- scripts -->
   <script src="./questions.js"></script>
   <script src="./app.js"></script>
+
+  <script>
+    // 下拉选项：来自 questions.js 的 PROJECT_OPTIONS（如果你删了 PROJECT_OPTIONS，这里就改成写死 options）
+    const sel = document.getElementById("schoolSelect");
+    if (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS)) {
+      sel.innerHTML = PROJECT_OPTIONS.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
+    } else {
+      sel.innerHTML = `<option value="CIS">CIS</option><option value="Hohhot">Hohhot</option>`;
+    }
+  </script>
 </body>
 </html>
