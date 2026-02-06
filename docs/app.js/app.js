@@ -9,7 +9,7 @@ function el(tag, attrs={}, children=[]){
   return node;
 }
 
-const state = { started:false, answers:{} };
+const state = { answers:{} };
 
 function groupTitle(q){
   if(q.type && q.type.startsWith("listening")) return "听力 Listening";
@@ -20,19 +20,15 @@ function renderQuestion(q, idx){
   const wrap = el("div", {class:"qCard"});
   wrap.appendChild(el("div",{class:"qMeta"},[`Q${idx+1} · ${q.points||1} pts`]));
   wrap.appendChild(el("div",{class:"qPrompt"},[q.prompt||""]));
-
   if(q.audio){
     wrap.appendChild(el("audio",{controls:"true",preload:"none",src:q.audio}));
   }
 
-  const choices = Array.isArray(q.choices)?q.choices:[];
-  const chosen = state.answers[q.id];
-
   const list = el("div",{class:"choices"});
-  choices.forEach((text,i)=>{
+  (q.choices||[]).forEach((text,i)=>{
     const id = `${q.id}_${i}`;
     const label = el("label",{class:"choiceItem",for:id},[
-      el("input",{type:"radio",name:q.id,id,value:String(i),...(chosen===i?{checked:"true"}:{})}),
+      el("input",{type:"radio",name:q.id,id,value:String(i),...(state.answers[q.id]===i?{checked:"true"}:{})}),
       el("span",{},[text])
     ]);
     label.querySelector("input").addEventListener("change",()=>{
@@ -48,24 +44,19 @@ function renderQuestion(q, idx){
 
 function render(){
   const quizBox=$("#quizBox");
-  const startBtn=$("#startBtn");
   const submitBtn=$("#submitBtn");
   const progress=$("#progress");
   const progressText=$("#progressText");
-  const tip=$("#tip");
+  if(!quizBox) return;
 
-  const name=$("#name")?.value.trim();
-  const school=$("#schoolSelect")?.value;
+  const qs = (typeof QUESTIONS!=="undefined" && Array.isArray(QUESTIONS)) ? QUESTIONS : [];
+  quizBox.innerHTML="";
 
-  // 开始按钮：必须填信息
-  startBtn.disabled = !(name && school);
-  if(tip) tip.textContent = startBtn.disabled ? "请先填写姓名" : "";
-
-  // 未开始：不显示题目
-  if(!state.started){
-    quizBox.innerHTML="";
-    quizBox.appendChild(el("div",{class:"hint"},[
-      "填写姓名和学校/项目后，点击「开始考试」。"
+  if(qs.length===0){
+    quizBox.appendChild(el("div",{class:"error"},[
+      "题库未加载（QUESTIONS 为空或未定义）。",
+      el("br"),
+      "请检查 questions.js 是否正常加载。"
     ]));
     if(submitBtn) submitBtn.disabled=true;
     if(progress) progress.style.width="0%";
@@ -73,38 +64,19 @@ function render(){
     return;
   }
 
-  // 已开始：必须有 QUESTIONS
-  const qs = (typeof QUESTIONS!=="undefined" && Array.isArray(QUESTIONS)) ? QUESTIONS : [];
-  quizBox.innerHTML="";
-
-  if(qs.length===0){
-    quizBox.appendChild(el("div",{class:"error"},[
-      "题库没有加载成功（QUESTIONS 为空或未定义）。",
-      el("br"),
-      "请检查：questions.js 是否正常加载，是否有 const QUESTIONS = [...]。"
-    ]));
-    if(submitBtn) submitBtn.disabled=true;
-    return;
-  }
-
   const total = qs.length;
   const done = Object.keys(state.answers).length;
-
   if(progress) progress.style.width = `${Math.round(done/total*100)}%`;
   if(progressText) progressText.textContent = `${done} / ${total}`;
+  if(submitBtn) submitBtn.disabled = done!==total;
 
-  // 分组渲染
   const groups = {};
-  qs.forEach(q=>{
-    const g=groupTitle(q);
-    (groups[g] ||= []).push(q);
-  });
+  qs.forEach(q=>{ const g=groupTitle(q); (groups[g] ||= []).push(q); });
+
   Object.entries(groups).forEach(([gname,items])=>{
     quizBox.appendChild(el("h3",{class:"sectionTitle"},[gname]));
     items.forEach((q,idx)=>quizBox.appendChild(renderQuestion(q, idx)));
   });
-
-  if(submitBtn) submitBtn.disabled = done!==total;
 }
 
 function scoreExam(){
@@ -117,16 +89,21 @@ function scoreExam(){
   return {score,total};
 }
 
-function submitExam(){
-  const {score,total}=scoreExam();
-  alert(`完成！你的分数：${score} / ${total}`);
-  // 下一步我们再接入收集结果（Google Forms / Apps Script）
+function initExamPage(){
+  if(!$("#quizBox")) return; // 只在 exam.html 生效
+
+  const name = localStorage.getItem("quiz_name") || "";
+  const school = localStorage.getItem("quiz_school") || "";
+  const who = $("#who");
+  if(who) who.textContent = (name && school) ? `考生：${name}｜项目：${school}` : "未检测到考生信息，请返回上一页填写。";
+
+  $("#submitBtn")?.addEventListener("click", ()=>{
+    const {score,total}=scoreExam();
+    alert(`完成！你的分数：${score} / ${total}`);
+    // 下一步：接入结果收集（Google Forms / Apps Script）
+  });
+
+  render();
 }
 
-window.addEventListener("DOMContentLoaded",()=>{
-  $("#startBtn")?.addEventListener("click",()=>{ state.started=true; render(); });
-  $("#submitBtn")?.addEventListener("click",submitExam);
-  $("#name")?.addEventListener("input",render);
-  $("#schoolSelect")?.addEventListener("change",render);
-  render();
-});
+window.addEventListener("DOMContentLoaded", initExamPage);
