@@ -40,7 +40,7 @@
       background:linear-gradient(135deg,var(--red2),var(--red));
       box-shadow:0 14px 32px rgba(225,29,72,.25);
       display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:800;
+      color:#fff;font-weight:900;
       user-select:none;
     }
     h1{margin:0;font-size:20px}
@@ -61,7 +61,7 @@
     .btn:active{transform:translateY(1px)}
     .btnPrimary{
       background:linear-gradient(135deg,var(--red2),var(--red));
-      border-color:transparent;color:#fff;font-weight:800;
+      border-color:transparent;color:#fff;font-weight:900;
       box-shadow:0 14px 26px rgba(225,29,72,.22);
     }
     .btnGhost:hover{border-color:rgba(225,29,72,.35)}
@@ -78,7 +78,7 @@
     .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
     .tab{
       padding:9px 14px;border-radius:999px;border:1px solid rgba(17,24,39,.14);
-      background:#fff;cursor:pointer;font-size:14px;font-weight:700;color:var(--text);
+      background:#fff;cursor:pointer;font-size:14px;font-weight:800;color:var(--text);
     }
     .tab.active{
       color:#fff;border-color:transparent;
@@ -89,122 +89,115 @@
     .progressBar{height:10px;border-radius:999px;background:rgba(17,24,39,.08);overflow:hidden}
     .progressFill{height:100%;width:0%;background:linear-gradient(90deg,var(--red2),var(--red));}
 
-    .q{padding:14px;border:1px solid rgba(17,24,39,.10);border-radius:18px;background:#fff}
-    .qTitle{font-weight:850;font-size:16px;margin-bottom:10px}
-    audio{width:100%;margin-top:8px}
-
-    .choices label{
-      display:block;margin:10px 0;
-      padding:12px 12px;border-radius:16px;
-      border:1px solid rgba(17,24,39,.12);
-      background:#fff;
-      cursor:pointer;
-    }
-    .choices label:hover{border-color:rgba(225,29,72,.35)}
-    .choices input{margin-right:10px;transform:scale(1.1)}
     .navRow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}
 
     .submitCard{
       background:linear-gradient(180deg, rgba(225,29,72,.06), rgba(225,29,72,.03));
       border:1px solid rgba(225,29,72,.18);
     }
+
     /* ===== Listening UI upgrade (A版) ===== */
-.qCard{
-  padding:14px;
-  border:1px solid rgba(17,24,39,.10);
-  border-radius:18px;
-  background:#fff;
-}
-.audioBar{
-  margin-bottom:10px;
-}
-.audioBar audio{ width:100%; }
+    .qCard{
+      padding:14px;
+      border:1px solid rgba(17,24,39,.10);
+      border-radius:18px;
+      background:#fff;
+    }
+    .audioBar{ margin-top:10px; }
+    .audioBar audio{ width:100%; }
 
-.panel{ margin-top:8px; }
-.panelTitle{
-  font-weight:900;
-  font-size:13px;
-  color:rgba(17,24,39,.65);
-  margin-bottom:6px;
-}
-.stemMain{
-  font-size:16px;
-  font-weight:900;
-  line-height:1.5;
-  color:#111827;
-}
-.stemSub{
-  margin-top:6px;
-  font-size:13px;
-  color:rgba(17,24,39,.55);
-  line-height:1.55;
-}
+    .panel{ margin-top:8px; }
+    .panelTitle{
+      font-weight:950;
+      font-size:13px;
+      color:rgba(17,24,39,.65);
+      margin-bottom:8px;
 
-.optGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-@media (max-width:640px){
-  .optGrid{ grid-template-columns:1fr; }
-}
-.optCard{
-  text-align:left;
-  border:1px solid rgba(17,24,39,.12);
-  background:#fff;
-  border-radius:16px;
-  padding:12px;
-  cursor:pointer;
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-}
-.optCard:hover{
-  border-color:rgba(225,29,72,.35);
-}
-.optCard.selected{
-  border-color:rgba(225,29,72,.65);
-  background:rgba(225,29,72,.07);
-  box-shadow:0 0 0 4px rgba(225,29,72,.12);
-}
-.optLetter{
-  width:30px;height:30px;
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:950;
-  color:#111827;
-  border:1px solid rgba(17,24,39,.12);
-  background:#fafafa;
-  flex:0 0 auto;
-}
-.optBody{ flex:1; min-width:0; }
-.optText{
-  font-weight:850;
-  line-height:1.45;
-  color:#111827;
-}
-.optImg{
-  margin-top:8px;
-  max-width:100%;
-  max-height:160px;
-  border-radius:12px;
-  border:1px solid rgba(17,24,39,.10);
-  display:block;
-}
+      /* ✅ pill-like label */
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(17,24,39,.10);
+      background:rgba(255,255,255,.82);
+    }
+    .stemMain{
+      font-size:16px;
+      font-weight:950;
+      line-height:1.5;
+      color:#111827;
+      margin-top:6px;
+    }
+    .stemSub{
+      margin-top:6px;
+      font-size:13px;
+      color:rgba(17,24,39,.55);
+      line-height:1.55;
+    }
 
-.helpFold{
-  margin-top:14px;
-  border-top:1px dashed rgba(17,24,39,.18);
-  padding-top:12px;
-}
-.helpFold summary{
-  cursor:pointer;
-  font-weight:900;
-  color:rgba(17,24,39,.70);
-  list-style:none;
-}
-.helpFold summary::-webkit-details-marker{display:none}
-.helpInner{ margin-top:10px; }
+    .optGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width:640px){
+      .optGrid{ grid-template-columns:1fr; }
+    }
+    .optCard{
+      text-align:left;
+      border:1px solid rgba(17,24,39,.12);
+      background:#fff;
+      border-radius:16px;
+      padding:12px;
+      cursor:pointer;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .optCard:hover{ border-color:rgba(225,29,72,.35); }
+    .optCard.selected{
+      border-color:rgba(225,29,72,.65);
+      background:rgba(225,29,72,.07);
+      box-shadow:0 0 0 4px rgba(225,29,72,.12);
+    }
+    .optLetter{
+      width:30px;height:30px;
+      border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:950;
+      color:#111827;
+      border:1px solid rgba(17,24,39,.12);
+      background:#fafafa;
+      flex:0 0 auto;
+    }
+    .optBody{ flex:1; min-width:0; }
+    .optText{
+      font-weight:900;
+      line-height:1.45;
+      color:#111827;
+    }
+    .optImg{
+      margin-top:8px;
+      max-width:100%;
+      max-height:160px;
+      border-radius:12px;
+      border:1px solid rgba(17,24,39,.10);
+      display:block;
+    }
+
+    .helpFold{
+      margin-top:14px;
+      border-top:1px dashed rgba(17,24,39,.18);
+      padding-top:12px;
+    }
+    .helpFold summary{
+      cursor:pointer;
+      font-weight:950;
+      color:rgba(17,24,39,.70);
+      list-style:none;
+    }
+    .helpFold summary::-webkit-details-marker{display:none}
+    .helpInner{ margin-top:10px; }
   </style>
 </head>
 
@@ -236,15 +229,15 @@
       <div id="quizBox" style="margin-top:12px;"></div>
 
       <div class="navRow">
-        <button id="prevBtn" class="btn btnGhost">上一题</button>
-        <button id="nextBtn" class="btn btnPrimary">下一题</button>
+        <button id="prevBtn" class="btn btnGhost">上一题 / Previous</button>
+        <button id="nextBtn" class="btn btnPrimary">下一题 / Next</button>
       </div>
     </div>
 
     <div class="card submitCard">
       <div class="muted">完成全部题目后，点击提交查看成绩。</div>
       <div style="margin-top:10px">
-        <button id="submitBtn" class="btn btnPrimary">提交并出结果</button>
+        <button id="submitBtn" class="btn btnPrimary">提交并出结果 / Submit</button>
       </div>
       <div id="submitTip" class="muted" style="margin-top:10px;"></div>
     </div>
