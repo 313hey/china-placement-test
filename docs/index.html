@@ -3,23 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>中文分级测评 | 开始</title>
+  <title>中文分级测评 / Chinese Placement Test</title>
   <style>
     :root{
-      --bg:#f7f7f8;
+      --bg:#f6f6f7;
       --card:#ffffff;
       --text:#111827;
       --muted:#6b7280;
+      --muted2:#8b93a2;
       --border:rgba(17,24,39,.10);
       --shadow:0 18px 50px rgba(0,0,0,.08);
       --radius:22px;
 
-      --red:#e11d48;      /* 主红 */
-      --red2:#ff2d55;     /* 更像苹果红的亮一点 */
-      --redDark:#be123c;  /* hover */
-      --focus:rgba(225,29,72,.28);
-    }
+      --red:#e11d48;
+      --red2:#ff2d55;
+      --redDark:#be123c;
+      --focus:rgba(225,29,72,.25);
 
+      --danger:#ef4444;
+      --dangerBg:rgba(239,68,68,.10);
+    }
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -30,25 +33,18 @@
         var(--bg);
       color:var(--text);
     }
-    .wrap{max-width:920px;margin:0 auto;padding:22px 16px 40px;}
-    .top{
-      display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-    .brand{
-      display:flex;align-items:center;gap:12px;
-    }
+    .wrap{max-width:920px;margin:0 auto;padding:22px 16px 44px;}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
     .logo{
       width:44px;height:44px;border-radius:14px;
       background:linear-gradient(135deg,var(--red2),var(--red));
       box-shadow:0 14px 32px rgba(225,29,72,.25);
       display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:800;font-size:18px;
-      user-select:none;
+      color:#fff;font-weight:900;font-size:18px;user-select:none;
     }
     h1{margin:0;font-size:22px;letter-spacing:.2px}
-    .sub{margin-top:6px;color:var(--muted);font-size:14px;line-height:1.6}
-
+    .subtitle{margin-top:6px;color:var(--muted);font-size:14px;line-height:1.6}
+    .subtitle .en{color:var(--muted2)}
     .card{
       background:var(--card);
       border:1px solid var(--border);
@@ -56,35 +52,27 @@
       box-shadow:var(--shadow);
       padding:18px;
     }
-
-    .pillRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border-radius:999px;
-      border:1px solid var(--border);background:rgba(255,255,255,.8);
-      color:var(--muted);font-size:13px;
+    .steps{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .step{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:16px;
+      border:1px solid var(--border);background:rgba(255,255,255,.75);
+      font-size:13px;color:var(--muted);
     }
-    .dot{
-      width:9px;height:9px;border-radius:999px;background:var(--red);
-      box-shadow:0 0 0 6px rgba(225,29,72,.12);
-    }
-
-    label{display:block;margin:16px 0 8px;font-weight:750}
+    .step b{color:var(--text)}
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--red);box-shadow:0 0 0 6px rgba(225,29,72,.12)}
+    label{display:block;margin:14px 0 8px;font-weight:800}
+    .labline{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+    .labline .en{font-weight:650;color:var(--muted2);font-size:13px}
     input,select{
       width:100%;max-width:560px;
-      padding:14px 14px;
-      border-radius:16px;
-      border:1px solid rgba(17,24,39,.14);
-      font-size:15px;
-      outline:none;
-      background:#fff;
+      padding:14px 14px;border-radius:16px;border:1px solid rgba(17,24,39,.14);
+      font-size:15px;outline:none;background:#fff;
     }
-    input:focus,select:focus{
-      border-color:rgba(225,29,72,.55);
-      box-shadow:0 0 0 6px var(--focus);
-    }
-
-    .actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:18px}
+    input:focus,select:focus{border-color:rgba(225,29,72,.55);box-shadow:0 0 0 6px var(--focus)}
+    .help{margin-top:6px;color:var(--muted2);font-size:12.5px;line-height:1.5}
+    .error{margin-top:6px;color:var(--redDark);font-size:13px;font-weight:700}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:16px}
     .btn{
       padding:12px 16px;border-radius:16px;border:1px solid rgba(17,24,39,.14);
       background:#fff;cursor:pointer;font-size:15px;
@@ -94,67 +82,167 @@
     .btn:active{transform:translateY(1px)}
     .btnPrimary{
       background:linear-gradient(135deg,var(--red2),var(--red));
-      border-color:transparent;color:#fff;font-weight:800;
+      border-color:transparent;color:#fff;font-weight:900;
       box-shadow:0 14px 26px rgba(225,29,72,.22);
     }
-    .btnPrimary:hover{filter:saturate(1.05) brightness(1.02)}
-    .btnGhost:hover{border-color:rgba(225,29,72,.35)}
-    .tip{color:var(--muted);font-size:14px}
-
-    .note{
-      margin-top:16px;padding:14px 14px;border-radius:18px;
+    .btnSecondary{background:#fff}
+    .btnSecondary:hover{border-color:rgba(225,29,72,.35)}
+    .btnDanger{
+      background:var(--dangerBg);
+      border-color:rgba(239,68,68,.35);
+      color:#b91c1c;
+      font-weight:900;
+    }
+    .btnGhost{background:transparent;border-color:transparent;color:var(--muted);text-decoration:underline}
+    .tipBox{
+      margin-top:14px;padding:14px;border-radius:18px;
       background:linear-gradient(180deg, rgba(225,29,72,.06), rgba(225,29,72,.03));
       border:1px solid rgba(225,29,72,.18);
       color:rgba(17,24,39,.78);
-      font-size:14px;line-height:1.65;
+      font-size:14px;line-height:1.7;
+    }
+    .tipBox .en{color:rgba(107,114,128,.95)}
+    .smallMuted{color:var(--muted2);font-size:12.5px}
+
+    /* Readonly class chip */
+    .chipRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--border);
+      border-radius:999px;padding:10px 12px;
+      background:rgba(255,255,255,.75);
+      color:var(--text);font-weight:800;
+    }
+    .changeLink{
+      border:none;background:none;color:var(--redDark);cursor:pointer;
+      font-weight:800;text-decoration:underline;padding:6px 2px;
     }
 
-    .footer{margin-top:14px;color:rgba(107,114,128,.9);font-size:12.5px}
+    /* Modal */
+    .overlay{
+      position:fixed;inset:0;background:rgba(17,24,39,.45);
+      display:none;align-items:center;justify-content:center;padding:18px;
+      z-index:50;
+    }
+    .modal{
+      width:min(560px, 100%);
+      background:#fff;border-radius:22px;border:1px solid var(--border);
+      box-shadow:0 26px 70px rgba(0,0,0,.22);
+      padding:16px;
+    }
+    .modal h2{margin:0;font-size:18px}
+    .modal .sub{margin-top:6px;color:var(--muted);font-size:13.5px;line-height:1.6}
+    .kv{
+      margin-top:12px;border:1px solid var(--border);border-radius:16px;
+      padding:12px;background:#fafafa;
+      font-size:14px;line-height:1.7;
+    }
+    .kv b{display:inline-block;min-width:150px}
+    .modalActions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
+    .toast{
+      position:fixed;left:50%;transform:translateX(-50%);
+      bottom:18px;z-index:60;
+      background:#111827;color:#fff;
+      padding:10px 14px;border-radius:999px;
+      box-shadow:0 16px 34px rgba(0,0,0,.25);
+      display:none;font-size:14px;
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="brand">
-        <div class="logo">中</div>
-        <div>
-          <h1>中文分级测评</h1>
-          <div class="sub">25题 · 两大题 · 全选择题（适合小朋友）</div>
+    <div class="brand">
+      <div class="logo">中</div>
+      <div>
+        <h1>中文分级测评 / <span style="font-weight:800">Chinese Placement Test</span></h1>
+        <div class="subtitle">
+          共25题｜全选择题｜预计8–12分钟｜可返回上一题｜自动保存
+          <span class="en">/ 25 questions | Multiple choice | 8–12 min | Can go back | Auto-saves</span>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="pillRow">
-        <div class="pill"><span class="dot"></span>先填写信息，再开始答题</div>
-        <div class="pill">开始新学生会自动清除上一位答题记录</div>
+      <div class="steps">
+        <div class="step"><span class="dot"></span><b>Step 1 填写信息</b> / <span class="en">Fill in info</span></div>
+        <div class="step"><b>Step 2 开始答题</b> / <span class="en">Start</span></div>
       </div>
 
-      <label for="name">学生姓名 / ID</label>
-      <input id="name" placeholder="例如：Anna / 2026-001（建议填写）" autocomplete="off" />
+      <!-- Name -->
+      <label for="name">
+        <span class="labline">学生姓名（必填） <span class="en">/ Student Name (Required)</span></span>
+      </label>
+      <input id="name" placeholder="例如：张三 / e.g., Zhang San" autocomplete="off" />
+      <div id="nameErr" class="error" style="display:none">请填写学生姓名 / Please enter student name</div>
 
-      <label for="school">项目 / 班级</label>
-      <select id="school"></select>
+      <!-- ID (optional) -->
+      <label for="sid">
+        <span class="labline">学号/ID（选填） <span class="en">/ Student ID (Optional)</span></span>
+      </label>
+      <input id="sid" placeholder="例如：CIS-2026-001 / e.g., CIS-2026-001" autocomplete="off" />
+      <div class="help">如需学号，请在此填写 / <span class="en">If you have an ID, fill it here.</span></div>
 
-      <div class="actions">
-        <button id="startBtn" class="btn btnPrimary">开始测试</button>
-        <button id="clearAllBtn" class="btn btnGhost">清空本机记录</button>
-        <span id="tip" class="tip"></span>
+      <!-- Class / Program -->
+      <label>
+        <span class="labline">项目/班级 <span class="en">/ Program/Class</span></span>
+      </label>
+
+      <div id="classReadonly" style="display:none" class="chipRow">
+        <div class="chip" id="classChip"></div>
+        <button class="changeLink" id="changeClassBtn">更换 / Change</button>
       </div>
 
-      <div class="note">
-        <b>小提示：</b><br/>
-        1）题目可以返回上一题，答案会自动保存。<br/>
-        2）如果换电脑或交接设备，可以点“清空本机记录”。
+      <select id="school" style="display:none"></select>
+
+      <!-- Buttons -->
+      <div class="row">
+        <button id="startBtn" class="btn btnPrimary">开始测试 / Start Test</button>
+        <button id="clearBtn" class="btn btnSecondary">清除上一位记录 / Clear Previous Record</button>
       </div>
 
-      <div class="footer">© 中文学习分级测评</div>
+      <div class="tipBox">
+        <div>提示：可以返回上一题，系统会自动保存 / <span class="en">Tip: You can go back; answers are auto-saved.</span></div>
+        <div style="margin-top:8px">同一台电脑测下一位同学前，请先清除上一位记录 / <span class="en">Before the next student on this device, clear the previous record.</span></div>
+      </div>
+
+      <div class="smallMuted" style="margin-top:12px" id="tinyStatus"></div>
     </div>
   </div>
 
+  <!-- Confirm Start Modal -->
+  <div class="overlay" id="startOverlay">
+    <div class="modal">
+      <h2>确认开始 / Confirm Start</h2>
+      <div class="sub">请核对信息后开始测试 / <span class="en">Please check details before starting.</span></div>
+      <div class="kv" id="startKV"></div>
+      <div class="modalActions">
+        <button class="btn btnSecondary" id="editBtn">返回修改 / Edit</button>
+        <button class="btn btnPrimary" id="confirmBtn">确认开始 / Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clear Modal -->
+  <div class="overlay" id="clearOverlay">
+    <div class="modal">
+      <h2>清除记录？ / Clear record?</h2>
+      <div class="sub">
+        将清除本机上一位学生的答题记录，清除后无法恢复。<br/>
+        <span class="en">This will remove the previous student's answers on this device. This cannot be undone.</span>
+      </div>
+      <div class="modalActions">
+        <button class="btn btnSecondary" id="cancelClearBtn">取消 / Cancel</button>
+        <button class="btn btnDanger" id="confirmClearBtn">确认清除 / Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
   <script src="./questions.js"></script>
   <script>
+    // 与 app.js 保持一致
     const LS = {
       name: "quiz_name",
       school: "quiz_school",
@@ -163,25 +251,72 @@
       result: "quiz_result"
     };
 
-    const nameInput = document.getElementById("name");
-    const schoolSel = document.getElementById("school");
-    const startBtn = document.getElementById("startBtn");
-    const clearAllBtn = document.getElementById("clearAllBtn");
-    const tip = document.getElementById("tip");
+    const $ = (id)=>document.getElementById(id);
+
+    const nameInput = $("name");
+    const idInput = $("sid");
+    const nameErr = $("nameErr");
+
+    const schoolSel = $("school");
+    const classReadonly = $("classReadonly");
+    const classChip = $("classChip");
+    const changeClassBtn = $("changeClassBtn");
+
+    const startBtn = $("startBtn");
+    const clearBtn = $("clearBtn");
+
+    const startOverlay = $("startOverlay");
+    const startKV = $("startKV");
+    const editBtn = $("editBtn");
+    const confirmBtn = $("confirmBtn");
+
+    const clearOverlay = $("clearOverlay");
+    const cancelClearBtn = $("cancelClearBtn");
+    const confirmClearBtn = $("confirmClearBtn");
+
+    const toast = $("toast");
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.style.display = "block";
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=>toast.style.display="none", 2400);
+    }
 
     function initProjectOptions(){
       const opts = (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS))
         ? PROJECT_OPTIONS
         : [{ value: "default", label: "default" }];
 
-      schoolSel.innerHTML = "";
-      opts.forEach(o => {
+      // if only one option -> readonly chip + change
+      if (opts.length === 1){
+        classReadonly.style.display = "flex";
+        schoolSel.style.display = "none";
+        classChip.textContent = `${opts[0].label}`;
+        schoolSel.innerHTML = "";
         const op = document.createElement("option");
-        op.value = o.value;
-        op.textContent = o.label;
+        op.value = opts[0].value;
+        op.textContent = opts[0].label;
         schoolSel.appendChild(op);
-      });
+        schoolSel.value = opts[0].value;
+      } else {
+        classReadonly.style.display = "none";
+        schoolSel.style.display = "block";
+        schoolSel.innerHTML = "";
+        opts.forEach(o=>{
+          const op=document.createElement("option");
+          op.value=o.value; op.textContent=o.label;
+          schoolSel.appendChild(op);
+        });
+      }
     }
+
+    changeClassBtn.addEventListener("click", ()=>{
+      // reveal select
+      classReadonly.style.display = "none";
+      schoolSel.style.display = "block";
+      schoolSel.focus();
+    });
 
     function loadSaved(){
       nameInput.value = localStorage.getItem(LS.name) || "";
@@ -189,37 +324,85 @@
       if (savedSchool) schoolSel.value = savedSchool;
     }
 
-    function clearStudentAttemptCache(){
+    function clearPreviousAttempt(){
       localStorage.removeItem(LS.answers);
       localStorage.removeItem(LS.state);
       localStorage.removeItem(LS.result);
     }
 
-    startBtn.addEventListener("click", () => {
+    function validate(){
       const name = nameInput.value.trim();
-      const school = schoolSel.value;
+      if (!name){
+        nameErr.style.display = "block";
+        return null;
+      }
+      nameErr.style.display = "none";
+      const sid = idInput.value.trim();
+      const cls = schoolSel.value;
+      return { name, sid, cls };
+    }
 
-      if (!school) { tip.textContent = "请选择项目/班级"; return; }
+    // Start flow -> confirm modal
+    startBtn.addEventListener("click", ()=>{
+      const v = validate();
+      if (!v) return;
 
-      // 如果你想强制必须填姓名，取消注释：
-      // if (!name) { tip.textContent = "请填写学生姓名/ID"; return; }
+      const clsLabel = (() => {
+        const op = schoolSel.options[schoolSel.selectedIndex];
+        return op ? op.textContent : (v.cls || "—");
+      })();
 
-      localStorage.setItem(LS.name, name);
-      localStorage.setItem(LS.school, school);
+      startKV.innerHTML = `
+        <div><b>学生 / Student:</b> ${escapeHtml(v.name)}</div>
+        <div><b>学号 / ID:</b> ${escapeHtml(v.sid || "—")}</div>
+        <div><b>班级 / Class:</b> ${escapeHtml(clsLabel || "—")}</div>
+        <div><b>题量 / Questions:</b> 25</div>
+        <div><b>预计时长 / Est. time:</b> 8–12 min</div>
+      `;
+      startOverlay.style.display = "flex";
+    });
 
-      // 自动清掉上一位学生答题记录
-      clearStudentAttemptCache();
+    editBtn.addEventListener("click", ()=> startOverlay.style.display="none");
 
+    confirmBtn.addEventListener("click", ()=>{
+      const v = validate();
+      if (!v) return;
+
+      // store name: include ID if provided (avoid touching app.js/result.html)
+      const mergedName = v.sid ? `${v.name} (${v.sid})` : v.name;
+
+      localStorage.setItem(LS.name, mergedName);
+      localStorage.setItem(LS.school, v.cls);
+
+      // avoid串号：clear previous answers/progress/result
+      clearPreviousAttempt();
+
+      startOverlay.style.display = "none";
       location.href = "./exam.html";
     });
 
-    clearAllBtn.addEventListener("click", () => {
-      if (!confirm("确定清空本机记录吗？（会清除本机上保存的姓名/项目/答题记录）")) return;
-      Object.values(LS).forEach(k => localStorage.removeItem(k));
-      tip.textContent = "已清空。";
-      nameInput.value = "";
-      initProjectOptions();
+    // Clear flow -> confirm modal
+    clearBtn.addEventListener("click", ()=>{
+      clearOverlay.style.display = "flex";
     });
+    cancelClearBtn.addEventListener("click", ()=> clearOverlay.style.display="none");
+
+    confirmClearBtn.addEventListener("click", ()=>{
+      clearPreviousAttempt();
+      clearOverlay.style.display = "none";
+      // clear name/id only; keep class by default
+      nameInput.value = "";
+      idInput.value = "";
+      nameErr.style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      showToast("已清除，可以开始新学生测评 / Cleared. Ready for the next student.");
+    });
+
+    function escapeHtml(s){
+      return (s ?? "").toString().replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[m]));
+    }
 
     initProjectOptions();
     loadSaved();
