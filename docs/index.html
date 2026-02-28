@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>中文分级测评 / Chinese Placement Test</title>
+  <title>枫叶教育来华中文水平测试 / Maple Leaf Edu-Travel Chinese Placement Test</title>
   <style>
     :root{
       --bg:#f6f6f7;
@@ -13,315 +13,286 @@
       --muted2:#8b93a2;
       --border:rgba(17,24,39,.10);
       --shadow:0 18px 50px rgba(0,0,0,.08);
-      --radius:22px;
+      --radius:20px;
 
       --red:#e11d48;
       --red2:#ff2d55;
       --redDark:#be123c;
-      --focus:rgba(225,29,72,.25);
+      --focus:rgba(225,29,72,.22);
 
       --danger:#ef4444;
       --dangerBg:rgba(239,68,68,.10);
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
       background:
-        radial-gradient(1100px 420px at 20% -10%, rgba(255,45,85,.18), transparent 65%),
-        radial-gradient(900px 360px at 90% 0%, rgba(225,29,72,.14), transparent 55%),
+        radial-gradient(1100px 420px at 20% -10%, rgba(255,45,85,.16), transparent 65%),
+        radial-gradient(900px 360px at 90% 0%, rgba(225,29,72,.12), transparent 55%),
         var(--bg);
       color:var(--text);
     }
-    .wrap{max-width:920px;margin:0 auto;padding:22px 16px 44px;}
-    .brand{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+
+    .wrap{max-width:920px;margin:0 auto;padding:22px 16px 44px;position:relative;}
+    .header{
+      display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;
+      margin-bottom:14px;position:relative;
+    }
     .logo{
       width:44px;height:44px;border-radius:14px;
       background:linear-gradient(135deg,var(--red2),var(--red));
-      box-shadow:0 14px 32px rgba(225,29,72,.25);
+      box-shadow:0 14px 30px rgba(225,29,72,.22);
       display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:900;font-size:18px;user-select:none;
+      color:#fff;font-weight:900;font-size:16px;user-select:none;
+      flex:0 0 auto;
     }
-    h1{margin:0;font-size:22px;letter-spacing:.2px}
-    .subtitle{margin-top:6px;color:var(--muted);font-size:14px;line-height:1.6}
-    .subtitle .en{color:var(--muted2)}
+    h1{margin:0;font-size:20px;letter-spacing:.2px;line-height:1.25}
+    .h1en{display:block;font-weight:750;color:rgba(17,24,39,.84);font-size:15px;margin-top:6px}
+    .subtitle{margin-top:8px;color:var(--muted);font-size:14px}
+
+    /* Maple watermark */
+    .watermark{
+      position:absolute;right:-40px;top:-40px;pointer-events:none;
+      opacity:.055; /* 4–6% */
+      width:240px;height:240px;
+      filter:blur(0px);
+    }
+
     .card{
+      position:relative;
       background:var(--card);
       border:1px solid var(--border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       padding:18px;
+      overflow:hidden;
     }
-    .steps{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-    .step{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:10px 12px;border-radius:16px;
-      border:1px solid var(--border);background:rgba(255,255,255,.75);
-      font-size:13px;color:var(--muted);
+    /* Top gradient hairline */
+    .card:before{
+      content:"";
+      position:absolute;left:0;top:0;right:0;height:2px;
+      background:linear-gradient(90deg,var(--red2),var(--red));
     }
-    .step b{color:var(--text)}
-    .dot{width:10px;height:10px;border-radius:999px;background:var(--red);box-shadow:0 0 0 6px rgba(225,29,72,.12)}
-    label{display:block;margin:14px 0 8px;font-weight:800}
-    .labline{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
-    .labline .en{font-weight:650;color:var(--muted2);font-size:13px}
-    input,select{
-      width:100%;max-width:560px;
-      padding:14px 14px;border-radius:16px;border:1px solid rgba(17,24,39,.14);
-      font-size:15px;outline:none;background:#fff;
+
+    label{display:block;margin:14px 0 8px}
+    .labCN{font-weight:850;font-size:14.5px}
+    .labEN{display:block;margin-top:4px;color:var(--muted2);font-size:12.5px;font-weight:650}
+
+    input{
+      width:100%;max-width:620px;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(17,24,39,.14);
+      font-size:15px;
+      outline:none;
+      background:#fff;
     }
-    input:focus,select:focus{border-color:rgba(225,29,72,.55);box-shadow:0 0 0 6px var(--focus)}
-    .help{margin-top:6px;color:var(--muted2);font-size:12.5px;line-height:1.5}
-    .error{margin-top:6px;color:var(--redDark);font-size:13px;font-weight:700}
-    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:16px}
+    input:focus{
+      border-color:rgba(225,29,72,.55);
+      box-shadow:0 0 0 6px var(--focus);
+    }
+    .help{
+      margin-top:6px;color:var(--muted2);font-size:12.5px;line-height:1.5;
+    }
+    .err{
+      margin-top:6px;
+      color:var(--redDark);
+      font-size:13px;
+      font-weight:800;
+      display:none;
+    }
+
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:18px}
     .btn{
       padding:12px 16px;border-radius:16px;border:1px solid rgba(17,24,39,.14);
       background:#fff;cursor:pointer;font-size:15px;
-      transition:transform .06s ease, background .15s ease, border-color .15s ease;
+      transition:transform .06s ease, filter .15s ease, box-shadow .15s ease;
       user-select:none;
     }
     .btn:active{transform:translateY(1px)}
     .btnPrimary{
       background:linear-gradient(135deg,var(--red2),var(--red));
-      border-color:transparent;color:#fff;font-weight:900;
-      box-shadow:0 14px 26px rgba(225,29,72,.22);
+      border-color:transparent;color:#fff;font-weight:950;
+      box-shadow:0 14px 26px rgba(225,29,72,.20);
     }
-    .btnSecondary{background:#fff}
-    .btnSecondary:hover{border-color:rgba(225,29,72,.35)}
-    .btnDanger{
-      background:var(--dangerBg);
-      border-color:rgba(239,68,68,.35);
-      color:#b91c1c;
-      font-weight:900;
+    .btnPrimary:hover{filter:saturate(1.05) brightness(1.02)}
+    .btnSecondary{
+      background:#fff;
+      color:var(--muted);
     }
-    .btnGhost{background:transparent;border-color:transparent;color:var(--muted);text-decoration:underline}
-    .tipBox{
-      margin-top:14px;padding:14px;border-radius:18px;
-      background:linear-gradient(180deg, rgba(225,29,72,.06), rgba(225,29,72,.03));
-      border:1px solid rgba(225,29,72,.18);
-      color:rgba(17,24,39,.78);
-      font-size:14px;line-height:1.7;
-    }
-    .tipBox .en{color:rgba(107,114,128,.95)}
-    .smallMuted{color:var(--muted2);font-size:12.5px}
 
-    /* Readonly class chip */
-    .chipRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .chip{
-      display:inline-flex;align-items:center;gap:8px;
-      border:1px solid var(--border);
-      border-radius:999px;padding:10px 12px;
-      background:rgba(255,255,255,.75);
-      color:var(--text);font-weight:800;
-    }
-    .changeLink{
-      border:none;background:none;color:var(--redDark);cursor:pointer;
-      font-weight:800;text-decoration:underline;padding:6px 2px;
+    .footer{
+      margin-top:14px;
+      color:var(--muted2);
+      font-size:12.5px;
     }
 
     /* Modal */
     .overlay{
       position:fixed;inset:0;background:rgba(17,24,39,.45);
-      display:none;align-items:center;justify-content:center;padding:18px;
-      z-index:50;
+      display:none;align-items:center;justify-content:center;
+      padding:18px;z-index:50;
     }
     .modal{
-      width:min(560px, 100%);
+      width:min(600px, 100%);
       background:#fff;border-radius:22px;border:1px solid var(--border);
       box-shadow:0 26px 70px rgba(0,0,0,.22);
       padding:16px;
+      transform:scale(.98);
+      opacity:0;
+      transition:transform .18s ease, opacity .18s ease;
     }
+    .overlay.show .modal{transform:scale(1);opacity:1}
     .modal h2{margin:0;font-size:18px}
-    .modal .sub{margin-top:6px;color:var(--muted);font-size:13.5px;line-height:1.6}
+    .modal .sub{
+      margin-top:6px;color:var(--muted);font-size:13.5px;line-height:1.6
+    }
     .kv{
       margin-top:12px;border:1px solid var(--border);border-radius:16px;
       padding:12px;background:#fafafa;
       font-size:14px;line-height:1.7;
     }
-    .kv b{display:inline-block;min-width:150px}
+    .kvRow{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}
+    .kvKey{min-width:170px;font-weight:900}
+    .kvKey .en{font-weight:750;color:var(--muted2)}
+    .kvVal{font-weight:750;color:rgba(17,24,39,.88)}
     .modalActions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
-    .toast{
-      position:fixed;left:50%;transform:translateX(-50%);
-      bottom:18px;z-index:60;
-      background:#111827;color:#fff;
-      padding:10px 14px;border-radius:999px;
-      box-shadow:0 16px 34px rgba(0,0,0,.25);
-      display:none;font-size:14px;
+
+    /* Small screen tweaks */
+    @media (max-width:520px){
+      .kvKey{min-width:100%}
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="brand">
-      <div class="logo">中</div>
+    <!-- Watermark -->
+    <svg class="watermark" viewBox="0 0 256 256" aria-hidden="true">
+      <!-- Simple maple leaf outline -->
+      <path fill="none" stroke="#111827" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"
+        d="M128 18c7 20 6 35 0 50 18-10 34-25 46-42 3 20-2 38-12 54 19-5 36-16 50-31-2 24-12 45-29 61 20 2 39-4 55-17-9 26-27 46-50 58 18 9 31 23 40 42-27-7-49-22-66-43 2 21-4 40-17 56-9-23-14-47-17-73h-2c-3 26-8 50-17 73-13-16-19-35-17-56-17 21-39 36-66 43 9-19 22-33 40-42-23-12-41-32-50-58 16 13 35 19 55 17-17-16-27-37-29-61 14 15 31 26 50 31-10-16-15-34-12-54 12 17 28 32 46 42-6-15-7-30 0-50z"/>
+    </svg>
+
+    <div class="header">
+      <div class="logo">ML</div>
       <div>
-        <h1>中文分级测评 / <span style="font-weight:800">Chinese Placement Test</span></h1>
-        <div class="subtitle">
-          共25题｜全选择题｜预计8–12分钟｜可返回上一题｜自动保存
-          <span class="en">/ 25 questions | Multiple choice | 8–12 min | Can go back | Auto-saves</span>
-        </div>
+        <h1>
+          枫叶教育来华中文水平测试
+          <span class="h1en">Maple Leaf Edu-Travel Chinese Placement Test</span>
+        </h1>
+        <div class="subtitle">请先填写信息 / Please fill in the info below</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="steps">
-        <div class="step"><span class="dot"></span><b>Step 1 填写信息</b> / <span class="en">Fill in info</span></div>
-        <div class="step"><b>Step 2 开始答题</b> / <span class="en">Start</span></div>
-      </div>
-
       <!-- Name -->
       <label for="name">
-        <span class="labline">学生姓名（必填） <span class="en">/ Student Name (Required)</span></span>
+        <span class="labCN">姓名（必填）</span>
+        <span class="labEN">Name (Required)</span>
       </label>
-      <input id="name" placeholder="例如：张三 / e.g., Zhang San" autocomplete="off" />
-      <div id="nameErr" class="error" style="display:none">请填写学生姓名 / Please enter student name</div>
+      <input id="name" autocomplete="off" placeholder="例如：张三 / e.g., Zhang San" />
+      <div id="err_name" class="err">请填写姓名 / Please enter name</div>
 
-      <!-- ID (optional) -->
-      <label for="sid">
-        <span class="labline">学号/ID（选填） <span class="en">/ Student ID (Optional)</span></span>
+      <!-- Program -->
+      <label for="program">
+        <span class="labCN">项目（必填）</span>
+        <span class="labEN">Program (Required)</span>
       </label>
-      <input id="sid" placeholder="例如：CIS-2026-001 / e.g., CIS-2026-001" autocomplete="off" />
-      <div class="help">如需学号，请在此填写 / <span class="en">If you have an ID, fill it here.</span></div>
+      <input id="program" autocomplete="off" placeholder="例如：CIS Winter Camp / e.g., CIS Winter Camp" />
+      <div id="err_program" class="err">请填写项目 / Please enter program</div>
 
-      <!-- Class / Program -->
-      <label>
-        <span class="labline">项目/班级 <span class="en">/ Program/Class</span></span>
+      <!-- School -->
+      <label for="school">
+        <span class="labCN">学校（必填）</span>
+        <span class="labEN">School (Required)</span>
       </label>
+      <input id="school" autocomplete="off" placeholder="例如：Crofton House School / e.g., Crofton House School" />
+      <div id="err_school" class="err">请填写学校 / Please enter school</div>
 
-      <div id="classReadonly" style="display:none" class="chipRow">
-        <div class="chip" id="classChip"></div>
-        <button class="changeLink" id="changeClassBtn">更换 / Change</button>
-      </div>
+      <!-- Age -->
+      <label for="age">
+        <span class="labCN">年龄（必填）</span>
+        <span class="labEN">Age (Required)</span>
+      </label>
+      <input id="age" inputmode="numeric" autocomplete="off" placeholder="例如：14 / e.g., 14" />
+      <div class="help">范围：5–25 / Range: 5–25</div>
+      <div id="err_age" class="err">年龄需为 5–25 的数字 / Age must be a number between 5 and 25</div>
 
-      <select id="school" style="display:none"></select>
+      <!-- Email -->
+      <label for="email">
+        <span class="labCN">邮箱（选填）</span>
+        <span class="labEN">Email (Optional)</span>
+      </label>
+      <input id="email" autocomplete="off" placeholder="例如：name@example.com / e.g., name@example.com" />
+      <div id="err_email" class="err">邮箱格式不正确 / Invalid email format</div>
 
-      <!-- Buttons -->
       <div class="row">
         <button id="startBtn" class="btn btnPrimary">开始测试 / Start Test</button>
-        <button id="clearBtn" class="btn btnSecondary">清除上一位记录 / Clear Previous Record</button>
       </div>
 
-      <div class="tipBox">
-        <div>提示：可以返回上一题，系统会自动保存 / <span class="en">Tip: You can go back; answers are auto-saved.</span></div>
-        <div style="margin-top:8px">同一台电脑测下一位同学前，请先清除上一位记录 / <span class="en">Before the next student on this device, clear the previous record.</span></div>
-      </div>
-
-      <div class="smallMuted" style="margin-top:12px" id="tinyStatus"></div>
+      <div class="footer">信息仅用于分级测评 / Used for placement only</div>
     </div>
   </div>
 
-  <!-- Confirm Start Modal -->
-  <div class="overlay" id="startOverlay">
-    <div class="modal">
-      <h2>确认开始 / Confirm Start</h2>
-      <div class="sub">请核对信息后开始测试 / <span class="en">Please check details before starting.</span></div>
-      <div class="kv" id="startKV"></div>
+  <!-- Confirm Modal -->
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle">确认信息 / Confirm Your Info</h2>
+      <div class="sub">请核对后开始测试 / Please check before starting.</div>
+
+      <div class="kv" id="kv"></div>
+
       <div class="modalActions">
         <button class="btn btnSecondary" id="editBtn">返回修改 / Edit</button>
-        <button class="btn btnPrimary" id="confirmBtn">确认开始 / Confirm</button>
+        <button class="btn btnPrimary" id="confirmBtn">确认开始 / Confirm & Start</button>
       </div>
     </div>
   </div>
 
-  <!-- Clear Modal -->
-  <div class="overlay" id="clearOverlay">
-    <div class="modal">
-      <h2>清除记录？ / Clear record?</h2>
-      <div class="sub">
-        将清除本机上一位学生的答题记录，清除后无法恢复。<br/>
-        <span class="en">This will remove the previous student's answers on this device. This cannot be undone.</span>
-      </div>
-      <div class="modalActions">
-        <button class="btn btnSecondary" id="cancelClearBtn">取消 / Cancel</button>
-        <button class="btn btnDanger" id="confirmClearBtn">确认清除 / Clear</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <script src="./questions.js"></script>
   <script>
-    // 与 app.js 保持一致
+    // Existing keys used by exam/app.js
     const LS = {
       name: "quiz_name",
       school: "quiz_school",
       answers: "quiz_answers",
       state: "quiz_state",
-      result: "quiz_result"
+      result: "quiz_result",
+      // optional extra fields (won't break anything)
+      program: "quiz_program",
+      schoolName: "quiz_school_name",
+      age: "quiz_age",
+      email: "quiz_email"
     };
 
     const $ = (id)=>document.getElementById(id);
 
-    const nameInput = $("name");
-    const idInput = $("sid");
-    const nameErr = $("nameErr");
+    const el = {
+      name: $("name"),
+      program: $("program"),
+      school: $("school"),
+      age: $("age"),
+      email: $("email"),
+      startBtn: $("startBtn"),
+      overlay: $("overlay"),
+      kv: $("kv"),
+      editBtn: $("editBtn"),
+      confirmBtn: $("confirmBtn"),
 
-    const schoolSel = $("school");
-    const classReadonly = $("classReadonly");
-    const classChip = $("classChip");
-    const changeClassBtn = $("changeClassBtn");
+      err_name: $("err_name"),
+      err_program: $("err_program"),
+      err_school: $("err_school"),
+      err_age: $("err_age"),
+      err_email: $("err_email"),
+    };
 
-    const startBtn = $("startBtn");
-    const clearBtn = $("clearBtn");
+    function showErr(node, yes){ node.style.display = yes ? "block" : "none"; }
 
-    const startOverlay = $("startOverlay");
-    const startKV = $("startKV");
-    const editBtn = $("editBtn");
-    const confirmBtn = $("confirmBtn");
-
-    const clearOverlay = $("clearOverlay");
-    const cancelClearBtn = $("cancelClearBtn");
-    const confirmClearBtn = $("confirmClearBtn");
-
-    const toast = $("toast");
-
-    function showToast(msg){
-      toast.textContent = msg;
-      toast.style.display = "block";
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(()=>toast.style.display="none", 2400);
-    }
-
-    function initProjectOptions(){
-      const opts = (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS))
-        ? PROJECT_OPTIONS
-        : [{ value: "default", label: "default" }];
-
-      // if only one option -> readonly chip + change
-      if (opts.length === 1){
-        classReadonly.style.display = "flex";
-        schoolSel.style.display = "none";
-        classChip.textContent = `${opts[0].label}`;
-        schoolSel.innerHTML = "";
-        const op = document.createElement("option");
-        op.value = opts[0].value;
-        op.textContent = opts[0].label;
-        schoolSel.appendChild(op);
-        schoolSel.value = opts[0].value;
-      } else {
-        classReadonly.style.display = "none";
-        schoolSel.style.display = "block";
-        schoolSel.innerHTML = "";
-        opts.forEach(o=>{
-          const op=document.createElement("option");
-          op.value=o.value; op.textContent=o.label;
-          schoolSel.appendChild(op);
-        });
-      }
-    }
-
-    changeClassBtn.addEventListener("click", ()=>{
-      // reveal select
-      classReadonly.style.display = "none";
-      schoolSel.style.display = "block";
-      schoolSel.focus();
-    });
-
-    function loadSaved(){
-      nameInput.value = localStorage.getItem(LS.name) || "";
-      const savedSchool = localStorage.getItem(LS.school) || "";
-      if (savedSchool) schoolSel.value = savedSchool;
+    function isEmail(s){
+      // simple but practical email check
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
     }
 
     function clearPreviousAttempt(){
@@ -331,81 +302,125 @@
     }
 
     function validate(){
-      const name = nameInput.value.trim();
-      if (!name){
-        nameErr.style.display = "block";
+      const v = {
+        name: el.name.value.trim(),
+        program: el.program.value.trim(),
+        school: el.school.value.trim(),
+        ageRaw: el.age.value.trim(),
+        email: el.email.value.trim()
+      };
+
+      let ok = true;
+
+      // Required
+      const missingName = !v.name;
+      const missingProgram = !v.program;
+      const missingSchool = !v.school;
+
+      showErr(el.err_name, missingName);
+      showErr(el.err_program, missingProgram);
+      showErr(el.err_school, missingSchool);
+
+      if (missingName || missingProgram || missingSchool) ok = false;
+
+      // Age numeric + range
+      const age = Number(v.ageRaw);
+      const ageOk = Number.isFinite(age) && Number.isInteger(age) && age >= 5 && age <= 25;
+      showErr(el.err_age, !ageOk);
+      if (!ageOk) ok = false;
+
+      // Email optional but if present must be valid
+      const emailOk = !v.email || isEmail(v.email);
+      showErr(el.err_email, !emailOk);
+      if (!emailOk) ok = false;
+
+      // focus first invalid
+      if (!ok){
+        if (missingName) el.name.focus();
+        else if (missingProgram) el.program.focus();
+        else if (missingSchool) el.school.focus();
+        else if (!ageOk) el.age.focus();
+        else if (!emailOk) el.email.focus();
         return null;
       }
-      nameErr.style.display = "none";
-      const sid = idInput.value.trim();
-      const cls = schoolSel.value;
-      return { name, sid, cls };
+
+      return { name:v.name, program:v.program, school:v.school, age, email: v.email };
     }
 
-    // Start flow -> confirm modal
-    startBtn.addEventListener("click", ()=>{
-      const v = validate();
-      if (!v) return;
-
-      const clsLabel = (() => {
-        const op = schoolSel.options[schoolSel.selectedIndex];
-        return op ? op.textContent : (v.cls || "—");
-      })();
-
-      startKV.innerHTML = `
-        <div><b>学生 / Student:</b> ${escapeHtml(v.name)}</div>
-        <div><b>学号 / ID:</b> ${escapeHtml(v.sid || "—")}</div>
-        <div><b>班级 / Class:</b> ${escapeHtml(clsLabel || "—")}</div>
-        <div><b>题量 / Questions:</b> 25</div>
-        <div><b>预计时长 / Est. time:</b> 8–12 min</div>
-      `;
-      startOverlay.style.display = "flex";
-    });
-
-    editBtn.addEventListener("click", ()=> startOverlay.style.display="none");
-
-    confirmBtn.addEventListener("click", ()=>{
-      const v = validate();
-      if (!v) return;
-
-      // store name: include ID if provided (avoid touching app.js/result.html)
-      const mergedName = v.sid ? `${v.name} (${v.sid})` : v.name;
-
-      localStorage.setItem(LS.name, mergedName);
-      localStorage.setItem(LS.school, v.cls);
-
-      // avoid串号：clear previous answers/progress/result
-      clearPreviousAttempt();
-
-      startOverlay.style.display = "none";
-      location.href = "./exam.html";
-    });
-
-    // Clear flow -> confirm modal
-    clearBtn.addEventListener("click", ()=>{
-      clearOverlay.style.display = "flex";
-    });
-    cancelClearBtn.addEventListener("click", ()=> clearOverlay.style.display="none");
-
-    confirmClearBtn.addEventListener("click", ()=>{
-      clearPreviousAttempt();
-      clearOverlay.style.display = "none";
-      // clear name/id only; keep class by default
-      nameInput.value = "";
-      idInput.value = "";
-      nameErr.style.display = "none";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      showToast("已清除，可以开始新学生测评 / Cleared. Ready for the next student.");
-    });
-
-    function escapeHtml(s){
+    function esc(s){
       return (s ?? "").toString().replace(/[&<>"']/g, m => ({
         "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
       }[m]));
     }
 
-    initProjectOptions();
-    loadSaved();
+    function openModal(){
+      el.overlay.style.display = "flex";
+      // trigger animation
+      requestAnimationFrame(()=> el.overlay.classList.add("show"));
+    }
+    function closeModal(){
+      el.overlay.classList.remove("show");
+      // wait for animation
+      setTimeout(()=>{ el.overlay.style.display="none"; }, 150);
+    }
+
+    // Start -> validate -> show confirm card
+    el.startBtn.addEventListener("click", () => {
+      const v = validate();
+      if (!v) return;
+
+      el.kv.innerHTML = `
+        <div class="kvRow"><div class="kvKey">姓名 <span class="en">/ Name</span>:</div><div class="kvVal">${esc(v.name)}</div></div>
+        <div class="kvRow"><div class="kvKey">项目 <span class="en">/ Program</span>:</div><div class="kvVal">${esc(v.program)}</div></div>
+        <div class="kvRow"><div class="kvKey">学校 <span class="en">/ School</span>:</div><div class="kvVal">${esc(v.school)}</div></div>
+        <div class="kvRow"><div class="kvKey">年龄 <span class="en">/ Age</span>:</div><div class="kvVal">${esc(String(v.age))}</div></div>
+        <div class="kvRow"><div class="kvKey">邮箱 <span class="en">/ Email</span>:</div><div class="kvVal">${esc(v.email || "—")}</div></div>
+      `;
+      openModal();
+    });
+
+    el.editBtn.addEventListener("click", closeModal);
+
+    // Confirm -> save -> clear previous attempt -> go exam
+    el.confirmBtn.addEventListener("click", () => {
+      const v = validate();
+      if (!v) return;
+
+      // Save required fields for exam page compatibility
+      localStorage.setItem(LS.name, v.name);
+
+      // Put program + school into quiz_school so existing exam header still shows meaningful info
+      localStorage.setItem(LS.school, `${v.program} | ${v.school}`);
+
+      // Optional extra fields (safe)
+      localStorage.setItem(LS.program, v.program);
+      localStorage.setItem(LS.schoolName, v.school);
+      localStorage.setItem(LS.age, String(v.age));
+      if (v.email) localStorage.setItem(LS.email, v.email);
+      else localStorage.removeItem(LS.email);
+
+      // Prevent串号: clear previous student's answers/progress/result
+      clearPreviousAttempt();
+
+      closeModal();
+      location.href = "./exam.html";
+    });
+
+    // Close modal by clicking outside
+    el.overlay.addEventListener("click", (e) => {
+      if (e.target === el.overlay) closeModal();
+    });
+
+    // Light UX: hide errors when typing
+    ["name","program","school","age","email"].forEach(k=>{
+      el[k].addEventListener("input", ()=>{
+        if (k==="name") showErr(el.err_name,false);
+        if (k==="program") showErr(el.err_program,false);
+        if (k==="school") showErr(el.err_school,false);
+        if (k==="age") showErr(el.err_age,false);
+        if (k==="email") showErr(el.err_email,false);
+      });
+    });
   </script>
 </body>
 </html>
