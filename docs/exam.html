@@ -3,65 +3,154 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>考试 | 来华研学插班中文分级测评</title>
+  <title>中文分级测评 | 答题</title>
   <style>
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;}
-    .muted{color:#666;font-size:14px;line-height:1.6}
-    .topRow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid #ddd;border-radius:999px;padding:8px 12px;background:#fff}
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
-    .btnPrimary{background:#111;color:#fff;border-color:#111}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
-    .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-    .tab{padding:8px 12px;border-radius:999px;border:1px solid #ddd;background:#fff;cursor:pointer}
-    .tab.active{background:#111;color:#fff;border-color:#111}
-    .progressBar{height:10px;border-radius:999px;background:#eee;overflow:hidden}
-    .progressFill{height:100%;width:0%}
-    .q{padding:14px;border:1px solid #eee;border-radius:14px;margin:10px 0}
-    .qTitle{font-weight:700;margin-bottom:10px}
-    .choices label{display:block;margin:8px 0;cursor:pointer}
-    audio{width:100%}
-    .navRow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
-    textarea{width:100%;min-height:120px;border:1px solid #ccc;border-radius:12px;padding:10px;font-size:14px}
+    :root{
+      --bg:#f7f7f8;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:rgba(17,24,39,.10);
+      --shadow:0 18px 50px rgba(0,0,0,.08);
+      --radius:22px;
+
+      --red:#e11d48;
+      --red2:#ff2d55;
+      --redDark:#be123c;
+      --focus:rgba(225,29,72,.28);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+      background:
+        radial-gradient(1100px 420px at 20% -10%, rgba(255,45,85,.18), transparent 65%),
+        radial-gradient(900px 360px at 90% 0%, rgba(225,29,72,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px;}
+    .top{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .title{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background:linear-gradient(135deg,var(--red2),var(--red));
+      box-shadow:0 14px 32px rgba(225,29,72,.25);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-weight:800;
+      user-select:none;
+    }
+    h1{margin:0;font-size:20px}
+    .muted{color:var(--muted);font-size:14px;line-height:1.6}
+
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      border:1px solid var(--border);background:rgba(255,255,255,.85);
+      font-size:13px;color:var(--muted);
+    }
+    .btn{
+      padding:11px 14px;border-radius:16px;border:1px solid rgba(17,24,39,.14);
+      background:#fff;cursor:pointer;font-size:14px;
+      transition:transform .06s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btnPrimary{
+      background:linear-gradient(135deg,var(--red2),var(--red));
+      border-color:transparent;color:#fff;font-weight:800;
+      box-shadow:0 14px 26px rgba(225,29,72,.22);
+    }
+    .btnGhost:hover{border-color:rgba(225,29,72,.35)}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin:12px 0;
+    }
+
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+    .tab{
+      padding:9px 14px;border-radius:999px;border:1px solid rgba(17,24,39,.14);
+      background:#fff;cursor:pointer;font-size:14px;font-weight:700;color:var(--text);
+    }
+    .tab.active{
+      color:#fff;border-color:transparent;
+      background:linear-gradient(135deg,var(--red2),var(--red));
+      box-shadow:0 12px 22px rgba(225,29,72,.18);
+    }
+
+    .progressBar{height:10px;border-radius:999px;background:rgba(17,24,39,.08);overflow:hidden}
+    .progressFill{height:100%;width:0%;background:linear-gradient(90deg,var(--red2),var(--red));}
+
+    .q{padding:14px;border:1px solid rgba(17,24,39,.10);border-radius:18px;background:#fff}
+    .qTitle{font-weight:850;font-size:16px;margin-bottom:10px}
+    audio{width:100%;margin-top:8px}
+
+    .choices label{
+      display:block;margin:10px 0;
+      padding:12px 12px;border-radius:16px;
+      border:1px solid rgba(17,24,39,.12);
+      background:#fff;
+      cursor:pointer;
+    }
+    .choices label:hover{border-color:rgba(225,29,72,.35)}
+    .choices input{margin-right:10px;transform:scale(1.1)}
+    .navRow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+    .submitCard{
+      background:linear-gradient(180deg, rgba(225,29,72,.06), rgba(225,29,72,.03));
+      border:1px solid rgba(225,29,72,.18);
+    }
   </style>
 </head>
 
 <body>
-  <div class="topRow">
-    <div>
-      <h1 style="margin:0;">考试进行中</h1>
-      <div class="muted">分段：听力 → 第二大题（选择题）。可返回上一段，答案会自动保存。</div>
-    </div>
-    <div class="pill">
-      <span id="who" class="muted"></span>
-      <button class="btn" id="backBtn">返回信息页</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="tabs">
-      <button class="tab" data-section="listening">听力</button>
-      <button class="tab" data-section="reading">第二大题</button>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">
+        <div class="logo">测</div>
+        <div>
+          <h1>答题中</h1>
+          <div class="muted">听力 → 第二大题（选择题）</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <div class="pill" id="who"></div>
+        <button class="btn btnGhost" id="backBtn">返回首页</button>
+      </div>
     </div>
 
-    <div class="progressBar">
-      <div id="progress" class="progressFill"></div>
+    <div class="card">
+      <div class="tabs">
+        <button class="tab" data-section="listening">听力</button>
+        <button class="tab" data-section="reading">第二大题</button>
+      </div>
+
+      <div class="progressBar"><div id="progress" class="progressFill"></div></div>
+      <div id="progressText" class="muted" style="margin-top:8px;">0 / 0</div>
+
+      <div id="quizBox" style="margin-top:12px;"></div>
+
+      <div class="navRow">
+        <button id="prevBtn" class="btn btnGhost">上一题</button>
+        <button id="nextBtn" class="btn btnPrimary">下一题</button>
+      </div>
     </div>
-    <div id="progressText" class="muted" style="margin-top:8px;">0 / 0</div>
 
-    <div id="quizBox"></div>
-
-    <div class="navRow">
-      <button id="prevBtn" class="btn">上一页</button>
-      <button id="nextBtn" class="btn btnPrimary">下一页</button>
+    <div class="card submitCard">
+      <div class="muted">完成全部题目后，点击提交查看成绩。</div>
+      <div style="margin-top:10px">
+        <button id="submitBtn" class="btn btnPrimary">提交并出结果</button>
+      </div>
+      <div id="submitTip" class="muted" style="margin-top:10px;"></div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="muted">完成全部分段后，点击提交进入成绩页。</div>
-    <button id="submitBtn" class="btn btnPrimary">提交并出结果</button>
-    <div id="submitTip" class="muted" style="margin-top:8px;"></div>
   </div>
 
   <script src="./questions.js"></script>

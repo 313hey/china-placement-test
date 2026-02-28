@@ -3,57 +3,158 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>中文分级测评 | 信息填写</title>
+  <title>中文分级测评 | 开始</title>
   <style>
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:860px;margin:24px auto;padding:0 16px;}
-    .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
-    .muted{color:#666;font-size:14px;line-height:1.6}
-    label{display:block;margin:12px 0 6px;font-weight:600}
-    input,select{width:100%;max-width:520px;padding:10px 12px;border-radius:12px;border:1px solid #ccc;font-size:14px}
-    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
-    .btnPrimary{background:#111;color:#fff;border-color:#111}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
-    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid #ddd;border-radius:999px;padding:8px 12px;background:#fff}
-    code{background:#f3f4f6;padding:2px 6px;border-radius:8px}
+    :root{
+      --bg:#f7f7f8;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:rgba(17,24,39,.10);
+      --shadow:0 18px 50px rgba(0,0,0,.08);
+      --radius:22px;
+
+      --red:#e11d48;      /* 主红 */
+      --red2:#ff2d55;     /* 更像苹果红的亮一点 */
+      --redDark:#be123c;  /* hover */
+      --focus:rgba(225,29,72,.28);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+      background:
+        radial-gradient(1100px 420px at 20% -10%, rgba(255,45,85,.18), transparent 65%),
+        radial-gradient(900px 360px at 90% 0%, rgba(225,29,72,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:920px;margin:0 auto;padding:22px 16px 40px;}
+    .top{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background:linear-gradient(135deg,var(--red2),var(--red));
+      box-shadow:0 14px 32px rgba(225,29,72,.25);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-weight:800;font-size:18px;
+      user-select:none;
+    }
+    h1{margin:0;font-size:22px;letter-spacing:.2px}
+    .sub{margin-top:6px;color:var(--muted);font-size:14px;line-height:1.6}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .pillRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      border:1px solid var(--border);background:rgba(255,255,255,.8);
+      color:var(--muted);font-size:13px;
+    }
+    .dot{
+      width:9px;height:9px;border-radius:999px;background:var(--red);
+      box-shadow:0 0 0 6px rgba(225,29,72,.12);
+    }
+
+    label{display:block;margin:16px 0 8px;font-weight:750}
+    input,select{
+      width:100%;max-width:560px;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(17,24,39,.14);
+      font-size:15px;
+      outline:none;
+      background:#fff;
+    }
+    input:focus,select:focus{
+      border-color:rgba(225,29,72,.55);
+      box-shadow:0 0 0 6px var(--focus);
+    }
+
+    .actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:18px}
+    .btn{
+      padding:12px 16px;border-radius:16px;border:1px solid rgba(17,24,39,.14);
+      background:#fff;cursor:pointer;font-size:15px;
+      transition:transform .06s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btnPrimary{
+      background:linear-gradient(135deg,var(--red2),var(--red));
+      border-color:transparent;color:#fff;font-weight:800;
+      box-shadow:0 14px 26px rgba(225,29,72,.22);
+    }
+    .btnPrimary:hover{filter:saturate(1.05) brightness(1.02)}
+    .btnGhost:hover{border-color:rgba(225,29,72,.35)}
+    .tip{color:var(--muted);font-size:14px}
+
+    .note{
+      margin-top:16px;padding:14px 14px;border-radius:18px;
+      background:linear-gradient(180deg, rgba(225,29,72,.06), rgba(225,29,72,.03));
+      border:1px solid rgba(225,29,72,.18);
+      color:rgba(17,24,39,.78);
+      font-size:14px;line-height:1.65;
+    }
+
+    .footer{margin-top:14px;color:rgba(107,114,128,.9);font-size:12.5px}
   </style>
 </head>
+
 <body>
-
-  <h1 style="margin:0;">中文分级测评（25题｜两大题｜全选择题）</h1>
-  <div class="muted" style="margin-top:8px;">
-    这页只做两件事：填写学生信息 + 进入考试（exam.html）。<br/>
-    <b>优化：</b>点击“开始考试”会自动清空上一位学生的答题记录（答案/进度），避免串号。
-  </div>
-
-  <div class="card">
-    <div class="row">
-      <div class="pill"><span class="muted">保存位置：</span><code>localStorage</code></div>
-      <div class="pill"><span class="muted">进入后页面：</span><code>exam.html</code></div>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo">中</div>
+        <div>
+          <h1>中文分级测评</h1>
+          <div class="sub">25题 · 两大题 · 全选择题（适合小朋友）</div>
+        </div>
+      </div>
     </div>
 
-    <label for="name">学生姓名 / ID</label>
-    <input id="name" placeholder="例如：Anna / 2026-001" />
+    <div class="card">
+      <div class="pillRow">
+        <div class="pill"><span class="dot"></span>先填写信息，再开始答题</div>
+        <div class="pill">开始新学生会自动清除上一位答题记录</div>
+      </div>
 
-    <label for="school">项目 / 班级（从下拉选择）</label>
-    <select id="school"></select>
+      <label for="name">学生姓名 / ID</label>
+      <input id="name" placeholder="例如：Anna / 2026-001（建议填写）" autocomplete="off" />
 
-    <div class="row" style="margin-top:14px;">
-      <button id="startBtn" class="btn btnPrimary">开始考试</button>
-      <button id="clearAllBtn" class="btn">清空本机所有记录（可选）</button>
-      <span id="tip" class="muted"></span>
-    </div>
+      <label for="school">项目 / 班级</label>
+      <select id="school"></select>
 
-    <div class="muted" style="margin-top:10px;">
-      说明：<br/>
-      - “开始考试”会清空：<code>quiz_answers</code>、<code>quiz_state</code>、<code>quiz_result</code>（但不会清空姓名/项目，方便连续测多人）。<br/>
-      - “清空本机所有记录”会把所有相关缓存都清掉（适合交接电脑/重新开始）。
+      <div class="actions">
+        <button id="startBtn" class="btn btnPrimary">开始测试</button>
+        <button id="clearAllBtn" class="btn btnGhost">清空本机记录</button>
+        <span id="tip" class="tip"></span>
+      </div>
+
+      <div class="note">
+        <b>小提示：</b><br/>
+        1）题目可以返回上一题，答案会自动保存。<br/>
+        2）如果换电脑或交接设备，可以点“清空本机记录”。
+      </div>
+
+      <div class="footer">© 中文学习分级测评</div>
     </div>
   </div>
 
   <script src="./questions.js"></script>
   <script>
-    // 这些 key 要和 app.js 保持一致
     const LS = {
       name: "quiz_name",
       school: "quiz_school",
@@ -68,7 +169,6 @@
     const clearAllBtn = document.getElementById("clearAllBtn");
     const tip = document.getElementById("tip");
 
-    // 1) 初始化下拉（来自 questions.js 里的 PROJECT_OPTIONS）
     function initProjectOptions(){
       const opts = (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS))
         ? PROJECT_OPTIONS
@@ -83,22 +183,12 @@
       });
     }
 
-    // 2) 回填上次输入（可选）
     function loadSaved(){
       nameInput.value = localStorage.getItem(LS.name) || "";
       const savedSchool = localStorage.getItem(LS.school) || "";
       if (savedSchool) schoolSel.value = savedSchool;
     }
 
-    function validate(){
-      const name = nameInput.value.trim();
-      const school = schoolSel.value;
-      if (!school) return { ok:false, msg:"请选择项目/班级" };
-      // 姓名允许空（但不建议）
-      return { ok:true, name, school };
-    }
-
-    // ✅ 优化：开始前清掉“上一位学生”的答题缓存，但保留姓名/项目
     function clearStudentAttemptCache(){
       localStorage.removeItem(LS.answers);
       localStorage.removeItem(LS.state);
@@ -106,33 +196,31 @@
     }
 
     startBtn.addEventListener("click", () => {
-      const v = validate();
-      if (!v.ok){
-        tip.textContent = v.msg;
-        return;
-      }
+      const name = nameInput.value.trim();
+      const school = schoolSel.value;
 
-      // 保存姓名/项目（方便成绩页展示、以及下一位继续测）
-      localStorage.setItem(LS.name, v.name);
-      localStorage.setItem(LS.school, v.school);
+      if (!school) { tip.textContent = "请选择项目/班级"; return; }
 
-      // ✅ 清空上一位学生的答案/进度/结果
+      // 如果你想强制必须填姓名，取消注释：
+      // if (!name) { tip.textContent = "请填写学生姓名/ID"; return; }
+
+      localStorage.setItem(LS.name, name);
+      localStorage.setItem(LS.school, school);
+
+      // 自动清掉上一位学生答题记录
       clearStudentAttemptCache();
 
-      // 进入考试
       location.href = "./exam.html";
     });
 
-    // 可选：彻底清空本机所有缓存（包括姓名/项目）
     clearAllBtn.addEventListener("click", () => {
-      if (!confirm("确定清空本机所有记录吗？（姓名/项目/答案/进度/结果都会清空）")) return;
+      if (!confirm("确定清空本机记录吗？（会清除本机上保存的姓名/项目/答题记录）")) return;
       Object.values(LS).forEach(k => localStorage.removeItem(k));
       tip.textContent = "已清空。";
       nameInput.value = "";
       initProjectOptions();
     });
 
-    // boot
     initProjectOptions();
     loadSaved();
   </script>
