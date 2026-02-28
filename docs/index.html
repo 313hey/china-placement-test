@@ -3,76 +3,138 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>来华研学插班中文分级测评</title>
+  <title>中文分级测评 | 信息填写</title>
   <style>
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;}
-    .muted{color:#666;font-size:14px;line-height:1.6}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;max-width:860px;margin:24px auto;padding:0 16px;}
     .card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:12px 0;background:#fff;}
-    .row{display:flex;gap:12px;flex-wrap:wrap;}
-    input,select{padding:10px;border:1px solid #ccc;border-radius:10px;min-width:260px;background:#fff;}
-    .btn{padding:12px 16px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
+    .muted{color:#666;font-size:14px;line-height:1.6}
+    label{display:block;margin:12px 0 6px;font-weight:600}
+    input,select{width:100%;max-width:520px;padding:10px 12px;border-radius:12px;border:1px solid #ccc;font-size:14px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
     .btnPrimary{background:#111;color:#fff;border-color:#111}
     .btn:disabled{opacity:.5;cursor:not-allowed}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid #ddd;border-radius:999px;padding:8px 12px;background:#fff}
+    code{background:#f3f4f6;padding:2px 6px;border-radius:8px}
   </style>
 </head>
-
 <body>
-  <h1>来华研学插班中文分级测评（在线）</h1>
-  <p class="muted">请先填写信息，点击开始后进入考试页面。</p>
+
+  <h1 style="margin:0;">中文分级测评（25题｜两大题｜全选择题）</h1>
+  <div class="muted" style="margin-top:8px;">
+    这页只做两件事：填写学生信息 + 进入考试（exam.html）。<br/>
+    <b>优化：</b>点击“开始考试”会自动清空上一位学生的答题记录（答案/进度），避免串号。
+  </div>
 
   <div class="card">
     <div class="row">
-      <div>
-        <div class="muted">姓名 Name</div>
-        <input id="name" placeholder="例如：Alex" />
-      </div>
-
-      <div>
-        <div class="muted">学校/项目 School</div>
-        <select id="schoolSelect"></select>
-      </div>
+      <div class="pill"><span class="muted">保存位置：</span><code>localStorage</code></div>
+      <div class="pill"><span class="muted">进入后页面：</span><code>exam.html</code></div>
     </div>
 
-    <div style="margin-top:14px;">
-      <button id="startBtn" class="btn btnPrimary" disabled>开始考试</button>
-      <span id="tip" class="muted" style="margin-left:10px;"></span>
+    <label for="name">学生姓名 / ID</label>
+    <input id="name" placeholder="例如：Anna / 2026-001" />
+
+    <label for="school">项目 / 班级（从下拉选择）</label>
+    <select id="school"></select>
+
+    <div class="row" style="margin-top:14px;">
+      <button id="startBtn" class="btn btnPrimary">开始考试</button>
+      <button id="clearAllBtn" class="btn">清空本机所有记录（可选）</button>
+      <span id="tip" class="muted"></span>
+    </div>
+
+    <div class="muted" style="margin-top:10px;">
+      说明：<br/>
+      - “开始考试”会清空：<code>quiz_answers</code>、<code>quiz_state</code>、<code>quiz_result</code>（但不会清空姓名/项目，方便连续测多人）。<br/>
+      - “清空本机所有记录”会把所有相关缓存都清掉（适合交接电脑/重新开始）。
     </div>
   </div>
 
   <script src="./questions.js"></script>
   <script>
-    const nameEl = document.getElementById("name");
-    const sel = document.getElementById("schoolSelect");
-    const btn = document.getElementById("startBtn");
+    // 这些 key 要和 app.js 保持一致
+    const LS = {
+      name: "quiz_name",
+      school: "quiz_school",
+      answers: "quiz_answers",
+      state: "quiz_state",
+      result: "quiz_result"
+    };
+
+    const nameInput = document.getElementById("name");
+    const schoolSel = document.getElementById("school");
+    const startBtn = document.getElementById("startBtn");
+    const clearAllBtn = document.getElementById("clearAllBtn");
     const tip = document.getElementById("tip");
 
-    // 下拉选项：后期你只改 questions.js 里的 PROJECT_OPTIONS
-    if (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS) && PROJECT_OPTIONS.length) {
-      sel.innerHTML =
-        '<option value="" disabled selected>请选择…</option>' +
-        PROJECT_OPTIONS.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
-    } else {
-      sel.innerHTML =
-        '<option value="" disabled selected>请选择…</option>' +
-        '<option value="CIS">CIS</option><option value="Hohhot">Hohhot</option>';
+    // 1) 初始化下拉（来自 questions.js 里的 PROJECT_OPTIONS）
+    function initProjectOptions(){
+      const opts = (typeof PROJECT_OPTIONS !== "undefined" && Array.isArray(PROJECT_OPTIONS))
+        ? PROJECT_OPTIONS
+        : [{ value: "default", label: "default" }];
+
+      schoolSel.innerHTML = "";
+      opts.forEach(o => {
+        const op = document.createElement("option");
+        op.value = o.value;
+        op.textContent = o.label;
+        schoolSel.appendChild(op);
+      });
     }
 
-    function update() {
-      const ok = nameEl.value.trim() && sel.value;
-      btn.disabled = !ok;
-      tip.textContent = ok ? "" : "请填写姓名并选择项目";
+    // 2) 回填上次输入（可选）
+    function loadSaved(){
+      nameInput.value = localStorage.getItem(LS.name) || "";
+      const savedSchool = localStorage.getItem(LS.school) || "";
+      if (savedSchool) schoolSel.value = savedSchool;
     }
-    nameEl.addEventListener("input", update);
-    sel.addEventListener("change", update);
 
-    btn.addEventListener("click", () => {
-      localStorage.setItem("quiz_name", nameEl.value.trim());
-      localStorage.setItem("quiz_school", sel.value);
-      // 关键：用相对路径，避免出现你之前那种 index.html/exam.html 的鬼链接
+    function validate(){
+      const name = nameInput.value.trim();
+      const school = schoolSel.value;
+      if (!school) return { ok:false, msg:"请选择项目/班级" };
+      // 姓名允许空（但不建议）
+      return { ok:true, name, school };
+    }
+
+    // ✅ 优化：开始前清掉“上一位学生”的答题缓存，但保留姓名/项目
+    function clearStudentAttemptCache(){
+      localStorage.removeItem(LS.answers);
+      localStorage.removeItem(LS.state);
+      localStorage.removeItem(LS.result);
+    }
+
+    startBtn.addEventListener("click", () => {
+      const v = validate();
+      if (!v.ok){
+        tip.textContent = v.msg;
+        return;
+      }
+
+      // 保存姓名/项目（方便成绩页展示、以及下一位继续测）
+      localStorage.setItem(LS.name, v.name);
+      localStorage.setItem(LS.school, v.school);
+
+      // ✅ 清空上一位学生的答案/进度/结果
+      clearStudentAttemptCache();
+
+      // 进入考试
       location.href = "./exam.html";
     });
 
-    update();
+    // 可选：彻底清空本机所有缓存（包括姓名/项目）
+    clearAllBtn.addEventListener("click", () => {
+      if (!confirm("确定清空本机所有记录吗？（姓名/项目/答案/进度/结果都会清空）")) return;
+      Object.values(LS).forEach(k => localStorage.removeItem(k));
+      tip.textContent = "已清空。";
+      nameInput.value = "";
+      initProjectOptions();
+    });
+
+    // boot
+    initProjectOptions();
+    loadSaved();
   </script>
 </body>
 </html>
