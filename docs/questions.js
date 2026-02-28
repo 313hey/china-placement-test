@@ -17,45 +17,28 @@ const QUESTIONS = [
   // =========================
   // L00 试听&示例（不计分 Not scored）
   // =========================
-  {
+{
   id: "L00",
   section: "listening",
-  type: "info",
-  points: 0,
+  type: "practice_listening",     // ✅ 新类型：试听题
+  points: 0,                      // 不计分
   title: "试听题 / Practice (Not scored)",
-  prompt:
-`一、听力（Listening）
-请听录音，并看题目中的“问题”，然后从选项 A/B/C/D 中选出最合适的答案。
-Listen to the audio, and read the question, then choose the best answer A/B/C/D.
-
-说明与示例在下方折叠区（默认收起） / Instructions & example are below (collapsed).`,
-
-  // ✅ 把示例放在折叠区里（这段会被 app.js 放进 <details>）
+  prompt: "她喜欢什么颜色？ / What color does she like?",
+  audio: "audio/L00.mp3",         // ✅ 你放示例音频到 audio/L00.mp3
+  // ✅ 图片选项（你已经有 EX_A~EX_D）
+  choices: [
+    { text: "A. 红色 / Red", img: "img/EX_A.png" },
+    { text: "B. 蓝色 / Blue", img: "img/EX_B.png" },
+    { text: "C. 绿色 / Green", img: "img/EX_C.png" },
+    { text: "D. 黄色 / Yellow", img: "img/EX_D.png" }
+  ],
+  answer: 1, // ✅ 正确答案：B（index=1）
+  // 可选：把说明塞进折叠区
   helpHtml: `
-    <div style="margin-top:8px">
-      <div style="font-weight:800">示例 Example（不计分 Not scored｜与正式题无关）</div>
-      <div style="margin-top:6px">问题：她喜欢什么颜色？（Tā xǐhuan shénme yánsè? / What color does she like?）</div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
-        <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
-          <div>A. 红色</div>
-          <img src="img/EX_A.png" alt="A 红色" style="max-width:260px;max-height:160px;border-radius:10px;margin-top:6px;border:1px solid rgba(0,0,0,.12)" />
-        </div>
-        <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
-          <div>B. 蓝色</div>
-          <img src="img/EX_B.png" alt="B 蓝色" style="max-width:260px;max-height:160px;border-radius:10px;margin-top:6px;border:1px solid rgba(0,0,0,.12)" />
-        </div>
-        <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
-          <div>C. 绿色</div>
-          <img src="img/EX_C.png" alt="C 绿色" style="max-width:260px;max-height:160px;border-radius:10px;margin-top:6px;border:1px solid rgba(0,0,0,.12)" />
-        </div>
-        <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
-          <div>D. 黄色</div>
-          <img src="img/EX_D.png" alt="D 黄色" style="max-width:260px;max-height:160px;border-radius:10px;margin-top:6px;border:1px solid rgba(0,0,0,.12)" />
-        </div>
-      </div>
-
-      <div style="margin-top:8px">答案：B</div>
+    <div style="line-height:1.7">
+      <div style="font-weight:900">说明 / Instructions</div>
+      <div>请点击喇叭按钮听录音，然后选 A/B/C/D。/ Click the speaker to listen, then choose A/B/C/D.</div>
+      <div style="margin-top:6px">此题不计分，但必须完成后才进入正式题。/ Not scored, but required to start the test.</div>
     </div>
   `
 },
