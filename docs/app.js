@@ -1,5 +1,8 @@
 // ==============================
-// Exam Engine (3 sections + persist answers + result page)
+// Exam Engine (2 sections + persist answers + result page)
+// - sections: listening + reading
+// - supports: mcq / listening_mcq / listening_tf / short_text / info
+// - supports choices: "text" OR { text: "...", img: "img/xxx.png" }
 // ==============================
 
 /**
@@ -46,9 +49,10 @@ function normalizeText(s) {
   return String(s || "").replace(/\s+/g, "").replace(/[，。！？,.!?]/g, "");
 }
 
+// ✅ 只保留两个分段：listening + reading
 function groupBySection(questions) {
-  const sections = ["listening", "reading", "writing"];
-  const map = { listening: [], reading: [], writing: [] };
+  const sections = ["listening", "reading"];
+  const map = { listening: [], reading: [] };
   (questions || []).forEach(q => {
     const sec = q.section || "reading";
     if (map[sec]) map[sec].push(q);
@@ -56,27 +60,47 @@ function groupBySection(questions) {
   return { sections, map };
 }
 
+// ==============================
 // render helpers
+// ==============================
+
+// ✅ choices 支持：字符串 或 {text,img}
 function renderMCQ(q, savedValue, onChange) {
   const wrap = document.createElement("div");
   wrap.className = "q";
   wrap.innerHTML = `
-    <div class="qTitle">${q.prompt}</div>
+    <div class="qTitle">${q.prompt || ""}</div>
     ${q.audio ? `<audio controls src="${q.audio}"></audio>` : ""}
     <div class="choices"></div>
   `;
 
   const choicesDiv = wrap.querySelector(".choices");
-  q.choices.forEach((c, idx) => {
+  const choices = Array.isArray(q.choices) ? q.choices : [];
+
+  choices.forEach((c, idx) => {
     const id = `${q.id}_${idx}`;
     const label = document.createElement("label");
+
+    const text = (typeof c === "string") ? c : (c && c.text) ? c.text : "";
+    const img = (typeof c === "object" && c && c.img) ? c.img : "";
+
     label.innerHTML = `
       <input type="radio" name="${q.id}" id="${id}" value="${idx}" ${String(savedValue) === String(idx) ? "checked" : ""} />
-      ${c}
+      <span>${text}</span>
+      ${
+        img
+          ? `<div style="margin-top:6px">
+               <img src="${img}" alt="${text}"
+                 style="max-width:260px;max-height:160px;border-radius:10px;border:1px solid rgba(0,0,0,.12)" />
+             </div>`
+          : ""
+      }
     `;
+
     label.querySelector("input").addEventListener("change", (e) => onChange(Number(e.target.value)));
     choicesDiv.appendChild(label);
   });
+
   return wrap;
 }
 
@@ -84,7 +108,7 @@ function renderShortText(q, savedValue, onChange) {
   const wrap = document.createElement("div");
   wrap.className = "q";
   wrap.innerHTML = `
-    <div class="qTitle">${q.prompt}</div>
+    <div class="qTitle">${q.prompt || ""}</div>
     <textarea placeholder="请输入…"></textarea>
   `;
   const ta = wrap.querySelector("textarea");
@@ -93,25 +117,48 @@ function renderShortText(q, savedValue, onChange) {
   return wrap;
 }
 
+// ✅ 说明/示例页：type = "info"
+function renderInfo(q) {
+  const wrap = document.createElement("div");
+  wrap.className = "q";
+  wrap.innerHTML = `
+    <div class="qTitle" style="font-weight:800">${q.title || "说明 / Instructions"}</div>
+    <div class="muted" style="margin-top:10px;white-space:pre-wrap;line-height:1.7">
+      ${q.prompt || ""}
+    </div>
+    ${q.html ? `<div style="margin-top:14px">${q.html}</div>` : ""}
+    <div class="muted" style="margin-top:14px">点击“下一页”开始。</div>
+  `;
+  return wrap;
+}
+
+// ==============================
+// scoring
+// ==============================
+
 function calcScore(questions, answersMap) {
   let total = 0;
   let possible = 0;
+
+  // ✅ 只保留两项
   const breakdown = {
     listening: { score: 0, possible: 0, count: 0 },
-    reading: { score: 0, possible: 0, count: 0 },
-    writing: { score: 0, possible: 0, count: 0 }
+    reading: { score: 0, possible: 0, count: 0 }
   };
 
   (questions || []).forEach(q => {
     const pts = Number(q.points || 0);
-    const sec = q.section || "reading";
+    let sec = q.section || "reading";
+    if (!breakdown[sec]) sec = "reading";
+
+    // info 不计入 possible（points 一般为0），但这里仍然安全
     possible += pts;
     breakdown[sec].possible += pts;
     breakdown[sec].count += 1;
 
     const ans = answersMap[q.id];
 
-    // 如果你还没填答案（answer: null / undefined），那这题不计分（但仍计 possible）
+    // answer 为空：不计分
     if (q.answer === null || typeof q.answer === "undefined") return;
 
     let correct = false;
@@ -119,7 +166,8 @@ function calcScore(questions, answersMap) {
     if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
       correct = Number(ans) === Number(q.answer);
     } else if (q.type === "short_text") {
-      // 写作主观题：默认不自动判分（你也可以后续改成关键词匹配）
+      correct = false;
+    } else if (q.type === "info") {
       correct = false;
     }
 
@@ -171,7 +219,7 @@ async function submitToGoogleForm(payload) {
 
   // question bank
   if (typeof QUESTIONS === "undefined" || !Array.isArray(QUESTIONS)) {
-    quizBox.innerHTML = `<div class="muted">题库未加载（QUESTIONS 不存在）。请检查：docs/questions.js 是否为“文件”而不是“文件夹”。</div>`;
+    quizBox.innerHTML = `<div class="muted">题库未加载（QUESTIONS 不存在）。请检查：questions.js 是否正确加载。</div>`;
     return;
   }
 
@@ -188,7 +236,6 @@ async function submitToGoogleForm(payload) {
   const prevBtn = byId("prevBtn");
   const nextBtn = byId("nextBtn");
   const submitBtn = byId("submitBtn");
-  const submitTip = byId("submitTip");
   const tabButtons = Array.from(document.querySelectorAll(".tab"));
 
   function currentSectionKey() {
@@ -196,9 +243,6 @@ async function submitToGoogleForm(payload) {
   }
   function currentQuestions() {
     return map[currentSectionKey()] || [];
-  }
-  function totalPagesInSection() {
-    return currentQuestions().length;
   }
 
   function setTabActive() {
@@ -235,7 +279,11 @@ async function submitToGoogleForm(payload) {
     quizBox.innerHTML = ""; // clear
 
     let node;
-    if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
+
+    // ✅ 支持 info 页
+    if (q.type === "info") {
+      node = renderInfo(q);
+    } else if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
       node = renderMCQ(q, saved, (val) => {
         answers[q.id] = val;
         saveJSON(LS.answers, answers);
@@ -253,19 +301,16 @@ async function submitToGoogleForm(payload) {
 
     quizBox.appendChild(node);
 
-    // progress within section
-    const pct = ((state.pageIndex + 1) / totalPages) * 100;
+    // progress（按当前分段页数显示）
+    const pct = Math.round(((state.pageIndex + 1) / totalPages) * 100);
     if (progress) progress.style.width = `${pct}%`;
     if (progressText) progressText.textContent = `${state.pageIndex + 1} / ${totalPages}`;
 
-    // nav
+    // buttons
     if (prevBtn) prevBtn.disabled = (state.sectionIndex === 0 && state.pageIndex === 0);
-    if (nextBtn) nextBtn.disabled = (state.sectionIndex === sections.length - 1 && state.pageIndex === totalPages - 1);
+    if (nextBtn) nextBtn.disabled = false;
 
-    // submit hint
-    if (submitTip) {
-      submitTip.textContent = `当前分段：${secKey}（第 ${state.pageIndex + 1} / ${totalPages} 题）`;
-    }
+    // submit button: 只有到最后一题才显示/可用（你 exam.html 里通常是一直显示按钮，这里不强控）
   }
 
   function goPrev() {
@@ -274,7 +319,8 @@ async function submitToGoogleForm(payload) {
       state.pageIndex -= 1;
     } else if (state.sectionIndex > 0) {
       state.sectionIndex -= 1;
-      state.pageIndex = (map[currentSectionKey()] || []).length - 1;
+      const prevSecQs = map[sections[state.sectionIndex]] || [];
+      state.pageIndex = Math.max(0, prevSecQs.length - 1);
     }
     saveJSON(LS.state, state);
     render();
@@ -292,7 +338,7 @@ async function submitToGoogleForm(payload) {
     render();
   }
 
-  // tab click (允许随时跳分段)
+  // tab click
   tabButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const sec = btn.getAttribute("data-section");
@@ -311,7 +357,6 @@ async function submitToGoogleForm(payload) {
 
   if (submitBtn) {
     submitBtn.addEventListener("click", async () => {
-      // score
       const { total, possible, breakdown } = calcScore(QUESTIONS, answers);
 
       const payload = {
@@ -325,8 +370,9 @@ async function submitToGoogleForm(payload) {
       saveJSON(LS.result, payload);
 
       // submit to google form (best-effort)
-      const r = await submitToGoogleForm(payload);
-      // 不阻塞跳转
+      await submitToGoogleForm(payload);
+
+      // 跳转成绩页
       location.href = "./result.html";
     });
   }
