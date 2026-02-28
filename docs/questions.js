@@ -18,22 +18,23 @@ const QUESTIONS = [
   // L00 试听&示例（不计分 Not scored）
   // =========================
   {
-    id: "L00",
-    section: "listening",
-    type: "info",
-    points: 0,
-    title: "一、听力（Listening）",
-    prompt:
-`请听录音，并看题目中的“问题”，然后从选项 A/B/C/D 中选出最合适的答案。
+  id: "L00",
+  section: "listening",
+  type: "info",
+  points: 0,
+  title: "试听题 / Practice (Not scored)",
+  prompt:
+`一、听力（Listening）
+请听录音，并看题目中的“问题”，然后从选项 A/B/C/D 中选出最合适的答案。
 Listen to the audio, and read the question, then choose the best answer A/B/C/D.
 
-示例 Example（不计分 Not scored｜与正式题无关）
-问题：她喜欢什么颜色？
-（Tā xǐhuan shénme yánsè? / What color does she like?）
+说明与示例在下方折叠区（默认收起） / Instructions & example are below (collapsed).`,
 
-答案：B`,
-    html: `
-      <div class="muted" style="margin-top:6px">示例题选项（图片）</div>
+  // ✅ 把示例放在折叠区里（这段会被 app.js 放进 <details>）
+  helpHtml: `
+    <div style="margin-top:8px">
+      <div style="font-weight:800">示例 Example（不计分 Not scored｜与正式题无关）</div>
+      <div style="margin-top:6px">问题：她喜欢什么颜色？（Tā xǐhuan shénme yánsè? / What color does she like?）</div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
         <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
@@ -54,13 +55,10 @@ Listen to the audio, and read the question, then choose the best answer A/B/C/D.
         </div>
       </div>
 
-      <div style="margin-top:14px">
-        <button id="startOfficialBtn" class="btn btnPrimary">正式开始（进入第1题）</button>
-        <span class="muted" style="margin-left:10px">点击后开始计分。</span>
-      </div>
-    `,
-    // info 页不需要 answer
-  },
+      <div style="margin-top:8px">答案：B</div>
+    </div>
+  `
+},
 
   // =========================
   // 第一大题：听力 1-15

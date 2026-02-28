@@ -58,41 +58,83 @@ function groupBySection(questions) {
 // ✅ choices 支持：字符串 或 {text,img}
 function renderMCQ(q, savedValue, onChange) {
   const wrap = document.createElement("div");
-  wrap.className = "q";
+  wrap.className = "qCard";
+
+  // 音频：每题都有（哪怕没有audio也占位更一致）
+  const audioHTML = q.audio
+    ? `<audio id="qAudio" controls src="${q.audio}"></audio>`
+    : `<div class="muted" style="margin:6px 0">（本题无音频 / No audio for this item）</div>`;
+
+  // 题干分层：如果你未来想加拼音/英文，可用 q.subtext
+  const stemMain = (q.prompt || "").trim();
+  const stemSub  = (q.subtext || "").trim(); // 可选：你以后可加拼音/英文到 subtext
+
+  // 选项
+  const choices = Array.isArray(q.choices) ? q.choices : [];
+  const letters = ["A","B","C","D"];
+
   wrap.innerHTML = `
-    <div class="qTitle">${q.prompt || ""}</div>
-    ${q.audio ? `<audio controls src="${q.audio}"></audio>` : ""}
-    <div class="choices"></div>
+    <div class="audioBar">
+      ${audioHTML}
+    </div>
+
+    <div class="panel">
+      <div class="panelTitle">问题 / Question</div>
+      <div class="stemMain">${escapeHtml(stemMain)}</div>
+      ${stemSub ? `<div class="stemSub">${escapeHtml(stemSub)}</div>` : ""}
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <div class="panelTitle">选项 / Options</div>
+      <div class="optGrid" id="optGrid"></div>
+    </div>
+
+    <details class="helpFold" ${q.helpHtml ? "" : "style='display:none'"} >
+      <summary>说明与示例 / Instructions & Example</summary>
+      <div class="helpInner">${q.helpHtml || ""}</div>
+    </details>
   `;
 
-  const choicesDiv = wrap.querySelector(".choices");
-  const choices = Array.isArray(q.choices) ? q.choices : [];
+  const grid = wrap.querySelector("#optGrid");
 
   choices.forEach((c, idx) => {
-    const id = `${q.id}_${idx}`;
-    const label = document.createElement("label");
-
+    // 支持两种 choices：
+    // 1) "纯文字"
+    // 2) { text:"...", img:"img/xxx.png" }
     const text = (typeof c === "string") ? c : (c && c.text) ? c.text : "";
-    const img = (typeof c === "object" && c && c.img) ? c.img : "";
+    const img  = (typeof c === "object" && c && c.img) ? c.img : "";
 
-    label.innerHTML = `
-      <input type="radio" name="${q.id}" id="${id}" value="${idx}" ${String(savedValue) === String(idx) ? "checked" : ""} />
-      <span>${text}</span>
-      ${
-        img
-          ? `<div style="margin-top:6px">
-               <img src="${img}" alt="${text}"
-                 style="max-width:260px;max-height:160px;border-radius:10px;border:1px solid rgba(0,0,0,.12)" />
-             </div>`
-          : ""
-      }
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "optCard" + (String(savedValue) === String(idx) ? " selected" : "");
+    card.setAttribute("data-idx", String(idx));
+
+    card.innerHTML = `
+      <div class="optLetter">${letters[idx] || ""}</div>
+      <div class="optBody">
+        <div class="optText">${escapeHtml(text)}</div>
+        ${img ? `<img class="optImg" src="${img}" alt="${escapeHtml(text)}" />` : ""}
+      </div>
     `;
 
-    label.querySelector("input").addEventListener("change", (e) => onChange(Number(e.target.value)));
-    choicesDiv.appendChild(label);
+    card.addEventListener("click", () => {
+      // 选中态
+      grid.querySelectorAll(".optCard").forEach(n => n.classList.remove("selected"));
+      card.classList.add("selected");
+      onChange(idx);
+    });
+
+    grid.appendChild(card);
   });
 
   return wrap;
+}
+
+// 小工具：防止 prompt 里出现特殊字符破坏HTML
+function escapeHtml(s){
+  return (s ?? "").toString().replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
 }
 
 function renderShortText(q, savedValue, onChange) {
@@ -276,17 +318,16 @@ async function submitToGoogleForm(payload) {
     }
 
     quizBox.appendChild(node);
-    // ✅ L00 试听&示例页：点“正式开始”跳到 L01
-if (q && q.type === "info" && q.id === "L00") {
-  const btn = document.getElementById("startOfficialBtn");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      // listening 分段第0页是 L00，下一页(1)就是 L01
-      state.sectionIndex = 0;
-      state.pageIndex = 1;
-      saveJSON(LS.state, state);
-      render();
-    });
+    // ✅ 每次进入新题：音频暂停+归零（允许重复播放）
+const a = quizBox.querySelector("audio");
+if (a) {
+  try {
+    a.pause();
+    a.currentTime = 0;
+    // load() 会让进度条归零更稳定
+    a.load();
+  } catch (e) {}
+}
   }
 }
 
