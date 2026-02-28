@@ -1,7 +1,11 @@
 // ==============================
 // 25题（两大题）：听力 1-15 + 请选择合适的词 16-25
-// 听力音频放到：docs/audio/ 下：L01.mp3 ~ L15.mp3
-// 图片放到：docs/img/ 下：L01_A.png 这种命名（见下方说明）
+// ✅ 新增：L00 试听&示例页（不计分）→ 点“正式开始”进入 L01
+//
+// 资源放置（按你当前路径写法）：
+// - 听力音频：audio/L01.mp3 ~ audio/L15.mp3
+// - 正式题图片：img/L01_A.png ... img/L08_D.png
+// - 示例页图片：img/EX_A.png ... img/EX_D.png   ✅你自己放这4张
 // ==============================
 
 const PROJECT_OPTIONS = [
@@ -10,6 +14,54 @@ const PROJECT_OPTIONS = [
 ];
 
 const QUESTIONS = [
+  // =========================
+  // L00 试听&示例（不计分 Not scored）
+  // =========================
+  {
+    id: "L00",
+    section: "listening",
+    type: "info",
+    points: 0,
+    title: "一、听力（Listening）",
+    prompt:
+`请听录音，并看题目中的“问题”，然后从选项 A/B/C/D 中选出最合适的答案。
+Listen to the audio, and read the question, then choose the best answer A/B/C/D.
+
+示例 Example（不计分 Not scored｜与正式题无关）
+问题：她喜欢什么颜色？
+（Tā xǐhuan shénme yánsè? / What color does she like?）
+
+答案：B`,
+    html: `
+      <div class="muted" style="margin-top:6px">示例题选项（图片）</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+        <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
+          <div>A. 红色</div>
+          <img src="img/EX_A.png" alt="A 红色" style="max-width:260px;max-height:160px;border-radius:10px;margin-top:6px;border:1px solid rgba(0,0,0,.12)" />
+        </div>
+        <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
+          <div>B. 蓝色</div>
+          <img src="img/EX_B.png" alt="B 蓝色" style="max-width:260px;max-height:160px;border-radius:10px;margin-top:6px;border:1px solid rgba(0,0,0,.12)" />
+        </div>
+        <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
+          <div>C. 绿色</div>
+          <img src="img/EX_C.png" alt="C 绿色" style="max-width:260px;max-height:160px;border-radius:10px;margin-top:6px;border:1px solid rgba(0,0,0,.12)" />
+        </div>
+        <div style="border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px;background:#fafafa">
+          <div>D. 黄色</div>
+          <img src="img/EX_D.png" alt="D 黄色" style="max-width:260px;max-height:160px;border-radius:10px;margin-top:6px;border:1px solid rgba(0,0,0,.12)" />
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <button id="startOfficialBtn" class="btn btnPrimary">正式开始（进入第1题）</button>
+        <span class="muted" style="margin-left:10px">点击后开始计分。</span>
+      </div>
+    `,
+    // info 页不需要 answer
+  },
+
   // =========================
   // 第一大题：听力 1-15
   // =========================
@@ -224,7 +276,6 @@ const QUESTIONS = [
 
   // =========================
   // 第二大题：请选择合适的词 16-25
-  // （你原项目里叫 reading section，也可以理解成“第二大题”）
   // =========================
 
   {
@@ -234,7 +285,7 @@ const QUESTIONS = [
     points: 1,
     prompt: "16. 我 ___ 中国。",
     choices: ["A. 来", "B. 去", "C. 看", "D. 听"],
-    answer: 0, // 16A
+    answer: 0,
   },
   {
     id: "C17",
@@ -243,7 +294,7 @@ const QUESTIONS = [
     points: 1,
     prompt: "17. 我想喝一 ___ 水。",
     choices: ["A. 杯", "B. 本", "C. 张", "D. 条"],
-    answer: 0, // 17A
+    answer: 0,
   },
   {
     id: "C18",
@@ -257,7 +308,7 @@ const QUESTIONS = [
       "C. 我去看电影明天跟朋友。",
       "D. 我明天去跟朋友看电影。",
     ],
-    answer: 0, // 18A
+    answer: 0,
   },
   {
     id: "C19",
@@ -266,7 +317,7 @@ const QUESTIONS = [
     points: 1,
     prompt: "19. ___ 下雨，所以我们不去公园。",
     choices: ["A. 因为", "B. 但是", "C. 还是", "D. 和"],
-    answer: 0, // 19A
+    answer: 0,
   },
   {
     id: "C20",
@@ -275,7 +326,7 @@ const QUESTIONS = [
     points: 1,
     prompt: "20. 你要茶 ___ 咖啡？",
     choices: ["A. 和", "B. 还是", "C. 因为", "D. 所以"],
-    answer: 1, // 20B
+    answer: 1,
   },
   {
     id: "C21",
@@ -284,7 +335,7 @@ const QUESTIONS = [
     points: 1,
     prompt: "21. 他比我 ___。",
     choices: ["A. 高", "B. 高的", "C. 高了", "D. 高着"],
-    answer: 0, // 21A
+    answer: 0,
   },
   {
     id: "C22",
@@ -293,7 +344,7 @@ const QUESTIONS = [
     points: 1,
     prompt: "22. 选出正确的一句：",
     choices: ["A. 请把门关上。", "B. 请把关上门。", "C. 请门把关上。", "D. 请把门关上了着。"],
-    answer: 0, // 22A
+    answer: 0,
   },
   {
     id: "C23",
@@ -302,7 +353,7 @@ const QUESTIONS = [
     points: 1,
     prompt: "23. 小通知：今天下午三点有中文课，请准时到教室。\n中文课几点开始？",
     choices: ["A. 两点", "B. 三点", "C. 四点", "D. 五点"],
-    answer: 1, // 23B
+    answer: 1,
   },
   {
     id: "C24",
@@ -311,7 +362,7 @@ const QUESTIONS = [
     points: 1,
     prompt: "24. 他下午做什么？",
     choices: ["A. 做作业", "B. 踢足球", "C. 看电影", "D. 去游泳"],
-    answer: 1, // 24B
+    answer: 1,
   },
   {
     id: "C25",
@@ -320,6 +371,6 @@ const QUESTIONS = [
     points: 1,
     prompt: "25. 我很喜欢 ___ 中文。",
     choices: ["A. 学习", "B. 学习着", "C. 学了", "D. 学过"],
-    answer: 0, // 25A
+    answer: 0,
   },
 ];

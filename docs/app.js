@@ -5,15 +5,6 @@
 // - supports choices: "text" OR { text: "...", img: "img/xxx.png" }
 // ==============================
 
-/**
- * 你需要在这里填 Google Form 的两个东西：
- * 1) GOOGLE_FORM_ACTION_URL: 形如：
- *    https://docs.google.com/forms/d/e/【你的FormID】/formResponse
- * 2) FORM_ENTRY: 你表单里每个题对应的 entry.xxxxx
- *    例如：{ name: "entry.123", school: "entry.456", score: "entry.789", breakdown: "entry.101112" }
- *
- * 下面先留空，不影响考试流程，只影响“提交到表单”。
- */
 const GOOGLE_FORM_ACTION_URL = ""; // TODO: 填你的 formResponse
 const FORM_ENTRY = {
   name: "",      // TODO: entry.xxxxx
@@ -151,23 +142,19 @@ function calcScore(questions, answersMap) {
     let sec = q.section || "reading";
     if (!breakdown[sec]) sec = "reading";
 
-    // info 不计入 possible（points 一般为0），但这里仍然安全
     possible += pts;
     breakdown[sec].possible += pts;
     breakdown[sec].count += 1;
 
     const ans = answersMap[q.id];
 
-    // answer 为空：不计分
     if (q.answer === null || typeof q.answer === "undefined") return;
 
     let correct = false;
 
     if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
       correct = Number(ans) === Number(q.answer);
-    } else if (q.type === "short_text") {
-      correct = false;
-    } else if (q.type === "info") {
+    } else {
       correct = false;
     }
 
@@ -181,7 +168,6 @@ function calcScore(questions, answersMap) {
 }
 
 async function submitToGoogleForm(payload) {
-  // 没配置就直接跳过
   if (!GOOGLE_FORM_ACTION_URL || !FORM_ENTRY.name) return { ok: false, skipped: true };
 
   const fd = new FormData();
@@ -191,7 +177,6 @@ async function submitToGoogleForm(payload) {
   fd.append(FORM_ENTRY.breakdown, JSON.stringify(payload.breakdown));
 
   try {
-    // no-cors：不会报跨域，但也拿不到返回。以“不抛错”为成功信号
     await fetch(GOOGLE_FORM_ACTION_URL, { method: "POST", mode: "no-cors", body: fd });
     return { ok: true };
   } catch (e) {
@@ -203,21 +188,17 @@ async function submitToGoogleForm(payload) {
 // Boot exam page
 // ==============================
 (function bootExam() {
-  // 只在 exam.html 上跑（有 quizBox 才跑）
   const quizBox = byId("quizBox");
   if (!quizBox) return;
 
-  // 基本信息
   const name = localStorage.getItem(LS.name) || "";
   const school = localStorage.getItem(LS.school) || "";
   const who = byId("who");
   if (who) who.textContent = `${name || "（未填姓名）"} ｜ ${school || "（未选项目）"}`;
 
-  // back
   const backBtn = byId("backBtn");
   if (backBtn) backBtn.addEventListener("click", () => location.href = "./index.html");
 
-  // question bank
   if (typeof QUESTIONS === "undefined" || !Array.isArray(QUESTIONS)) {
     quizBox.innerHTML = `<div class="muted">题库未加载（QUESTIONS 不存在）。请检查：questions.js 是否正确加载。</div>`;
     return;
@@ -225,12 +206,10 @@ async function submitToGoogleForm(payload) {
 
   const { sections, map } = groupBySection(QUESTIONS);
 
-  // state
   const defaultState = { sectionIndex: 0, pageIndex: 0 };
   const state = loadJSON(LS.state, defaultState);
   const answers = loadJSON(LS.answers, {});
 
-  // dom
   const progress = byId("progress");
   const progressText = byId("progressText");
   const prevBtn = byId("prevBtn");
@@ -259,7 +238,6 @@ async function submitToGoogleForm(payload) {
 
     setTabActive();
 
-    // edge
     if (totalPages === 0) {
       quizBox.innerHTML = `<div class="muted">本分段暂无题目（${secKey}）。请检查 questions.js 里的 section 字段。</div>`;
       if (progress) progress.style.width = "0%";
@@ -269,18 +247,16 @@ async function submitToGoogleForm(payload) {
       return;
     }
 
-    // clamp
     state.pageIndex = Math.max(0, Math.min(state.pageIndex, totalPages - 1));
     saveJSON(LS.state, state);
 
     const q = qs[state.pageIndex];
     const saved = answers[q.id];
 
-    quizBox.innerHTML = ""; // clear
+    quizBox.innerHTML = "";
 
     let node;
 
-    // ✅ 支持 info 页
     if (q.type === "info") {
       node = renderInfo(q);
     } else if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
@@ -300,17 +276,40 @@ async function submitToGoogleForm(payload) {
     }
 
     quizBox.appendChild(node);
+    // ✅ L00 试听&示例页：点“正式开始”跳到 L01
+if (q && q.type === "info" && q.id === "L00") {
+  const btn = document.getElementById("startOfficialBtn");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      // listening 分段第0页是 L00，下一页(1)就是 L01
+      state.sectionIndex = 0;
+      state.pageIndex = 1;
+      saveJSON(LS.state, state);
+      render();
+    });
+  }
+}
 
-    // progress（按当前分段页数显示）
+    // ✅ 关键新增：L00 试听&示例页 —— 点击“正式开始”直接跳到 L01
+    if (q && q.type === "info" && q.id === "L00") {
+      const btn = document.getElementById("startOfficialBtn");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          // listening 分段第0页是 L00，下一页(1)就是 L01（正式第1题）
+          state.sectionIndex = 0;
+          state.pageIndex = 1;
+          saveJSON(LS.state, state);
+          render();
+        });
+      }
+    }
+
     const pct = Math.round(((state.pageIndex + 1) / totalPages) * 100);
     if (progress) progress.style.width = `${pct}%`;
     if (progressText) progressText.textContent = `${state.pageIndex + 1} / ${totalPages}`;
 
-    // buttons
     if (prevBtn) prevBtn.disabled = (state.sectionIndex === 0 && state.pageIndex === 0);
     if (nextBtn) nextBtn.disabled = false;
-
-    // submit button: 只有到最后一题才显示/可用（你 exam.html 里通常是一直显示按钮，这里不强控）
   }
 
   function goPrev() {
@@ -338,7 +337,6 @@ async function submitToGoogleForm(payload) {
     render();
   }
 
-  // tab click
   tabButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const sec = btn.getAttribute("data-section");
@@ -369,10 +367,7 @@ async function submitToGoogleForm(payload) {
       };
       saveJSON(LS.result, payload);
 
-      // submit to google form (best-effort)
       await submitToGoogleForm(payload);
-
-      // 跳转成绩页
       location.href = "./result.html";
     });
   }
