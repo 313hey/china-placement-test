@@ -3,6 +3,9 @@
 // - sections: listening + reading
 // - supports: mcq / listening_mcq / listening_tf / short_text / info
 // - supports choices: "text" OR { text: "...", img: "img/xxx.png" }
+// - Listening UI flow: Question -> Audio -> Options(2x2) -> Next
+// - Instructions/Example: moved to collapsible details using q.helpHtml (collapsed by default)
+// - Audio: reset (pause + currentTime=0 + load) whenever a new question is rendered
 // ==============================
 
 const GOOGLE_FORM_ACTION_URL = ""; // TODO: 填你的 formResponse
@@ -36,10 +39,6 @@ function saveJSON(key, value) {
 
 function byId(id) { return document.getElementById(id); }
 
-function normalizeText(s) {
-  return String(s || "").replace(/\s+/g, "").replace(/[，。！？,.!?]/g, "");
-}
-
 // ✅ 只保留两个分段：listening + reading
 function groupBySection(questions) {
   const sections = ["listening", "reading"];
@@ -55,33 +54,36 @@ function groupBySection(questions) {
 // render helpers
 // ==============================
 
-// ✅ choices 支持：字符串 或 {text,img}
+function escapeHtml(s){
+  return (s ?? "").toString().replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
+
+// ✅ 听力/选择题 UI：题干 → 音频 → 选项（2x2）→ Next
 function renderMCQ(q, savedValue, onChange) {
   const wrap = document.createElement("div");
   wrap.className = "qCard";
 
-  // 音频：每题都有（哪怕没有audio也占位更一致）
-  const audioHTML = q.audio
-    ? `<audio id="qAudio" controls src="${q.audio}"></audio>`
-    : `<div class="muted" style="margin:6px 0">（本题无音频 / No audio for this item）</div>`;
-
-  // 题干分层：如果你未来想加拼音/英文，可用 q.subtext
   const stemMain = (q.prompt || "").trim();
-  const stemSub  = (q.subtext || "").trim(); // 可选：你以后可加拼音/英文到 subtext
+  const stemSub  = (q.subtext || "").trim(); // 可选：拼音/英文（如果你以后要加）
 
-  // 选项
+  const audioHTML = q.audio
+    ? `<audio controls src="${q.audio}"></audio>`
+    : "";
+
   const choices = Array.isArray(q.choices) ? q.choices : [];
   const letters = ["A","B","C","D"];
 
   wrap.innerHTML = `
-    <div class="audioBar">
-      ${audioHTML}
-    </div>
-
     <div class="panel">
       <div class="panelTitle">问题 / Question</div>
       <div class="stemMain">${escapeHtml(stemMain)}</div>
       ${stemSub ? `<div class="stemSub">${escapeHtml(stemSub)}</div>` : ""}
+    </div>
+
+    <div class="audioBar" style="margin-top:10px">
+      ${audioHTML}
     </div>
 
     <div class="panel" style="margin-top:12px">
@@ -98,9 +100,6 @@ function renderMCQ(q, savedValue, onChange) {
   const grid = wrap.querySelector("#optGrid");
 
   choices.forEach((c, idx) => {
-    // 支持两种 choices：
-    // 1) "纯文字"
-    // 2) { text:"...", img:"img/xxx.png" }
     const text = (typeof c === "string") ? c : (c && c.text) ? c.text : "";
     const img  = (typeof c === "object" && c && c.img) ? c.img : "";
 
@@ -118,7 +117,6 @@ function renderMCQ(q, savedValue, onChange) {
     `;
 
     card.addEventListener("click", () => {
-      // 选中态
       grid.querySelectorAll(".optCard").forEach(n => n.classList.remove("selected"));
       card.classList.add("selected");
       onChange(idx);
@@ -130,18 +128,11 @@ function renderMCQ(q, savedValue, onChange) {
   return wrap;
 }
 
-// 小工具：防止 prompt 里出现特殊字符破坏HTML
-function escapeHtml(s){
-  return (s ?? "").toString().replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[m]));
-}
-
 function renderShortText(q, savedValue, onChange) {
   const wrap = document.createElement("div");
   wrap.className = "q";
   wrap.innerHTML = `
-    <div class="qTitle">${q.prompt || ""}</div>
+    <div class="qTitle">${escapeHtml(q.prompt || "")}</div>
     <textarea placeholder="请输入…"></textarea>
   `;
   const ta = wrap.querySelector("textarea");
@@ -150,17 +141,20 @@ function renderShortText(q, savedValue, onChange) {
   return wrap;
 }
 
-// ✅ 说明/示例页：type = "info"
+// ✅ 说明/示例页：type = "info"（版本A方案1：Practice页就是L00，不计分；点下一题进入L01）
 function renderInfo(q) {
   const wrap = document.createElement("div");
-  wrap.className = "q";
+  wrap.className = "qCard";
   wrap.innerHTML = `
-    <div class="qTitle" style="font-weight:800">${q.title || "说明 / Instructions"}</div>
-    <div class="muted" style="margin-top:10px;white-space:pre-wrap;line-height:1.7">
-      ${q.prompt || ""}
+    <div class="panel">
+      <div class="panelTitle">${escapeHtml(q.title || "说明 / Instructions")}</div>
+      <div class="stemMain" style="font-size:15px;font-weight:850">${escapeHtml(q.prompt || "")}</div>
     </div>
-    ${q.html ? `<div style="margin-top:14px">${q.html}</div>` : ""}
-    <div class="muted" style="margin-top:14px">点击“下一页”开始。</div>
+
+    <details class="helpFold" ${q.helpHtml ? "" : "style='display:none'"} style="margin-top:12px">
+      <summary>说明与示例 / Instructions & Example</summary>
+      <div class="helpInner">${q.helpHtml || ""}</div>
+    </details>
   `;
   return wrap;
 }
@@ -173,7 +167,6 @@ function calcScore(questions, answersMap) {
   let total = 0;
   let possible = 0;
 
-  // ✅ 只保留两项
   const breakdown = {
     listening: { score: 0, possible: 0, count: 0 },
     reading: { score: 0, possible: 0, count: 0 }
@@ -190,14 +183,12 @@ function calcScore(questions, answersMap) {
 
     const ans = answersMap[q.id];
 
+    // info 不计分：一般不写 answer
     if (q.answer === null || typeof q.answer === "undefined") return;
 
     let correct = false;
-
     if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
       correct = Number(ans) === Number(q.answer);
-    } else {
-      correct = false;
     }
 
     if (correct) {
@@ -298,7 +289,6 @@ async function submitToGoogleForm(payload) {
     quizBox.innerHTML = "";
 
     let node;
-
     if (q.type === "info") {
       node = renderInfo(q);
     } else if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
@@ -314,35 +304,19 @@ async function submitToGoogleForm(payload) {
     } else {
       node = document.createElement("div");
       node.className = "q";
-      node.innerHTML = `<div class="muted">不支持的题型：${q.type}</div>`;
+      node.innerHTML = `<div class="muted">不支持的题型：${escapeHtml(q.type)}</div>`;
     }
 
     quizBox.appendChild(node);
-    // ✅ 每次进入新题：音频暂停+归零（允许重复播放）
-const a = quizBox.querySelector("audio");
-if (a) {
-  try {
-    a.pause();
-    a.currentTime = 0;
-    // load() 会让进度条归零更稳定
-    a.load();
-  } catch (e) {}
-}
-  }
-}
 
-    // ✅ 关键新增：L00 试听&示例页 —— 点击“正式开始”直接跳到 L01
-    if (q && q.type === "info" && q.id === "L00") {
-      const btn = document.getElementById("startOfficialBtn");
-      if (btn) {
-        btn.addEventListener("click", () => {
-          // listening 分段第0页是 L00，下一页(1)就是 L01（正式第1题）
-          state.sectionIndex = 0;
-          state.pageIndex = 1;
-          saveJSON(LS.state, state);
-          render();
-        });
-      }
+    // ✅ 每次进入新题：音频默认暂停，进度归零；允许重复播放
+    const a = quizBox.querySelector("audio");
+    if (a) {
+      try {
+        a.pause();
+        a.currentTime = 0;
+        a.load();
+      } catch (e) {}
     }
 
     const pct = Math.round(((state.pageIndex + 1) / totalPages) * 100);
@@ -351,6 +325,8 @@ if (a) {
 
     if (prevBtn) prevBtn.disabled = (state.sectionIndex === 0 && state.pageIndex === 0);
     if (nextBtn) nextBtn.disabled = false;
+
+    // Submit 按钮：你要求可以一直显示，因此不在这里做隐藏/显示控制
   }
 
   function goPrev() {
