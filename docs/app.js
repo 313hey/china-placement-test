@@ -69,24 +69,54 @@ function renderMCQ(q, savedValue, onChange) {
 
   const choicesDiv = wrap.querySelector(".choices");
   q.choices.forEach((c, idx) => {
+   // ✅ 支持 choices 为：字符串 或 {text,img} 的版本
+function renderMCQ(q, savedValue, onChange) {
+  const wrap = document.createElement("div");
+  wrap.className = "q";
+
+  const prompt = document.createElement("div");
+  prompt.className = "qPrompt";
+  prompt.textContent = q.prompt || "";
+  wrap.appendChild(prompt);
+
+  const choicesDiv = document.createElement("div");
+  choicesDiv.className = "choices";
+  wrap.appendChild(choicesDiv);
+
+  (q.choices || []).forEach((c, idx) => {
     const id = `${q.id}_${idx}`;
     const label = document.createElement("label");
+    label.className = "choice";
 
-    // 支持两种写法：
-    // 1) "纯文本"
-    // 2) { text: "文本", img: "img/xxx.png" }
+    // ✅ 两种写法都兼容
+    // 1) "A. xxx"
+    // 2) { text: "A. xxx", img: "img/L01_A.png" }
     const text = (typeof c === "string") ? c : (c && c.text) ? c.text : "";
-    const img = (typeof c === "object" && c && c.img) ? c.img : "";
+    const img  = (typeof c === "object" && c && c.img) ? c.img : "";
 
     label.innerHTML = `
-      <input type="radio" name="${q.id}" id="${id}" value="${idx}" ${String(savedValue) === String(idx) ? "checked" : ""} />
+      <input type="radio" name="${q.id}" id="${id}" value="${idx}"
+        ${String(savedValue) === String(idx) ? "checked" : ""} />
       <span>${text}</span>
-      ${img ? `<div style="margin-top:6px"><img src="${img}" alt="${text}" style="max-width:260px;max-height:160px;border-radius:10px;border:1px solid #eee" /></div>` : ""}
+      ${
+        img
+          ? `<div style="margin-top:6px">
+               <img src="${img}" alt="${text}"
+                 style="max-width:260px;max-height:160px;border-radius:10px;border:1px solid rgba(0,0,0,.12)" />
+             </div>`
+          : ""
+      }
     `;
-    label.querySelector("input").addEventListener("change", (e) => onChange(Number(e.target.value)));
+
+    label.querySelector("input").addEventListener("change", (e) => {
+      onChange(Number(e.target.value));
+    });
+
     choicesDiv.appendChild(label);
   });
+
   return wrap;
+}
 }
 
 function renderShortText(q, savedValue, onChange) {
