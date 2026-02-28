@@ -47,11 +47,10 @@ function normalizeText(s) {
 }
 
 function groupBySection(questions) {
-  const sections = ["listening", "reading"];
-  const map = { listening: [], reading: [] };
+  const sections = ["listening", "reading", "writing"];
+  const map = { listening: [], reading: [], writing: [] };
   (questions || []).forEach(q => {
-    let sec = q.section || "reading";
-    if (!breakdown[sec]) sec = "reading";
+    const sec = q.section || "reading";
     if (map[sec]) map[sec].push(q);
   });
   return { sections, map };
@@ -69,54 +68,16 @@ function renderMCQ(q, savedValue, onChange) {
 
   const choicesDiv = wrap.querySelector(".choices");
   q.choices.forEach((c, idx) => {
-   // ✅ 支持 choices 为：字符串 或 {text,img} 的版本
-function renderMCQ(q, savedValue, onChange) {
-  const wrap = document.createElement("div");
-  wrap.className = "q";
-
-  const prompt = document.createElement("div");
-  prompt.className = "qPrompt";
-  prompt.textContent = q.prompt || "";
-  wrap.appendChild(prompt);
-
-  const choicesDiv = document.createElement("div");
-  choicesDiv.className = "choices";
-  wrap.appendChild(choicesDiv);
-
-  (q.choices || []).forEach((c, idx) => {
     const id = `${q.id}_${idx}`;
     const label = document.createElement("label");
-    label.className = "choice";
-
-    // ✅ 两种写法都兼容
-    // 1) "A. xxx"
-    // 2) { text: "A. xxx", img: "img/L01_A.png" }
-    const text = (typeof c === "string") ? c : (c && c.text) ? c.text : "";
-    const img  = (typeof c === "object" && c && c.img) ? c.img : "";
-
     label.innerHTML = `
-      <input type="radio" name="${q.id}" id="${id}" value="${idx}"
-        ${String(savedValue) === String(idx) ? "checked" : ""} />
-      <span>${text}</span>
-      ${
-        img
-          ? `<div style="margin-top:6px">
-               <img src="${img}" alt="${text}"
-                 style="max-width:260px;max-height:160px;border-radius:10px;border:1px solid rgba(0,0,0,.12)" />
-             </div>`
-          : ""
-      }
+      <input type="radio" name="${q.id}" id="${id}" value="${idx}" ${String(savedValue) === String(idx) ? "checked" : ""} />
+      ${c}
     `;
-
-    label.querySelector("input").addEventListener("change", (e) => {
-      onChange(Number(e.target.value));
-    });
-
+    label.querySelector("input").addEventListener("change", (e) => onChange(Number(e.target.value)));
     choicesDiv.appendChild(label);
   });
-
   return wrap;
-}
 }
 
 function renderShortText(q, savedValue, onChange) {
@@ -132,21 +93,6 @@ function renderShortText(q, savedValue, onChange) {
   return wrap;
 }
 
-
-function renderInfo(q) {
-  const wrap = document.createElement("div");
-  wrap.className = "q";
-  // 允许 prompt 用少量 HTML（示例/图片）
-  wrap.innerHTML = `
-    <div class="qTitle">${q.title || "说明 / Instructions"}</div>
-    <div class="muted" style="margin-top:8px;white-space:pre-wrap">${q.prompt || ""}</div>
-    ${q.html ? `<div style="margin-top:12px">${q.html}</div>` : ""}
-    <div class="muted" style="margin-top:12px">点击“下一页”开始。</div>
-  `;
-  return wrap;
-}
-
-
 function calcScore(questions, answersMap) {
   let total = 0;
   let possible = 0;
@@ -158,8 +104,7 @@ function calcScore(questions, answersMap) {
 
   (questions || []).forEach(q => {
     const pts = Number(q.points || 0);
-    let sec = q.section || "reading";
-    if (!breakdown[sec]) sec = "reading";
+    const sec = q.section || "reading";
     possible += pts;
     breakdown[sec].possible += pts;
     breakdown[sec].count += 1;
@@ -171,9 +116,7 @@ function calcScore(questions, answersMap) {
 
     let correct = false;
 
-    if (q.type === "info") {
-      node = renderInfo(q);
-    } else if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
+    if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
       correct = Number(ans) === Number(q.answer);
     } else if (q.type === "short_text") {
       // 写作主观题：默认不自动判分（你也可以后续改成关键词匹配）
@@ -292,9 +235,7 @@ async function submitToGoogleForm(payload) {
     quizBox.innerHTML = ""; // clear
 
     let node;
-    if (q.type === "info") {
-      node = renderInfo(q);
-    } else if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
+    if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
       node = renderMCQ(q, saved, (val) => {
         answers[q.id] = val;
         saveJSON(LS.answers, answers);
