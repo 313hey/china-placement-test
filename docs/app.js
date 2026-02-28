@@ -1,11 +1,13 @@
 // ==============================
 // Exam Engine (2 sections + persist answers + result page)
 // - sections: listening + reading
-// - supports: mcq / listening_mcq / listening_tf / short_text / info
+// - supports: mcq / listening_mcq / listening_tf / short_text / info / practice_listening
 // - supports choices: "text" OR { text: "...", img: "img/xxx.png" }
 // - Listening UI flow: Question -> Audio -> Options(2x2) -> Next
-// - Instructions/Example: moved to collapsible details using q.helpHtml (collapsed by default)
+// - Instructions/Example: collapsible details using q.helpHtml (collapsed by default)
 // - Audio: reset (pause + currentTime=0 + load) whenever a new question is rendered
+// - Practice listening (L00): speaker button plays audio; must choose to unlock Next;
+//   after choosing, show correct answer feedback immediately.
 // ==============================
 
 const GOOGLE_FORM_ACTION_URL = ""; // TODO: 填你的 formResponse
@@ -22,7 +24,8 @@ const LS = {
   school: "quiz_school",
   answers: "quiz_answers",
   state: "quiz_state",
-  result: "quiz_result"
+  result: "quiz_result",
+  practiceDone: "quiz_practice_done"
 };
 
 function loadJSON(key, fallback) {
@@ -39,6 +42,12 @@ function saveJSON(key, value) {
 
 function byId(id) { return document.getElementById(id); }
 
+function escapeHtml(s){
+  return (s ?? "").toString().replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
+
 // ✅ 只保留两个分段：listening + reading
 function groupBySection(questions) {
   const sections = ["listening", "reading"];
@@ -54,50 +63,13 @@ function groupBySection(questions) {
 // render helpers
 // ==============================
 
-function escapeHtml(s){
-  return (s ?? "").toString().replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[m]));
-}
-
-// ✅ 听力/选择题 UI：题干 → 音频 → 选项（2x2）→ Next
-function renderMCQ(q, savedValue, onChange) {
-  const wrap = document.createElement("div");
-  wrap.className = "qCard";
-
-  const stemMain = (q.prompt || "").trim();
-  const stemSub  = (q.subtext || "").trim(); // 可选：拼音/英文（如果你以后要加）
-
-  const audioHTML = q.audio
-    ? `<audio controls src="${q.audio}"></audio>`
-    : "";
-
-  const choices = Array.isArray(q.choices) ? q.choices : [];
+// 通用：2x2 选项卡渲染（支持图片）
+function renderOptionsGrid({ q, savedValue, onPick, showFeedbackFn }) {
   const letters = ["A","B","C","D"];
+  const choices = Array.isArray(q.choices) ? q.choices : [];
 
-  wrap.innerHTML = `
-    <div class="panel">
-      <div class="panelTitle">问题 / Question</div>
-      <div class="stemMain">${escapeHtml(stemMain)}</div>
-      ${stemSub ? `<div class="stemSub">${escapeHtml(stemSub)}</div>` : ""}
-    </div>
-
-    <div class="audioBar" style="margin-top:10px">
-      ${audioHTML}
-    </div>
-
-    <div class="panel" style="margin-top:12px">
-      <div class="panelTitle">选项 / Options</div>
-      <div class="optGrid" id="optGrid"></div>
-    </div>
-
-    <details class="helpFold" ${q.helpHtml ? "" : "style='display:none'"} >
-      <summary>说明与示例 / Instructions & Example</summary>
-      <div class="helpInner">${q.helpHtml || ""}</div>
-    </details>
-  `;
-
-  const grid = wrap.querySelector("#optGrid");
+  const grid = document.createElement("div");
+  grid.className = "optGrid";
 
   choices.forEach((c, idx) => {
     const text = (typeof c === "string") ? c : (c && c.text) ? c.text : "";
@@ -106,7 +78,6 @@ function renderMCQ(q, savedValue, onChange) {
     const card = document.createElement("button");
     card.type = "button";
     card.className = "optCard" + (String(savedValue) === String(idx) ? " selected" : "");
-    card.setAttribute("data-idx", String(idx));
 
     card.innerHTML = `
       <div class="optLetter">${letters[idx] || ""}</div>
@@ -119,11 +90,131 @@ function renderMCQ(q, savedValue, onChange) {
     card.addEventListener("click", () => {
       grid.querySelectorAll(".optCard").forEach(n => n.classList.remove("selected"));
       card.classList.add("selected");
-      onChange(idx);
+      onPick(idx);
+      if (showFeedbackFn) showFeedbackFn(idx);
     });
 
     grid.appendChild(card);
   });
+
+  return grid;
+}
+
+// ✅ 听力/选择题 UI：题干 → 音频 → 选项（2x2）→ Next
+function renderMCQ(q, savedValue, onChange) {
+  const wrap = document.createElement("div");
+  wrap.className = "qCard";
+
+  const stemMain = (q.prompt || "").trim();
+  const stemSub  = (q.subtext || "").trim(); // 可选：拼音/英文
+
+  const audioHTML = q.audio
+    ? `<audio controls src="${q.audio}"></audio>`
+    : "";
+
+  wrap.innerHTML = `
+    <div class="panel">
+      <div class="panelTitle">问题 / Question</div>
+      <div class="stemMain">${escapeHtml(stemMain)}</div>
+      ${stemSub ? `<div class="stemSub">${escapeHtml(stemSub)}</div>` : ""}
+    </div>
+
+    <div class="audioBar">
+      ${audioHTML}
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <div class="panelTitle">选项 / Options</div>
+      <div id="gridMount"></div>
+    </div>
+
+    <details class="helpFold" ${q.helpHtml ? "" : "style='display:none'"} >
+      <summary>说明与示例 / Instructions & Example</summary>
+      <div class="helpInner">${q.helpHtml || ""}</div>
+    </details>
+  `;
+
+  const mount = wrap.querySelector("#gridMount");
+  mount.appendChild(renderOptionsGrid({
+    q,
+    savedValue,
+    onPick: (idx) => onChange(idx)
+  }));
+
+  return wrap;
+}
+
+// ✅ 试听题：喇叭播放→必须选择→立即显示正确答案→做完才能 Next
+function renderPracticeListening(q, savedValue, onChange) {
+  const wrap = document.createElement("div");
+  wrap.className = "qCard";
+
+  const stemMain = (q.prompt || "").trim();
+
+  wrap.innerHTML = `
+    <div class="panel">
+      <div class="panelTitle">${escapeHtml(q.title || "试听题 / Practice (Not scored)")}</div>
+      <div class="stemMain">${escapeHtml(stemMain)}</div>
+      <div class="stemSub">点击喇叭听录音，再选择 / Click the speaker to listen, then choose</div>
+    </div>
+
+    <div class="audioBar" style="margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button type="button" id="spkBtn" class="btn btnPrimary">🔊 播放 / Play</button>
+      <audio id="practiceAudio" preload="auto" src="${q.audio || ""}"></audio>
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <div class="panelTitle">选项 / Options</div>
+      <div id="gridMount"></div>
+    </div>
+
+    <div id="feedback" class="muted" style="margin-top:12px"></div>
+
+    <details class="helpFold" ${q.helpHtml ? "" : "style='display:none'"} >
+      <summary>说明与示例 / Instructions & Example</summary>
+      <div class="helpInner">${q.helpHtml || ""}</div>
+    </details>
+  `;
+
+  const audio = wrap.querySelector("#practiceAudio");
+  const spkBtn = wrap.querySelector("#spkBtn");
+  const fb = wrap.querySelector("#feedback");
+  const mount = wrap.querySelector("#gridMount");
+
+  const letters = ["A","B","C","D"];
+
+  spkBtn.addEventListener("click", async () => {
+    try {
+      audio.pause();
+      audio.currentTime = 0;
+      await audio.play();
+    } catch (e) {
+      fb.textContent = "无法播放音频 / Audio cannot be played.";
+    }
+  });
+
+  function showFeedback(idx){
+    if (typeof q.answer !== "number") return;
+    const correct = idx === q.answer;
+    const correctLetter = letters[q.answer] || "B";
+    fb.innerHTML = correct
+      ? `<b style="color:#16a34a">✅ 正确 / Correct</b>`
+      : `<b style="color:#dc2626">❌ 不正确 / Incorrect</b>　正确答案：<b>${correctLetter}</b> / Correct: <b>${correctLetter}</b>`;
+  }
+
+  mount.appendChild(renderOptionsGrid({
+    q,
+    savedValue,
+    onPick: (idx) => {
+      onChange(idx);
+      showFeedback(idx);
+    }
+  }));
+
+  // 若之前选过，刷新反馈
+  if (savedValue !== null && savedValue !== undefined && savedValue !== "") {
+    showFeedback(Number(savedValue));
+  }
 
   return wrap;
 }
@@ -141,7 +232,7 @@ function renderShortText(q, savedValue, onChange) {
   return wrap;
 }
 
-// ✅ 说明/示例页：type = "info"（版本A方案1：Practice页就是L00，不计分；点下一题进入L01）
+// info 页面：用于纯说明（不计分）
 function renderInfo(q) {
   const wrap = document.createElement("div");
   wrap.className = "qCard";
@@ -183,13 +274,14 @@ function calcScore(questions, answersMap) {
 
     const ans = answersMap[q.id];
 
-    // info 不计分：一般不写 answer
+    // 不计分题：通常不写 answer（或 points=0 也行）
     if (q.answer === null || typeof q.answer === "undefined") return;
 
     let correct = false;
     if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
       correct = Number(ans) === Number(q.answer);
     }
+    // practice_listening 不计分（points=0），不影响 total，但也不统计正确与否
 
     if (correct) {
       total += pts;
@@ -289,7 +381,15 @@ async function submitToGoogleForm(payload) {
     quizBox.innerHTML = "";
 
     let node;
-    if (q.type === "info") {
+    if (q.type === "practice_listening") {
+      node = renderPracticeListening(q, saved, (val) => {
+        answers[q.id] = val;
+        saveJSON(LS.answers, answers);
+        // ✅ 只要做过选择，就算试听完成
+        localStorage.setItem(LS.practiceDone, "1");
+        if (nextBtn) nextBtn.disabled = false;
+      });
+    } else if (q.type === "info") {
       node = renderInfo(q);
     } else if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
       node = renderMCQ(q, saved, (val) => {
@@ -309,9 +409,9 @@ async function submitToGoogleForm(payload) {
 
     quizBox.appendChild(node);
 
-    // ✅ 每次进入新题：音频默认暂停，进度归零；允许重复播放
+    // ✅ 每次进入新题：音频默认暂停，进度归零；允许重复播放（对 audio controls 题有效）
     const a = quizBox.querySelector("audio");
-    if (a) {
+    if (a && q.type !== "practice_listening") {
       try {
         a.pause();
         a.currentTime = 0;
@@ -319,14 +419,21 @@ async function submitToGoogleForm(payload) {
       } catch (e) {}
     }
 
+    // ✅ 试听题门禁：必须完成试听题（做出选择）才能 Next
+    if (q && q.type === "practice_listening") {
+      const done = localStorage.getItem(LS.practiceDone) === "1";
+      if (nextBtn) nextBtn.disabled = !done;
+    } else {
+      if (nextBtn) nextBtn.disabled = false;
+    }
+
     const pct = Math.round(((state.pageIndex + 1) / totalPages) * 100);
     if (progress) progress.style.width = `${pct}%`;
     if (progressText) progressText.textContent = `${state.pageIndex + 1} / ${totalPages}`;
 
     if (prevBtn) prevBtn.disabled = (state.sectionIndex === 0 && state.pageIndex === 0);
-    if (nextBtn) nextBtn.disabled = false;
 
-    // Submit 按钮：你要求可以一直显示，因此不在这里做隐藏/显示控制
+    // Submit 按钮：你要求可以一直显示，因此不做隐藏
   }
 
   function goPrev() {
