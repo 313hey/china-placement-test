@@ -3,8 +3,8 @@
 // - L00: practice_listening (Not scored) with speaker audio + image options
 // - Listening: L01–L15
 //   - Image-only options (no text): L01, L02, L04, L06, L08
-//   - Text-only options: L03, L05, L07, L09–L15
-// - MCQ section: C16–C25
+//   - Text-only options (NO A/B/C/D prefixes): L03, L05, L07, L09–L15
+// - MCQ section: C16–C25 (NO A/B/C/D prefixes)
 //
 // IMPORTANT PATHS (match your GitHub Pages publish folder):
 // - Practice audio: audio/L00.mp3
@@ -85,7 +85,7 @@ const QUESTIONS = [
     answer: 0
   },
 
-  // 3 (text-only) ✅ no images
+  // 3 (text-only) ✅ NO A/B/C/D prefixes
   {
     id: "L03",
     section: "listening",
@@ -114,7 +114,7 @@ const QUESTIONS = [
     answer: 2
   },
 
-  // 5 (text-only) ✅ no images
+  // 5 (text-only) ✅ NO A/B/C/D prefixes
   {
     id: "L05",
     section: "listening",
@@ -122,7 +122,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L05.mp3",
     prompt: "5. 现在几点？（What time is it now?）",
-    choices: ["A. 8:00", "B. 8:30", "C. 9:00", "D. 9:30"],
+    choices: ["8:00", "8:30", "9:00", "9:30"],
     answer: 1
   },
 
@@ -143,7 +143,7 @@ const QUESTIONS = [
     answer: 0
   },
 
-  // 7 (text-only) ✅ no images
+  // 7 (text-only) ✅ NO A/B/C/D prefixes
   {
     id: "L07",
     section: "listening",
@@ -151,7 +151,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L07.mp3",
     prompt: "7. 这件衣服多少钱？（How much is this clothing item?）",
-    choices: ["A. 15块", "B. 30块", "C. 50块", "D. 80块"],
+    choices: ["15块", "30块", "50块", "80块"],
     answer: 2
   },
 
@@ -172,7 +172,7 @@ const QUESTIONS = [
     answer: 0
   },
 
-  // 9–15 (text-only)
+  // 9–15 (text-only) ✅ NO A/B/C/D prefixes
   {
     id: "L09",
     section: "listening",
@@ -180,7 +180,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L09.mp3",
     prompt: "9. 明天天气怎么样？",
-    choices: ["A. 很热", "B. 很冷", "C. 下雨", "D. 下雪"],
+    choices: ["很热", "很冷", "下雨", "下雪"],
     answer: 2
   },
   {
@@ -190,7 +190,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L10.mp3",
     prompt: "10. 男生会不会说中文？",
-    choices: ["A. 不会", "B. 会一点儿", "C. 会很多", "D. 不知道"],
+    choices: ["不会", "会一点儿", "会很多", "不知道"],
     answer: 1
   },
   {
@@ -200,7 +200,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L11.mp3",
     prompt: "11. 女生怎么来学校？",
-    choices: ["A. 坐地铁", "B. 坐公交车", "C. 走路", "D. 开车"],
+    choices: ["坐地铁", "坐公交车", "走路", "开车"],
     answer: 0
   },
   {
@@ -210,7 +210,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L12.mp3",
     prompt: "12. 他为什么没去游泳？",
-    choices: ["A. 因为下雨了", "B. 因为太忙了", "C. 因为感冒了", "D. 因为忘了"],
+    choices: ["因为下雨了", "因为太忙了", "因为感冒了", "因为忘了"],
     answer: 2
   },
   {
@@ -220,7 +220,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L13.mp3",
     prompt: "13. 他们先做什么？",
-    choices: ["A. 先看电影", "B. 先去图书馆", "C. 先吃饭", "D. 先踢足球"],
+    choices: ["先看电影", "先去图书馆", "先吃饭", "先踢足球"],
     answer: 1
   },
   {
@@ -230,7 +230,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L14.mp3",
     prompt: "14. 他几点睡觉？",
-    choices: ["A. 九点", "B. 十点", "C. 十点半", "D. 十一点"],
+    choices: ["九点", "十点", "十点半", "十一点"],
     answer: 1
   },
   {
@@ -240,27 +240,33 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L15.mp3",
     prompt: "15. 他们上周去了哪里？",
-    choices: ["A. 动物园", "B. 公园", "C. 图书馆", "D. 博物馆"],
+    choices: ["动物园", "公园", "图书馆", "博物馆"],
     answer: 0
   },
 
   // =========================
-  // MCQ Section 16–25 (选择题 / MCQ)
+  // MCQ Section 16–25 (选择题 / MCQ) ✅ NO A/B/C/D prefixes
   // =========================
-  { id:"C16", section:"reading", type:"mcq", points:1, prompt:"16. 我 ___ 中国。", choices:["A. 来","B. 去","C. 看","D. 听"], answer:0 },
-  { id:"C17", section:"reading", type:"mcq", points:1, prompt:"17. 我想喝一 ___ 水。", choices:["A. 杯","B. 本","C. 张","D. 条"], answer:0 },
+  { id:"C16", section:"reading", type:"mcq", points:1, prompt:"16. 我 ___ 中国。", choices:["来","去","看","听"], answer:0 },
+  { id:"C17", section:"reading", type:"mcq", points:1, prompt:"17. 我想喝一 ___ 水。", choices:["杯","本","张","条"], answer:0 },
   { id:"C18", section:"reading", type:"mcq", points:1, prompt:"18. 选出最自然的一句：", choices:[
-      "A. 我明天跟朋友去看电影。",
-      "B. 我跟朋友明天去看电影。",
-      "C. 我去看电影明天跟朋友。",
-      "D. 我明天去跟朋友看电影。"
+      "我明天跟朋友去看电影。",
+      "我跟朋友明天去看电影。",
+      "我去看电影明天跟朋友。",
+      "我明天去跟朋友看电影。"
     ], answer:0
   },
-  { id:"C19", section:"reading", type:"mcq", points:1, prompt:"19. ___ 下雨，所以我们不去公园。", choices:["A. 因为","B. 但是","C. 还是","D. 和"], answer:0 },
-  { id:"C20", section:"reading", type:"mcq", points:1, prompt:"20. 你要茶 ___ 咖啡？", choices:["A. 和","B. 还是","C. 因为","D. 所以"], answer:1 },
-  { id:"C21", section:"reading", type:"mcq", points:1, prompt:"21. 他比我 ___。", choices:["A. 高","B. 高的","C. 高了","D. 高着"], answer:0 },
-  { id:"C22", section:"reading", type:"mcq", points:1, prompt:"22. 选出正确的一句：", choices:["A. 请把门关上。","B. 请把关上门。","C. 请门把关上。","D. 请把门关上了着。"], answer:0 },
-  { id:"C23", section:"reading", type:"mcq", points:1, prompt:"23. 小通知：今天下午三点有中文课，请准时到教室。\n中文课几点开始？", choices:["A. 两点","B. 三点","C. 四点","D. 五点"], answer:1 },
-  { id:"C24", section:"reading", type:"mcq", points:1, prompt:"24. 他下午做什么？", choices:["A. 做作业","B. 踢足球","C. 看电影","D. 去游泳"], answer:1 },
-  { id:"C25", section:"reading", type:"mcq", points:1, prompt:"25. 我很喜欢 ___ 中文。", choices:["A. 学习","B. 学习着","C. 学了","D. 学过"], answer:0 },
+  { id:"C19", section:"reading", type:"mcq", points:1, prompt:"19. ___ 下雨，所以我们不去公园。", choices:["因为","但是","还是","和"], answer:0 },
+  { id:"C20", section:"reading", type:"mcq", points:1, prompt:"20. 你要茶 ___ 咖啡？", choices:["和","还是","因为","所以"], answer:1 },
+  { id:"C21", section:"reading", type:"mcq", points:1, prompt:"21. 他比我 ___。", choices:["高","高的","高了","高着"], answer:0 },
+  { id:"C22", section:"reading", type:"mcq", points:1, prompt:"22. 选出正确的一句：", choices:[
+      "请把门关上。",
+      "请把关上门。",
+      "请门把关上。",
+      "请把门关上了着。"
+    ], answer:0
+  },
+  { id:"C23", section:"reading", type:"mcq", points:1, prompt:"23. 小通知：今天下午三点有中文课，请准时到教室。\n中文课几点开始？", choices:["两点","三点","四点","五点"], answer:1 },
+  { id:"C24", section:"reading", type:"mcq", points:1, prompt:"24. 他下午做什么？", choices:["做作业","踢足球","看电影","去游泳"], answer:1 },
+  { id:"C25", section:"reading", type:"mcq", points:1, prompt:"25. 我很喜欢 ___ 中文。", choices:["学习","学习着","学了","学过"], answer:0 },
 ];
