@@ -19,11 +19,7 @@
       --red2:#ff2d55;
       --redDark:#be123c;
       --focus:rgba(225,29,72,.22);
-
-      --danger:#ef4444;
-      --dangerBg:rgba(239,68,68,.10);
     }
-
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -34,12 +30,8 @@
         var(--bg);
       color:var(--text);
     }
-
     .wrap{max-width:920px;margin:0 auto;padding:22px 16px 44px;position:relative;}
-    .header{
-      display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;
-      margin-bottom:14px;position:relative;
-    }
+    .header{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
     .logo{
       width:44px;height:44px;border-radius:14px;
       background:linear-gradient(135deg,var(--red2),var(--red));
@@ -52,14 +44,6 @@
     .h1en{display:block;font-weight:750;color:rgba(17,24,39,.84);font-size:15px;margin-top:6px}
     .subtitle{margin-top:8px;color:var(--muted);font-size:14px}
 
-    /* Maple watermark */
-    .watermark{
-      position:absolute;right:-40px;top:-40px;pointer-events:none;
-      opacity:.055; /* 4–6% */
-      width:240px;height:240px;
-      filter:blur(0px);
-    }
-
     .card{
       position:relative;
       background:var(--card);
@@ -69,7 +53,6 @@
       padding:18px;
       overflow:hidden;
     }
-    /* Top gradient hairline */
     .card:before{
       content:"";
       position:absolute;left:0;top:0;right:0;height:2px;
@@ -93,9 +76,6 @@
       border-color:rgba(225,29,72,.55);
       box-shadow:0 0 0 6px var(--focus);
     }
-    .help{
-      margin-top:6px;color:var(--muted2);font-size:12.5px;line-height:1.5;
-    }
     .err{
       margin-top:6px;
       color:var(--redDark);
@@ -118,16 +98,9 @@
       box-shadow:0 14px 26px rgba(225,29,72,.20);
     }
     .btnPrimary:hover{filter:saturate(1.05) brightness(1.02)}
-    .btnSecondary{
-      background:#fff;
-      color:var(--muted);
-    }
+    .btnSecondary{color:var(--muted);}
 
-    .footer{
-      margin-top:14px;
-      color:var(--muted2);
-      font-size:12.5px;
-    }
+    .footer{margin-top:14px;color:var(--muted2);font-size:12.5px;}
 
     /* Modal */
     .overlay{
@@ -136,7 +109,7 @@
       padding:18px;z-index:50;
     }
     .modal{
-      width:min(600px, 100%);
+      width:min(560px, 100%);
       background:#fff;border-radius:22px;border:1px solid var(--border);
       box-shadow:0 26px 70px rgba(0,0,0,.22);
       padding:16px;
@@ -146,9 +119,7 @@
     }
     .overlay.show .modal{transform:scale(1);opacity:1}
     .modal h2{margin:0;font-size:18px}
-    .modal .sub{
-      margin-top:6px;color:var(--muted);font-size:13.5px;line-height:1.6
-    }
+    .modal .sub{margin-top:6px;color:var(--muted);font-size:13.5px;line-height:1.6}
     .kv{
       margin-top:12px;border:1px solid var(--border);border-radius:16px;
       padding:12px;background:#fafafa;
@@ -160,22 +131,12 @@
     .kvVal{font-weight:750;color:rgba(17,24,39,.88)}
     .modalActions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
 
-    /* Small screen tweaks */
-    @media (max-width:520px){
-      .kvKey{min-width:100%}
-    }
+    @media (max-width:520px){ .kvKey{min-width:100%} }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <!-- Watermark -->
-    <svg class="watermark" viewBox="0 0 256 256" aria-hidden="true">
-      <!-- Simple maple leaf outline -->
-      <path fill="none" stroke="#111827" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"
-        d="M128 18c7 20 6 35 0 50 18-10 34-25 46-42 3 20-2 38-12 54 19-5 36-16 50-31-2 24-12 45-29 61 20 2 39-4 55-17-9 26-27 46-50 58 18 9 31 23 40 42-27-7-49-22-66-43 2 21-4 40-17 56-9-23-14-47-17-73h-2c-3 26-8 50-17 73-13-16-19-35-17-56-17 21-39 36-66 43 9-19 22-33 40-42-23-12-41-32-50-58 16 13 35 19 55 17-17-16-27-37-29-61 14 15 31 26 50 31-10-16-15-34-12-54 12 17 28 32 46 42-6-15-7-30 0-50z"/>
-    </svg>
-
     <div class="header">
       <div class="logo">ML</div>
       <div>
@@ -196,14 +157,6 @@
       <input id="name" autocomplete="off" placeholder="例如：张三 / e.g., Zhang San" />
       <div id="err_name" class="err">请填写姓名 / Please enter name</div>
 
-      <!-- Program -->
-      <label for="program">
-        <span class="labCN">项目（必填）</span>
-        <span class="labEN">Program (Required)</span>
-      </label>
-      <input id="program" autocomplete="off" placeholder="例如：CIS Winter Camp / e.g., CIS Winter Camp" />
-      <div id="err_program" class="err">请填写项目 / Please enter program</div>
-
       <!-- School -->
       <label for="school">
         <span class="labCN">学校（必填）</span>
@@ -212,25 +165,9 @@
       <input id="school" autocomplete="off" placeholder="例如：Crofton House School / e.g., Crofton House School" />
       <div id="err_school" class="err">请填写学校 / Please enter school</div>
 
-      <!-- Age -->
-      <label for="age">
-        <span class="labCN">年龄（必填）</span>
-        <span class="labEN">Age (Required)</span>
-      </label>
-      <input id="age" inputmode="numeric" autocomplete="off" placeholder="例如：14 / e.g., 14" />
-      <div class="help">范围：5–25 / Range: 5–25</div>
-      <div id="err_age" class="err">年龄需为 5–25 的数字 / Age must be a number between 5 and 25</div>
-
-      <!-- Email -->
-      <label for="email">
-        <span class="labCN">邮箱（选填）</span>
-        <span class="labEN">Email (Optional)</span>
-      </label>
-      <input id="email" autocomplete="off" placeholder="例如：name@example.com / e.g., name@example.com" />
-      <div id="err_email" class="err">邮箱格式不正确 / Invalid email format</div>
-
       <div class="row">
         <button id="startBtn" class="btn btnPrimary">开始测试 / Start Test</button>
+        <button id="clearBtn" class="btn btnSecondary">清除上一位记录 / Clear Previous Record</button>
       </div>
 
       <div class="footer">信息仅用于分级测评 / Used for placement only</div>
@@ -252,100 +189,48 @@
     </div>
   </div>
 
+  <!-- Clear confirm -->
+  <div class="overlay" id="clearOverlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h2>清除记录？ / Clear record?</h2>
+      <div class="sub">
+        将清除本机上一位学生的答题记录，清除后无法恢复。<br/>
+        <span style="color:var(--muted2)">This will remove the previous student's answers on this device. This cannot be undone.</span>
+      </div>
+      <div class="modalActions">
+        <button class="btn btnSecondary" id="cancelClearBtn">取消 / Cancel</button>
+        <button class="btn btnPrimary" id="confirmClearBtn">确认清除 / Clear</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Existing keys used by exam/app.js
+    // 与 app.js 保持一致
     const LS = {
       name: "quiz_name",
       school: "quiz_school",
       answers: "quiz_answers",
       state: "quiz_state",
       result: "quiz_result",
-      // optional extra fields (won't break anything)
-      program: "quiz_program",
-      schoolName: "quiz_school_name",
-      age: "quiz_age",
-      email: "quiz_email"
+      practiceDone: "quiz_practice_done"
     };
 
     const $ = (id)=>document.getElementById(id);
-
     const el = {
       name: $("name"),
-      program: $("program"),
       school: $("school"),
-      age: $("age"),
-      email: $("email"),
+      err_name: $("err_name"),
+      err_school: $("err_school"),
       startBtn: $("startBtn"),
+      clearBtn: $("clearBtn"),
       overlay: $("overlay"),
       kv: $("kv"),
       editBtn: $("editBtn"),
       confirmBtn: $("confirmBtn"),
-
-      err_name: $("err_name"),
-      err_program: $("err_program"),
-      err_school: $("err_school"),
-      err_age: $("err_age"),
-      err_email: $("err_email"),
+      clearOverlay: $("clearOverlay"),
+      cancelClearBtn: $("cancelClearBtn"),
+      confirmClearBtn: $("confirmClearBtn"),
     };
-
-    function showErr(node, yes){ node.style.display = yes ? "block" : "none"; }
-
-    function isEmail(s){
-      // simple but practical email check
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-    }
-
-    function clearPreviousAttempt(){
-      localStorage.removeItem(LS.answers);
-      localStorage.removeItem(LS.state);
-      localStorage.removeItem(LS.result);
-    }
-
-    function validate(){
-      const v = {
-        name: el.name.value.trim(),
-        program: el.program.value.trim(),
-        school: el.school.value.trim(),
-        ageRaw: el.age.value.trim(),
-        email: el.email.value.trim()
-      };
-
-      let ok = true;
-
-      // Required
-      const missingName = !v.name;
-      const missingProgram = !v.program;
-      const missingSchool = !v.school;
-
-      showErr(el.err_name, missingName);
-      showErr(el.err_program, missingProgram);
-      showErr(el.err_school, missingSchool);
-
-      if (missingName || missingProgram || missingSchool) ok = false;
-
-      // Age numeric + range
-      const age = Number(v.ageRaw);
-      const ageOk = Number.isFinite(age) && Number.isInteger(age) && age >= 5 && age <= 25;
-      showErr(el.err_age, !ageOk);
-      if (!ageOk) ok = false;
-
-      // Email optional but if present must be valid
-      const emailOk = !v.email || isEmail(v.email);
-      showErr(el.err_email, !emailOk);
-      if (!emailOk) ok = false;
-
-      // focus first invalid
-      if (!ok){
-        if (missingName) el.name.focus();
-        else if (missingProgram) el.program.focus();
-        else if (missingSchool) el.school.focus();
-        else if (!ageOk) el.age.focus();
-        else if (!emailOk) el.email.focus();
-        return null;
-      }
-
-      return { name:v.name, program:v.program, school:v.school, age, email: v.email };
-    }
 
     function esc(s){
       return (s ?? "").toString().replace(/[&<>"']/g, m => ({
@@ -353,28 +238,57 @@
       }[m]));
     }
 
+    function showErr(node, yes){ node.style.display = yes ? "block" : "none"; }
+
+    function clearPreviousAttempt(){
+      localStorage.removeItem(LS.answers);
+      localStorage.removeItem(LS.state);
+      localStorage.removeItem(LS.result);
+      localStorage.removeItem(LS.practiceDone);
+    }
+
+    function validate(){
+      const name = el.name.value.trim();
+      const school = el.school.value.trim();
+
+      const badName = !name;
+      const badSchool = !school;
+
+      showErr(el.err_name, badName);
+      showErr(el.err_school, badSchool);
+
+      if (badName) { el.name.focus(); return null; }
+      if (badSchool) { el.school.focus(); return null; }
+
+      return { name, school };
+    }
+
     function openModal(){
       el.overlay.style.display = "flex";
-      // trigger animation
       requestAnimationFrame(()=> el.overlay.classList.add("show"));
     }
     function closeModal(){
       el.overlay.classList.remove("show");
-      // wait for animation
       setTimeout(()=>{ el.overlay.style.display="none"; }, 150);
     }
 
-    // Start -> validate -> show confirm card
-    el.startBtn.addEventListener("click", () => {
+    function openClear(){
+      el.clearOverlay.style.display = "flex";
+      requestAnimationFrame(()=> el.clearOverlay.classList.add("show"));
+    }
+    function closeClear(){
+      el.clearOverlay.classList.remove("show");
+      setTimeout(()=>{ el.clearOverlay.style.display="none"; }, 150);
+    }
+
+    // Start -> validate -> confirm card
+    el.startBtn.addEventListener("click", ()=>{
       const v = validate();
       if (!v) return;
 
       el.kv.innerHTML = `
         <div class="kvRow"><div class="kvKey">姓名 <span class="en">/ Name</span>:</div><div class="kvVal">${esc(v.name)}</div></div>
-        <div class="kvRow"><div class="kvKey">项目 <span class="en">/ Program</span>:</div><div class="kvVal">${esc(v.program)}</div></div>
         <div class="kvRow"><div class="kvKey">学校 <span class="en">/ School</span>:</div><div class="kvVal">${esc(v.school)}</div></div>
-        <div class="kvRow"><div class="kvKey">年龄 <span class="en">/ Age</span>:</div><div class="kvVal">${esc(String(v.age))}</div></div>
-        <div class="kvRow"><div class="kvKey">邮箱 <span class="en">/ Email</span>:</div><div class="kvVal">${esc(v.email || "—")}</div></div>
       `;
       openModal();
     });
@@ -382,45 +296,40 @@
     el.editBtn.addEventListener("click", closeModal);
 
     // Confirm -> save -> clear previous attempt -> go exam
-    el.confirmBtn.addEventListener("click", () => {
+    el.confirmBtn.addEventListener("click", ()=>{
       const v = validate();
       if (!v) return;
 
-      // Save required fields for exam page compatibility
       localStorage.setItem(LS.name, v.name);
+      localStorage.setItem(LS.school, v.school);
 
-      // Put program + school into quiz_school so existing exam header still shows meaningful info
-      localStorage.setItem(LS.school, `${v.program} | ${v.school}`);
-
-      // Optional extra fields (safe)
-      localStorage.setItem(LS.program, v.program);
-      localStorage.setItem(LS.schoolName, v.school);
-      localStorage.setItem(LS.age, String(v.age));
-      if (v.email) localStorage.setItem(LS.email, v.email);
-      else localStorage.removeItem(LS.email);
-
-      // Prevent串号: clear previous student's answers/progress/result
+      // 新学生开始前，清掉上一位的答题缓存 + 试听门禁
       clearPreviousAttempt();
 
       closeModal();
       location.href = "./exam.html";
     });
 
-    // Close modal by clicking outside
-    el.overlay.addEventListener("click", (e) => {
-      if (e.target === el.overlay) closeModal();
+    // Clear Previous Record (manual)
+    el.clearBtn.addEventListener("click", openClear);
+    el.cancelClearBtn.addEventListener("click", closeClear);
+    el.confirmClearBtn.addEventListener("click", ()=>{
+      clearPreviousAttempt();
+      closeClear();
+      el.name.value = "";
+      el.school.value = "";
+      showErr(el.err_name, false);
+      showErr(el.err_school, false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    // Light UX: hide errors when typing
-    ["name","program","school","age","email"].forEach(k=>{
-      el[k].addEventListener("input", ()=>{
-        if (k==="name") showErr(el.err_name,false);
-        if (k==="program") showErr(el.err_program,false);
-        if (k==="school") showErr(el.err_school,false);
-        if (k==="age") showErr(el.err_age,false);
-        if (k==="email") showErr(el.err_email,false);
-      });
-    });
+    // hide errors while typing
+    el.name.addEventListener("input", ()=>showErr(el.err_name,false));
+    el.school.addEventListener("input", ()=>showErr(el.err_school,false));
+
+    // close modal by clicking outside
+    el.overlay.addEventListener("click", (e)=>{ if (e.target === el.overlay) closeModal(); });
+    el.clearOverlay.addEventListener("click", (e)=>{ if (e.target === el.clearOverlay) closeClear(); });
   </script>
 </body>
 </html>
