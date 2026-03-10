@@ -73,10 +73,10 @@ const QUESTIONS = [
     audio: "audio/L02.mp3",
     prompt: "2. 男的想喝什么？（What does the man want to drink?）",
     choices: [
-      { text: "A. 水（shuǐ）", img: "img/L02_A.png" },
-      { text: "B. 茶（chá）", img: "img/L02_B.png" },
-      { text: "C. 牛奶（niúnǎi）", img: "img/L02_C.png" },
-      { text: "D. 咖啡（kāfēi）", img: "img/L02_D.png" },
+      { text: "", img: "img/L02_A.png" },
+      { text: "", img: "img/L02_B.png" },
+      { text: "", img: "img/L02_C.png" },
+      { text: "", img: "img/L02_D.png" },
     ],
     answer: 0, // 2A
   },
@@ -102,10 +102,10 @@ const QUESTIONS = [
     audio: "audio/L04.mp3",
     prompt: "4. 他家有几口人？（How many people are in his family?）",
     choices: [
-      { text: "A. 2个人", img: "img/L04_A.png" },
-      { text: "B. 3个人", img: "img/L04_B.png" },
-      { text: "C. 4个人", img: "img/L04_C.png" },
-      { text: "D. 5个人", img: "img/L04_D.png" },
+      { text: "", img: "img/L04_A.png" },
+      { text: "", img: "img/L04_B.png" },
+      { text: "", img: "img/L04_C.png" },
+      { text: "", img: "img/L04_D.png" },
     ],
     answer: 2, // 4C
   },
@@ -131,10 +131,10 @@ const QUESTIONS = [
     audio: "audio/L06.mp3",
     prompt: "6. 他去哪儿？（Where is he going?）",
     choices: [
-      { text: "A. 学校", img: "img/L06_A.png" },
-      { text: "B. 商店", img: "img/L06_B.png" },
-      { text: "C. 医院", img: "img/L06_C.png" },
-      { text: "D. 家", img: "img/L06_D.png" },
+      { text: "", img: "img/L06_A.png" },
+      { text: "", img: "img/L06_B.png" },
+      { text: "", img: "img/L06_C.png" },
+      { text: "", img: "img/L06_D.png" },
     ],
     answer: 0, // 6A
   },
@@ -160,10 +160,10 @@ const QUESTIONS = [
     audio: "audio/L08.mp3",
     prompt: "8. 他喜欢什么？（What does he like?）",
     choices: [
-      { text: "A. 苹果", img: "img/L08_A.png" },
-      { text: "B. 香蕉", img: "img/L08_B.png" },
-      { text: "C. 西瓜", img: "img/L08_C.png" },
-      { text: "D. 葡萄", img: "img/L08_D.png" },
+      { text: "", img: "img/L08_A.png" },
+      { text: "", img: "img/L08_B.png" },
+      { text: "", img: "img/L08_C.png" },
+      { text: "", img: "img/L08_D.png" },
     ],
     answer: 0, // 8A
   },
