@@ -1,53 +1,57 @@
 // ==============================
-// 25题（两大题）：听力 1-15 + 请选择合适的词 16-25
-// ✅ 新增：L00 试听&示例页（不计分）→ 点“正式开始”进入 L01
+// Question Bank (25 items + 1 practice)
+// - L00: practice_listening (Not scored) with speaker audio + image options
+// - Listening: L01–L15
+//   - Image-only options (no text): L01, L02, L04, L06, L08
+//   - Text-only options: L03, L05, L07, L09–L15
+// - MCQ section: C16–C25
 //
-// 资源放置（按你当前路径写法）：
-// - 听力音频：audio/L01.mp3 ~ audio/L15.mp3
-// - 正式题图片：img/L01_A.png ... img/L08_D.png
-// - 示例页图片：img/EX_A.png ... img/EX_D.png   ✅你自己放这4张
+// IMPORTANT PATHS (match your GitHub Pages publish folder):
+// - Practice audio: audio/L00.mp3
+// - Listening audios: audio/L01.mp3 ... audio/L15.mp3
+// - Practice images: img/EX_A.png ... img/EX_D.png
+// - Listening images: img/L01_A.png ... etc
 // ==============================
 
 const PROJECT_OPTIONS = [
   { value: "CIS", label: "CIS" },
-  { value: "Hohhot", label: "Hohhot" },
+  { value: "Hohhot", label: "Hohhot" }
 ];
 
 const QUESTIONS = [
   // =========================
-  // L00 试听&示例（不计分 Not scored）
+  // Practice (Not scored)
   // =========================
-{
-  id: "L00",
-  section: "listening",
-  type: "practice_listening",     // ✅ 新类型：试听题
-  points: 0,                      // 不计分
-  title: "试听题 / Practice (Not scored)",
-  prompt: "她喜欢什么颜色？ / What color does she like?",
-  audio: "audio/L00.mp3",         // ✅ 你放示例音频到 audio/L00.mp3
-  // ✅ 图片选项（你已经有 EX_A~EX_D）
-  choices: [
-    { text: "", img: "img/EX_A.png" },
-    { text: "", img: "img/EX_B.png" },
-    { text: "", img: "img/EX_C.png" },
-    { text: "", img: "img/EX_D.png" }
-  ],
-  answer: 1, // ✅ 正确答案：B（index=1）
-  // 可选：把说明塞进折叠区
-  helpHtml: `
-    <div style="line-height:1.7">
-      <div style="font-weight:900">说明 / Instructions</div>
-      <div>请点击喇叭按钮听录音，然后选 A/B/C/D。/ Click the speaker to listen, then choose A/B/C/D.</div>
-      <div style="margin-top:6px">此题不计分，但必须完成后才进入正式题。/ Not scored, but required to start the test.</div>
-    </div>
-  `
-},
+  {
+    id: "L00",
+    section: "listening",
+    type: "practice_listening",
+    points: 0,
+    title: "试听题 / Practice (Not scored)",
+    prompt: "她喜欢什么颜色？ / What color does she like?",
+    audio: "audio/L00.mp3",
+    // ✅ image-only (no text; UI already shows A/B/C/D)
+    choices: [
+      { text: "", img: "img/EX_A.png" },
+      { text: "", img: "img/EX_B.png" },
+      { text: "", img: "img/EX_C.png" },
+      { text: "", img: "img/EX_D.png" }
+    ],
+    answer: 1, // B
+    helpHtml: `
+      <div style="line-height:1.7">
+        <div style="font-weight:900">说明 / Instructions</div>
+        <div>请点击喇叭按钮听录音，然后选 A/B/C/D。/ Click the speaker to listen, then choose A/B/C/D.</div>
+        <div style="margin-top:6px">此题不计分，但必须完成后才进入正式题。/ Not scored, but required to start the test.</div>
+      </div>
+    `
+  },
 
   // =========================
-  // 第一大题：听力 1-15
+  // Listening 1–15
   // =========================
 
-  // 1（图片选项）
+  // 1 (image-only)
   {
     id: "L01",
     section: "listening",
@@ -59,12 +63,12 @@ const QUESTIONS = [
       { text: "", img: "img/L01_A.png" },
       { text: "", img: "img/L01_B.png" },
       { text: "", img: "img/L01_C.png" },
-      { text: "", img: "img/L01_D.png" },
+      { text: "", img: "img/L01_D.png" }
     ],
-    answer: 0, // 1A
+    answer: 0
   },
 
-  // 2（图片选项）
+  // 2 (image-only)
   {
     id: "L02",
     section: "listening",
@@ -76,24 +80,24 @@ const QUESTIONS = [
       { text: "", img: "img/L02_A.png" },
       { text: "", img: "img/L02_B.png" },
       { text: "", img: "img/L02_C.png" },
-      { text: "", img: "img/L02_D.png" },
+      { text: "", img: "img/L02_D.png" }
     ],
-    answer: 0, // 2A
+    answer: 0
   },
 
-  // 3
+  // 3 (text-only) ✅ no images
   {
-  id: "L03",
-  section: "listening",
-  type: "listening_mcq",
-  points: 1,
-  audio: "audio/L03.mp3",
-  prompt: "3. 今天几号？（What date is it today?）",
-  choices: ["A. 1号", "B. 2号", "C. 3号", "D. 4号"],
-  answer: 2
+    id: "L03",
+    section: "listening",
+    type: "listening_mcq",
+    points: 1,
+    audio: "audio/L03.mp3",
+    prompt: "3. 今天几号？（What date is it today?）",
+    choices: ["A. 1号", "B. 2号", "C. 3号", "D. 4号"],
+    answer: 2
   },
 
-  // 4（图片选项）
+  // 4 (image-only)
   {
     id: "L04",
     section: "listening",
@@ -105,24 +109,24 @@ const QUESTIONS = [
       { text: "", img: "img/L04_A.png" },
       { text: "", img: "img/L04_B.png" },
       { text: "", img: "img/L04_C.png" },
-      { text: "", img: "img/L04_D.png" },
+      { text: "", img: "img/L04_D.png" }
     ],
-    answer: 2, // 4C
+    answer: 2
   },
 
-  // 5
+  // 5 (text-only) ✅ no images
   {
-  id: "L05",
-  section: "listening",
-  type: "listening_mcq",
-  points: 1,
-  audio: "audio/L05.mp3",
-  prompt: "5. 现在几点？（What time is it now?）",
-  choices: ["A. 8:00", "B. 8:30", "C. 9:00", "D. 9:30"],
-  answer: 1
+    id: "L05",
+    section: "listening",
+    type: "listening_mcq",
+    points: 1,
+    audio: "audio/L05.mp3",
+    prompt: "5. 现在几点？（What time is it now?）",
+    choices: ["A. 8:00", "B. 8:30", "C. 9:00", "D. 9:30"],
+    answer: 1
   },
 
-  // 6（图片选项）
+  // 6 (image-only)
   {
     id: "L06",
     section: "listening",
@@ -134,24 +138,24 @@ const QUESTIONS = [
       { text: "", img: "img/L06_A.png" },
       { text: "", img: "img/L06_B.png" },
       { text: "", img: "img/L06_C.png" },
-      { text: "", img: "img/L06_D.png" },
+      { text: "", img: "img/L06_D.png" }
     ],
-    answer: 0, // 6A
+    answer: 0
   },
 
-  // 7
+  // 7 (text-only) ✅ no images
   {
-  id: "L07",
-  section: "listening",
-  type: "listening_mcq",
-  points: 1,
-  audio: "audio/L07.mp3",
-  prompt: "7. 这件衣服多少钱？（How much is this clothing item?）",
-  choices: ["A. 15块", "B. 30块", "C. 50块", "D. 80块"],
-  answer: 2
+    id: "L07",
+    section: "listening",
+    type: "listening_mcq",
+    points: 1,
+    audio: "audio/L07.mp3",
+    prompt: "7. 这件衣服多少钱？（How much is this clothing item?）",
+    choices: ["A. 15块", "B. 30块", "C. 50块", "D. 80块"],
+    answer: 2
   },
 
-  // 8（图片选项）
+  // 8 (image-only)
   {
     id: "L08",
     section: "listening",
@@ -163,12 +167,12 @@ const QUESTIONS = [
       { text: "", img: "img/L08_A.png" },
       { text: "", img: "img/L08_B.png" },
       { text: "", img: "img/L08_C.png" },
-      { text: "", img: "img/L08_D.png" },
+      { text: "", img: "img/L08_D.png" }
     ],
-    answer: 0, // 8A
+    answer: 0
   },
 
-  // 9-15（文字选项）
+  // 9–15 (text-only)
   {
     id: "L09",
     section: "listening",
@@ -177,7 +181,7 @@ const QUESTIONS = [
     audio: "audio/L09.mp3",
     prompt: "9. 明天天气怎么样？",
     choices: ["A. 很热", "B. 很冷", "C. 下雨", "D. 下雪"],
-    answer: 2, // 9C
+    answer: 2
   },
   {
     id: "L10",
@@ -187,7 +191,7 @@ const QUESTIONS = [
     audio: "audio/L10.mp3",
     prompt: "10. 男生会不会说中文？",
     choices: ["A. 不会", "B. 会一点儿", "C. 会很多", "D. 不知道"],
-    answer: 1, // 10B
+    answer: 1
   },
   {
     id: "L11",
@@ -197,7 +201,7 @@ const QUESTIONS = [
     audio: "audio/L11.mp3",
     prompt: "11. 女生怎么来学校？",
     choices: ["A. 坐地铁", "B. 坐公交车", "C. 走路", "D. 开车"],
-    answer: 0, // 11A
+    answer: 0
   },
   {
     id: "L12",
@@ -207,7 +211,7 @@ const QUESTIONS = [
     audio: "audio/L12.mp3",
     prompt: "12. 他为什么没去游泳？",
     choices: ["A. 因为下雨了", "B. 因为太忙了", "C. 因为感冒了", "D. 因为忘了"],
-    answer: 2, // 12C
+    answer: 2
   },
   {
     id: "L13",
@@ -217,7 +221,7 @@ const QUESTIONS = [
     audio: "audio/L13.mp3",
     prompt: "13. 他们先做什么？",
     choices: ["A. 先看电影", "B. 先去图书馆", "C. 先吃饭", "D. 先踢足球"],
-    answer: 1, // 13B
+    answer: 1
   },
   {
     id: "L14",
@@ -227,7 +231,7 @@ const QUESTIONS = [
     audio: "audio/L14.mp3",
     prompt: "14. 他几点睡觉？",
     choices: ["A. 九点", "B. 十点", "C. 十点半", "D. 十一点"],
-    answer: 1, // 14B
+    answer: 1
   },
   {
     id: "L15",
@@ -237,106 +241,26 @@ const QUESTIONS = [
     audio: "audio/L15.mp3",
     prompt: "15. 他们上周去了哪里？",
     choices: ["A. 动物园", "B. 公园", "C. 图书馆", "D. 博物馆"],
-    answer: 0, // 15A
+    answer: 0
   },
 
   // =========================
-  // 第二大题：请选择合适的词 16-25
+  // MCQ Section 16–25 (选择题 / MCQ)
   // =========================
-
-  {
-    id: "C16",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "16. 我 ___ 中国。",
-    choices: ["A. 来", "B. 去", "C. 看", "D. 听"],
-    answer: 0,
-  },
-  {
-    id: "C17",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "17. 我想喝一 ___ 水。",
-    choices: ["A. 杯", "B. 本", "C. 张", "D. 条"],
-    answer: 0,
-  },
-  {
-    id: "C18",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "18. 选出最自然的一句：",
-    choices: [
+  { id:"C16", section:"reading", type:"mcq", points:1, prompt:"16. 我 ___ 中国。", choices:["A. 来","B. 去","C. 看","D. 听"], answer:0 },
+  { id:"C17", section:"reading", type:"mcq", points:1, prompt:"17. 我想喝一 ___ 水。", choices:["A. 杯","B. 本","C. 张","D. 条"], answer:0 },
+  { id:"C18", section:"reading", type:"mcq", points:1, prompt:"18. 选出最自然的一句：", choices:[
       "A. 我明天跟朋友去看电影。",
       "B. 我跟朋友明天去看电影。",
       "C. 我去看电影明天跟朋友。",
-      "D. 我明天去跟朋友看电影。",
-    ],
-    answer: 0,
+      "D. 我明天去跟朋友看电影。"
+    ], answer:0
   },
-  {
-    id: "C19",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "19. ___ 下雨，所以我们不去公园。",
-    choices: ["A. 因为", "B. 但是", "C. 还是", "D. 和"],
-    answer: 0,
-  },
-  {
-    id: "C20",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "20. 你要茶 ___ 咖啡？",
-    choices: ["A. 和", "B. 还是", "C. 因为", "D. 所以"],
-    answer: 1,
-  },
-  {
-    id: "C21",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "21. 他比我 ___。",
-    choices: ["A. 高", "B. 高的", "C. 高了", "D. 高着"],
-    answer: 0,
-  },
-  {
-    id: "C22",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "22. 选出正确的一句：",
-    choices: ["A. 请把门关上。", "B. 请把关上门。", "C. 请门把关上。", "D. 请把门关上了着。"],
-    answer: 0,
-  },
-  {
-    id: "C23",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "23. 小通知：今天下午三点有中文课，请准时到教室。\n中文课几点开始？",
-    choices: ["A. 两点", "B. 三点", "C. 四点", "D. 五点"],
-    answer: 1,
-  },
-  {
-    id: "C24",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "24. 他下午做什么？",
-    choices: ["A. 做作业", "B. 踢足球", "C. 看电影", "D. 去游泳"],
-    answer: 1,
-  },
-  {
-    id: "C25",
-    section: "reading",
-    type: "mcq",
-    points: 1,
-    prompt: "25. 我很喜欢 ___ 中文。",
-    choices: ["A. 学习", "B. 学习着", "C. 学了", "D. 学过"],
-    answer: 0,
-  },
+  { id:"C19", section:"reading", type:"mcq", points:1, prompt:"19. ___ 下雨，所以我们不去公园。", choices:["A. 因为","B. 但是","C. 还是","D. 和"], answer:0 },
+  { id:"C20", section:"reading", type:"mcq", points:1, prompt:"20. 你要茶 ___ 咖啡？", choices:["A. 和","B. 还是","C. 因为","D. 所以"], answer:1 },
+  { id:"C21", section:"reading", type:"mcq", points:1, prompt:"21. 他比我 ___。", choices:["A. 高","B. 高的","C. 高了","D. 高着"], answer:0 },
+  { id:"C22", section:"reading", type:"mcq", points:1, prompt:"22. 选出正确的一句：", choices:["A. 请把门关上。","B. 请把关上门。","C. 请门把关上。","D. 请把门关上了着。"], answer:0 },
+  { id:"C23", section:"reading", type:"mcq", points:1, prompt:"23. 小通知：今天下午三点有中文课，请准时到教室。\n中文课几点开始？", choices:["A. 两点","B. 三点","C. 四点","D. 五点"], answer:1 },
+  { id:"C24", section:"reading", type:"mcq", points:1, prompt:"24. 他下午做什么？", choices:["A. 做作业","B. 踢足球","C. 看电影","D. 去游泳"], answer:1 },
+  { id:"C25", section:"reading", type:"mcq", points:1, prompt:"25. 我很喜欢 ___ 中文。", choices:["A. 学习","B. 学习着","C. 学了","D. 学过"], answer:0 },
 ];
