@@ -30,56 +30,21 @@
       color:var(--text);
     }
 
-    .wrap{
-      max-width:920px;
-      margin:0 auto;
-      padding:28px 16px 56px;
-    }
+    .wrap{max-width:920px;margin:0 auto;padding:28px 16px 56px;}
 
-    /* Header */
-    .header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-    .brand{
-      display:flex;
-      align-items:flex-start;
-      gap:12px;
-    }
+    .header{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
     .logo{
       width:44px;height:44px;border-radius:14px;
       background:linear-gradient(135deg,var(--red2),var(--red));
       box-shadow:0 14px 30px rgba(225,29,72,.22);
       display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:950;font-size:16px;
-      user-select:none;
+      color:#fff;font-weight:950;font-size:16px;user-select:none;
       flex:0 0 auto;
     }
-    h1{
-      margin:0;
-      font-size:20px;
-      line-height:1.25;
-      letter-spacing:.2px;
-    }
-    .h1en{
-      display:block;
-      margin-top:6px;
-      font-size:14.5px;
-      font-weight:750;
-      color:rgba(17,24,39,.72);
-    }
-    .sub{
-      margin-top:8px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.6;
-    }
+    h1{margin:0;font-size:20px;line-height:1.25;letter-spacing:.2px}
+    .h1en{display:block;margin-top:6px;font-size:14.5px;font-weight:750;color:rgba(17,24,39,.72);}
+    .sub{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.6}
 
-    /* Main card */
     .card{
       background:var(--card);
       border:1px solid var(--border);
@@ -89,19 +54,10 @@
       position:relative;
       overflow:hidden;
     }
-    /* subtle brand hairline */
     .card:before{
       content:"";
       position:absolute;left:0;top:0;right:0;height:2px;
       background:linear-gradient(90deg,var(--red2),var(--red));
-    }
-
-    .row{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin-top:16px;
     }
 
     label{display:block;margin:16px 0 8px}
@@ -109,52 +65,34 @@
     .labEN{display:block;margin-top:4px;color:var(--muted2);font-size:12.5px;font-weight:650}
 
     input{
-      width:100%;
-      max-width:620px;
-      padding:14px 14px;
-      border-radius:16px;
+      width:100%;max-width:620px;
+      padding:14px 14px;border-radius:16px;
       border:1px solid rgba(17,24,39,.14);
-      font-size:15px;
-      outline:none;
-      background:#fff;
+      font-size:15px;outline:none;background:#fff;
     }
     input:focus{
       border-color:rgba(225,29,72,.55);
       box-shadow:0 0 0 6px var(--focus);
     }
 
-    .err{
-      margin-top:6px;
-      color:var(--redDark);
-      font-size:13px;
-      font-weight:850;
-      display:none;
-    }
+    .err{margin-top:6px;color:var(--redDark);font-size:13px;font-weight:850;display:none;}
 
-    /* Buttons */
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:18px}
+
     .btn{
-      padding:12px 16px;
-      border-radius:16px;
-      border:1px solid rgba(17,24,39,.14);
-      background:#fff;
-      cursor:pointer;
-      font-size:15px;
+      padding:12px 16px;border-radius:16px;border:1px solid rgba(17,24,39,.14);
+      background:#fff;cursor:pointer;font-size:15px;
       transition:transform .06s ease, border-color .15s ease, filter .15s ease, box-shadow .15s ease;
       user-select:none;
     }
     .btn:active{transform:translateY(1px)}
     .btnPrimary{
       background:linear-gradient(135deg,var(--red2),var(--red));
-      border-color:transparent;
-      color:#fff;
-      font-weight:950;
+      border-color:transparent;color:#fff;font-weight:950;
       box-shadow:0 14px 26px rgba(225,29,72,.18);
     }
     .btnPrimary:hover{filter:saturate(1.05) brightness(1.02)}
-    .btnSecondary{
-      color:rgba(17,24,39,.72);
-      background:#fff;
-    }
+    .btnSecondary{color:rgba(17,24,39,.72);background:#fff;}
     .btnSecondary:hover{border-color:rgba(225,29,72,.28)}
     .btnDanger{
       border-color:rgba(239,68,68,.35);
@@ -164,88 +102,52 @@
     }
 
     .note{
-      margin-top:14px;
-      padding:12px 12px;
-      border-radius:16px;
+      margin-top:14px;padding:12px 12px;border-radius:16px;
       border:1px solid rgba(17,24,39,.10);
-      background:#fafafa;
-      color:rgba(17,24,39,.62);
-      font-size:13px;
-      line-height:1.65;
+      background:#fafafa;color:rgba(17,24,39,.62);
+      font-size:13px;line-height:1.65;
     }
 
     /* Modal */
     .overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(17,24,39,.30);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      z-index:50;
+      position:fixed;inset:0;background:rgba(17,24,39,.30);
+      display:none;align-items:center;justify-content:center;
+      padding:18px;z-index:50;
     }
     .overlay.show{display:flex;}
     .modal{
       width:min(560px, 100%);
-      background:#fff;
-      border-radius:22px;
-      border:1px solid var(--border);
+      background:#fff;border-radius:22px;border:1px solid var(--border);
       box-shadow:0 26px 70px rgba(0,0,0,.22);
       padding:16px;
-      transform:scale(.98);
-      opacity:0;
+      transform:scale(.98);opacity:0;
       transition:transform .18s ease, opacity .18s ease;
     }
-    .overlay.show .modal{
-      transform:scale(1);
-      opacity:1;
-    }
+    .overlay.show .modal{transform:scale(1);opacity:1}
     .modal h2{margin:0;font-size:18px}
-    .modal .sub2{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:13.5px;
-      line-height:1.6;
-    }
+    .modal .sub2{margin-top:6px;color:var(--muted);font-size:13.5px;line-height:1.6}
     .kv{
-      margin-top:12px;
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:12px;
-      background:#fafafa;
-      font-size:14px;
-      line-height:1.7;
+      margin-top:12px;border:1px solid var(--border);border-radius:16px;
+      padding:12px;background:#fafafa;font-size:14px;line-height:1.7;
     }
     .kvRow{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}
     .kvKey{min-width:170px;font-weight:900}
     .kvKey .en{font-weight:750;color:var(--muted2)}
     .kvVal{font-weight:750;color:rgba(17,24,39,.88)}
-    .modalActions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      margin-top:14px;
-    }
-
-    @media (max-width:520px){
-      .kvKey{min-width:100%}
-    }
+    .modalActions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
+    @media (max-width:520px){ .kvKey{min-width:100%} }
   </style>
 </head>
 
 <body>
   <div class="wrap">
     <div class="header">
-      <div class="brand">
-        <div class="logo">ML</div>
-        <div>
-          <h1>枫叶教育来华中文水平测试
-            <span class="h1en">Maple Leaf Edu-Travel Chinese Placement Test</span>
-          </h1>
-          <div class="sub">请先填写信息 / Please fill in the info below</div>
-        </div>
+      <div class="logo">ML</div>
+      <div>
+        <h1>枫叶教育来华中文水平测试
+          <span class="h1en">Maple Leaf Edu-Travel Chinese Placement Test</span>
+        </h1>
+        <div class="sub">请先填写信息 / Please fill in the info below</div>
       </div>
     </div>
 
@@ -269,9 +171,7 @@
         <button id="clearBtn" class="btn btnSecondary">清除上一位记录 / Clear Previous Record</button>
       </div>
 
-      <div class="note">
-        信息仅用于分级测评 / Used for placement only
-      </div>
+      <div class="note">信息仅用于分级测评 / Used for placement only</div>
     </div>
   </div>
 
@@ -315,7 +215,6 @@
     };
 
     const $ = (id)=>document.getElementById(id);
-
     const el = {
       name: $("name"),
       school: $("school"),
@@ -345,6 +244,7 @@
       localStorage.removeItem(LS.answers);
       localStorage.removeItem(LS.state);
       localStorage.removeItem(LS.result);
+      // ✅ 试听门禁也必须清掉
       localStorage.removeItem(LS.practiceDone);
     }
 
@@ -373,7 +273,6 @@
       overlay.setAttribute("aria-hidden","true");
     }
 
-    // Start -> confirm
     el.startBtn.addEventListener("click", ()=>{
       const v = validate();
       if (!v) return;
@@ -387,7 +286,6 @@
 
     el.editBtn.addEventListener("click", ()=>close(el.confirmOverlay));
 
-    // Confirm -> save -> clear prev -> go exam
     el.confirmBtn.addEventListener("click", ()=>{
       const v = validate();
       if (!v) return;
@@ -395,14 +293,13 @@
       localStorage.setItem(LS.name, v.name);
       localStorage.setItem(LS.school, v.school);
 
-      // Important: prevent串号 + reset practice gate for next student
+      // ✅ 新学生开始前：清掉上一位答题 + 试听门禁
       clearPreviousAttempt();
 
       close(el.confirmOverlay);
       location.href = "./exam.html";
     });
 
-    // Clear previous record
     el.clearBtn.addEventListener("click", ()=>open(el.clearOverlay));
     el.cancelClearBtn.addEventListener("click", ()=>close(el.clearOverlay));
     el.confirmClearBtn.addEventListener("click", ()=>{
@@ -415,11 +312,9 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    // Hide errors while typing
     el.name.addEventListener("input", ()=>showErr(el.err_name,false));
     el.school.addEventListener("input", ()=>showErr(el.err_school,false));
 
-    // Click outside to close
     el.confirmOverlay.addEventListener("click", (e)=>{ if (e.target === el.confirmOverlay) close(el.confirmOverlay); });
     el.clearOverlay.addEventListener("click", (e)=>{ if (e.target === el.clearOverlay) close(el.clearOverlay); });
   </script>
