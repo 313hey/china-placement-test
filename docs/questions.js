@@ -27,10 +27,10 @@ const QUESTIONS = [
   audio: "audio/L00.mp3",         // ✅ 你放示例音频到 audio/L00.mp3
   // ✅ 图片选项（你已经有 EX_A~EX_D）
   choices: [
-    { text: "A. 红色 / Red", img: "img/EX_A.png" },
-    { text: "B. 蓝色 / Blue", img: "img/EX_B.png" },
-    { text: "C. 绿色 / Green", img: "img/EX_C.png" },
-    { text: "D. 黄色 / Yellow", img: "img/EX_D.png" }
+    { text: "", img: "img/EX_A.png" },
+    { text: "", img: "img/EX_B.png" },
+    { text: "", img: "img/EX_C.png" },
+    { text: "", img: "img/EX_D.png" }
   ],
   answer: 1, // ✅ 正确答案：B（index=1）
   // 可选：把说明塞进折叠区
@@ -56,10 +56,10 @@ const QUESTIONS = [
     audio: "audio/L01.mp3",
     prompt: "1. 男的是谁？（Who is the man?）",
     choices: [
-      { text: "A. 老师（lǎoshī）", img: "img/L01_A.png" },
-      { text: "B. 学生（xuéshēng）", img: "img/L01_B.png" },
-      { text: "C. 医生（yīshēng）", img: "img/L01_C.png" },
-      { text: "D. 警察（jǐngchá）", img: "img/L01_D.png" },
+      { text: "", img: "img/L01_A.png" },
+      { text: "", img: "img/L01_B.png" },
+      { text: "", img: "img/L01_C.png" },
+      { text: "", img: "img/L01_D.png" },
     ],
     answer: 0, // 1A
   },
