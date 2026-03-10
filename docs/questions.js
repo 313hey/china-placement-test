@@ -81,21 +81,16 @@ const QUESTIONS = [
     answer: 0, // 2A
   },
 
-  // 3（图片选项）
+  // 3
   {
-    id: "L03",
-    section: "listening",
-    type: "listening_mcq",
-    points: 1,
-    audio: "audio/L03.mp3",
-    prompt: "3. 今天几号？（What date is it today?）",
-    choices: [
-      { text: "A. 1号", img: "img/L03_A.png" },
-      { text: "B. 2号", img: "img/L03_B.png" },
-      { text: "C. 3号", img: "img/L03_C.png" },
-      { text: "D. 4号", img: "img/L03_D.png" },
-    ],
-    answer: 2, // 3C
+  id: "L03",
+  section: "listening",
+  type: "listening_mcq",
+  points: 1,
+  audio: "audio/L03.mp3",
+  prompt: "3. 今天几号？（What date is it today?）",
+  choices: ["A. 1号", "B. 2号", "C. 3号", "D. 4号"],
+  answer: 2
   },
 
   // 4（图片选项）
@@ -115,21 +110,16 @@ const QUESTIONS = [
     answer: 2, // 4C
   },
 
-  // 5（图片选项）
+  // 5
   {
-    id: "L05",
-    section: "listening",
-    type: "listening_mcq",
-    points: 1,
-    audio: "audio/L05.mp3",
-    prompt: "5. 现在几点？（What time is it now?）",
-    choices: [
-      { text: "A. 8:00", img: "img/L05_A.png" },
-      { text: "B. 8:30", img: "img/L05_B.png" },
-      { text: "C. 9:00", img: "img/L05_C.png" },
-      { text: "D. 9:30", img: "img/L05_D.png" },
-    ],
-    answer: 1, // 5B
+  id: "L05",
+  section: "listening",
+  type: "listening_mcq",
+  points: 1,
+  audio: "audio/L05.mp3",
+  prompt: "5. 现在几点？（What time is it now?）",
+  choices: ["A. 8:00", "B. 8:30", "C. 9:00", "D. 9:30"],
+  answer: 1
   },
 
   // 6（图片选项）
@@ -149,21 +139,16 @@ const QUESTIONS = [
     answer: 0, // 6A
   },
 
-  // 7（图片选项）
+  // 7
   {
-    id: "L07",
-    section: "listening",
-    type: "listening_mcq",
-    points: 1,
-    audio: "audio/L07.mp3",
-    prompt: "7. 这件衣服多少钱？（How much is this clothing item?）",
-    choices: [
-      { text: "A. 15块", img: "img/L07_A.png" },
-      { text: "B. 30块", img: "img/L07_B.png" },
-      { text: "C. 50块", img: "img/L07_C.png" },
-      { text: "D. 80块", img: "img/L07_D.png" },
-    ],
-    answer: 2, // 7C
+  id: "L07",
+  section: "listening",
+  type: "listening_mcq",
+  points: 1,
+  audio: "audio/L07.mp3",
+  prompt: "7. 这件衣服多少钱？（How much is this clothing item?）",
+  choices: ["A. 15块", "B. 30块", "C. 50块", "D. 80块"],
+  answer: 2
   },
 
   // 8（图片选项）
