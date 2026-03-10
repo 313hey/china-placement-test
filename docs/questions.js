@@ -93,7 +93,7 @@ const QUESTIONS = [
     points: 1,
     audio: "audio/L03.mp3",
     prompt: "3. 今天几号？（What date is it today?）",
-    choices: ["A. 1号", "B. 2号", "C. 3号", "D. 4号"],
+    choices: ["1号", "2号", "3号", "4号"],
     answer: 2
   },
 
