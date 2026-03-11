@@ -95,14 +95,13 @@
       border:1px solid rgba(225,29,72,.18);
     }
 
-    /* ===== Question Card (A版 UI) ===== */
+    /* ===== Question Card UI ===== */
     .qCard{
       padding:14px;
       border:1px solid rgba(17,24,39,.10);
       border-radius:18px;
       background:#fff;
     }
-
     .panel{ margin-top:8px; }
     .panelTitle{
       font-weight:950;
@@ -136,8 +135,7 @@
       gap:10px;
       flex-wrap:wrap;
     }
-    /* 隐藏原生控件：统一用喇叭按钮 */
-    .audioBar audio{ display:none; }
+    .audioBar audio{ display:none; } /* 喇叭按钮统一播放 */
 
     .optGrid{
       display:grid;
@@ -182,7 +180,8 @@
       font-weight:900;
       line-height:1.45;
       color:#111827;
-      min-height:42px;
+      min-height:42px; /* 默认两行高度（图片题更好看） */
+      font-size:15px;
     }
     .optImg{
       margin-top:8px;
@@ -209,7 +208,7 @@
     .helpFold summary::-webkit-details-marker{display:none}
     .helpInner{ margin-top:10px; }
 
-    /* ======== 关键：稳定高度，防止“下一题跳动” ======== */
+    /* ======== Key: Stable height (No Jump) ======== */
     .card:not(.submitCard){
       display:flex;
       flex-direction:column;
@@ -227,6 +226,32 @@
       margin-top:auto; /* 按钮区贴底，不跳 */
     }
     #feedback{ min-height:28px; }
+
+    /* =========================================================
+       TEXT-ONLY OPTIONS (using :has)
+       文字题：没有图片 .optImg 时，自动变大、居中、更像按钮
+       ========================================================= */
+    #quizBox .optCard:not(:has(.optImg)){
+      min-height: 92px;      /* 文字题更紧凑 */
+      align-items: center;
+      padding: 14px 14px;
+    }
+    #quizBox .optCard:not(:has(.optImg)) .optBody{
+      display:flex;
+      align-items:center;
+    }
+    #quizBox .optCard:not(:has(.optImg)) .optText{
+      font-size: 18px;       /* 文字更大 */
+      font-weight: 950;
+      line-height: 1.35;
+      min-height: 0;         /* 不需要预留两行高度 */
+    }
+    #quizBox .optCard:not(:has(.optImg)) .optLetter{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      font-size: 16px;
+    }
   </style>
 </head>
 
