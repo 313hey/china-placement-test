@@ -180,7 +180,7 @@
       font-weight:900;
       line-height:1.45;
       color:#111827;
-      min-height:42px; /* 默认两行高度（图片题更好看） */
+      min-height:42px;
       font-size:15px;
     }
     .optImg{
@@ -208,7 +208,7 @@
     .helpFold summary::-webkit-details-marker{display:none}
     .helpInner{ margin-top:10px; }
 
-    /* ======== Key: Stable height (No Jump) ======== */
+    /* ===== Stable height (No Jump) ===== */
     .card:not(.submitCard){
       display:flex;
       flex-direction:column;
@@ -222,17 +222,12 @@
       display:flex;
       flex-direction:column;
     }
-    .navRow{
-      margin-top:auto; /* 按钮区贴底，不跳 */
-    }
+    .navRow{ margin-top:auto; }
     #feedback{ min-height:28px; }
 
-    /* =========================================================
-       TEXT-ONLY OPTIONS (using :has)
-       文字题：没有图片 .optImg 时，自动变大、居中、更像按钮
-       ========================================================= */
+    /* ===== Text-only options bigger (using :has) ===== */
     #quizBox .optCard:not(:has(.optImg)){
-      min-height: 92px;      /* 文字题更紧凑 */
+      min-height: 92px;
       align-items: center;
       padding: 14px 14px;
     }
@@ -241,10 +236,10 @@
       align-items:center;
     }
     #quizBox .optCard:not(:has(.optImg)) .optText{
-      font-size: 18px;       /* 文字更大 */
+      font-size: 18px;
       font-weight: 950;
       line-height: 1.35;
-      min-height: 0;         /* 不需要预留两行高度 */
+      min-height: 0;
     }
     #quizBox .optCard:not(:has(.optImg)) .optLetter{
       width: 34px;
@@ -262,7 +257,7 @@
         <div class="logo">测</div>
         <div>
           <h1>答题中</h1>
-          <div class="muted">听力 → 选择题</div>
+          <div class="muted">听力 Listening → 语法题 Grammar</div>
         </div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
@@ -273,8 +268,8 @@
 
     <div class="card">
       <div class="tabs">
-        <button class="tab" data-section="listening">听力</button>
-        <button class="tab" data-section="reading">选择题</button>
+        <button class="tab" data-section="listening">听力 Listening</button>
+        <button class="tab" data-section="reading">语法题 Grammar</button>
       </div>
 
       <div class="progressBar"><div id="progress" class="progressFill"></div></div>
