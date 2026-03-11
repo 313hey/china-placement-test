@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>中文分级测评 | 答题</title>
+  <title>中文水平测试 | 答题</title>
   <style>
     :root{
       --bg:#f7f7f8;
@@ -16,7 +16,6 @@
 
       --red:#e11d48;
       --red2:#ff2d55;
-      --redDark:#be123c;
       --focus:rgba(225,29,72,.28);
     }
     *{box-sizing:border-box}
@@ -96,15 +95,13 @@
       border:1px solid rgba(225,29,72,.18);
     }
 
-    /* ===== Listening UI upgrade (A版) ===== */
+    /* ===== Question Card (A版 UI) ===== */
     .qCard{
       padding:14px;
       border:1px solid rgba(17,24,39,.10);
       border-radius:18px;
       background:#fff;
     }
-    .audioBar{ margin-top:10px; }
-    .audioBar audio{ width:100%; }
 
     .panel{ margin-top:8px; }
     .panelTitle{
@@ -112,8 +109,6 @@
       font-size:13px;
       color:rgba(17,24,39,.65);
       margin-bottom:8px;
-
-      /* ✅ pill-like label */
       display:inline-block;
       padding:6px 10px;
       border-radius:999px;
@@ -134,11 +129,22 @@
       line-height:1.55;
     }
 
+    .audioBar{
+      margin-top:10px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    /* 隐藏原生控件：统一用喇叭按钮 */
+    .audioBar audio{ display:none; }
+
     .optGrid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:12px;
       margin-top:10px;
+      align-items: stretch;
     }
     @media (max-width:640px){
       .optGrid{ grid-template-columns:1fr; }
@@ -153,6 +159,7 @@
       display:flex;
       gap:10px;
       align-items:flex-start;
+      min-height:200px;
     }
     .optCard:hover{ border-color:rgba(225,29,72,.35); }
     .optCard.selected{
@@ -175,13 +182,16 @@
       font-weight:900;
       line-height:1.45;
       color:#111827;
+      min-height:42px;
     }
     .optImg{
       margin-top:8px;
-      max-width:100%;
-      max-height:160px;
+      width:100%;
+      height:160px;
+      object-fit:contain;
       border-radius:12px;
       border:1px solid rgba(17,24,39,.10);
+      background:rgba(17,24,39,.03);
       display:block;
     }
 
@@ -198,6 +208,25 @@
     }
     .helpFold summary::-webkit-details-marker{display:none}
     .helpInner{ margin-top:10px; }
+
+    /* ======== 关键：稳定高度，防止“下一题跳动” ======== */
+    .card:not(.submitCard){
+      display:flex;
+      flex-direction:column;
+    }
+    #quizBox{
+      flex: 1 1 auto;
+      min-height: 520px; /* 可调：480(更紧) / 560(更稳) */
+    }
+    #quizBox .qCard{
+      min-height: 520px;
+      display:flex;
+      flex-direction:column;
+    }
+    .navRow{
+      margin-top:auto; /* 按钮区贴底，不跳 */
+    }
+    #feedback{ min-height:28px; }
   </style>
 </head>
 
