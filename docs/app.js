@@ -9,12 +9,15 @@
 // - Practice listening (L00): must choose to unlock Next; show correct answer feedback
 // ==============================
 
-const GOOGLE_FORM_ACTION_URL = ""; // TODO: 填你的 formResponse
+const GOOGLE_FORM_ACTION_URL =
+  "https://docs.google.com/forms/d/e/1FAIpQLSfUfecf-6LFv0KD3CwYqx479f8kkvqEHUxv8KsjsyP7EUfB6g/formResponse";
+
 const FORM_ENTRY = {
-  name: "",      // TODO: entry.xxxxx
-  school: "",    // TODO: entry.xxxxx
-  score: "",     // TODO: entry.xxxxx
-  breakdown: ""  // TODO: entry.xxxxx
+  name:      "entry.876548502",     // 姓名 Name
+  school:    "entry.1499460098",    // 学校 School
+  total:     "entry.1378982693",    // 总分 Total
+  listening: "entry.909692536",     // 听力 Listening
+  grammar:   "entry.1238440513"     // 语法题 Grammar
 };
 
 // localStorage keys
@@ -127,15 +130,14 @@ function makeSpeakerBar(q) {
       audio.currentTime = 0;
       await audio.play();
     } catch (e) {
-      // 如需提示可加 toast；这里静默即可
+      // silent
     }
   });
 
   return { barEl: bar, audioEl: audio };
 }
 
-// ✅ 听力/选择题（含 listening_mcq / mcq / listening_tf）：
-// 信息流：题干 -> 喇叭按钮 -> 选项 -> next
+// ✅ 听力/选择题：题干 -> 喇叭按钮 -> 选项
 function renderMCQ(q, savedValue, onChange) {
   const wrap = document.createElement("div");
   wrap.className = "qCard";
@@ -209,7 +211,7 @@ function renderPracticeListening(q, savedValue, onChange) {
     </details>
   `;
 
-  // speaker bar（同一套）
+  // speaker bar
   const audioMount = wrap.querySelector("#audioMount");
   const { barEl } = makeSpeakerBar(q);
   audioMount.appendChild(barEl);
@@ -226,7 +228,6 @@ function renderPracticeListening(q, savedValue, onChange) {
       : `<b style="color:#dc2626">❌ 不正确 / Incorrect</b>　正确答案：<b>${correctLetter}</b> / Correct: <b>${correctLetter}</b>`;
   }
 
-  // options with feedback
   gridMount.appendChild(renderOptionsGrid({
     q,
     savedValue,
@@ -236,7 +237,6 @@ function renderPracticeListening(q, savedValue, onChange) {
     }
   }));
 
-  // if already answered, show feedback
   if (savedValue !== null && savedValue !== undefined && savedValue !== "") {
     showFeedback(Number(savedValue));
   }
@@ -257,7 +257,6 @@ function renderShortText(q, savedValue, onChange) {
   return wrap;
 }
 
-// info 页面（纯说明）
 function renderInfo(q) {
   const wrap = document.createElement("div");
   wrap.className = "qCard";
@@ -299,7 +298,6 @@ function calcScore(questions, answersMap) {
 
     const ans = answersMap[q.id];
 
-    // 不计分题一般不写 answer
     if (q.answer === null || typeof q.answer === "undefined") return;
 
     let correct = false;
@@ -317,15 +315,25 @@ function calcScore(questions, answersMap) {
 }
 
 async function submitToGoogleForm(payload) {
-  if (!GOOGLE_FORM_ACTION_URL || !FORM_ENTRY.name) return { ok: false, skipped: true };
+  // If not configured, skip silently.
+  if (!GOOGLE_FORM_ACTION_URL || !FORM_ENTRY?.name) return { ok: false, skipped: true };
 
   const fd = new FormData();
+
+  // Basic info
   fd.append(FORM_ENTRY.name, payload.name || "");
   fd.append(FORM_ENTRY.school, payload.school || "");
-  fd.append(FORM_ENTRY.score, String(payload.totalScore));
-  fd.append(FORM_ENTRY.breakdown, JSON.stringify(payload.breakdown));
+
+  // Scores
+  fd.append(FORM_ENTRY.total, String(payload.totalScore ?? ""));
+
+  // Section breakdown: your app uses keys listening / reading
+  const bd = payload.breakdown || {};
+  fd.append(FORM_ENTRY.listening, String(bd.listening?.score ?? ""));
+  fd.append(FORM_ENTRY.grammar, String(bd.reading?.score ?? ""));
 
   try {
+    // no-cors: response is opaque, but submission usually succeeds.
     await fetch(GOOGLE_FORM_ACTION_URL, { method: "POST", mode: "no-cors", body: fd });
     return { ok: true };
   } catch (e) {
@@ -410,7 +418,6 @@ async function submitToGoogleForm(payload) {
       node = renderPracticeListening(q, saved, (val) => {
         answers[q.id] = val;
         saveJSON(LS.answers, answers);
-        // ✅ 做出选择就算完成试听
         localStorage.setItem(LS.practiceDone, "1");
         if (nextBtn) nextBtn.disabled = false;
       });
@@ -434,7 +441,7 @@ async function submitToGoogleForm(payload) {
 
     quizBox.appendChild(node);
 
-    // ✅ 切题重置音频（当前题的隐藏 audio 也会被归零）
+    // Reset audio on each render
     const a = quizBox.querySelector("audio");
     if (a) {
       try {
@@ -444,7 +451,7 @@ async function submitToGoogleForm(payload) {
       } catch (e) {}
     }
 
-    // ✅ 试听题必须完成后才能 Next
+    // Practice gate
     if (q && q.type === "practice_listening") {
       const done = localStorage.getItem(LS.practiceDone) === "1";
       if (nextBtn) nextBtn.disabled = !done;
