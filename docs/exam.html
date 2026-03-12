@@ -16,7 +16,6 @@
 
       --red:#e11d48;
       --red2:#ff2d55;
-      --focus:rgba(225,29,72,.28);
     }
     *{box-sizing:border-box}
     body{
@@ -54,7 +53,7 @@
     .btn{
       padding:11px 14px;border-radius:16px;border:1px solid rgba(17,24,39,.14);
       background:#fff;cursor:pointer;font-size:14px;
-      transition:transform .06s ease, background .15s ease, border-color .15s ease;
+      transition:transform .06s ease, border-color .15s ease;
       user-select:none;
     }
     .btn:active{transform:translateY(1px)}
@@ -88,20 +87,33 @@
     .progressBar{height:10px;border-radius:999px;background:rgba(17,24,39,.08);overflow:hidden}
     .progressFill{height:100%;width:0%;background:linear-gradient(90deg,var(--red2),var(--red));}
 
-    .navRow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}
-
     .submitCard{
       background:linear-gradient(180deg, rgba(225,29,72,.06), rgba(225,29,72,.03));
       border:1px solid rgba(225,29,72,.18);
     }
 
-    /* ===== Question Card UI ===== */
+    /* ===== Main exam card uses flex so nav stays bottom ===== */
+    .examCard{
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* ===== Question area stable height (NO hard height) ===== */
+    #quizBox{
+      margin-top:12px;
+      min-height: 520px;   /* 统一“视觉大小”，但不硬锁死导致溢出 */
+    }
+
     .qCard{
       padding:14px;
       border:1px solid rgba(17,24,39,.10);
       border-radius:18px;
       background:#fff;
+      min-height: 520px;   /* 关键：图片题/文字题都至少这么高 */
+      display:flex;
+      flex-direction:column;
     }
+
     .panel{ margin-top:8px; }
     .panelTitle{
       font-weight:950;
@@ -121,12 +133,6 @@
       color:#111827;
       margin-top:6px;
     }
-    .stemSub{
-      margin-top:6px;
-      font-size:13px;
-      color:rgba(17,24,39,.55);
-      line-height:1.55;
-    }
 
     .audioBar{
       margin-top:10px;
@@ -135,18 +141,18 @@
       gap:10px;
       flex-wrap:wrap;
     }
-    .audioBar audio{ display:none; } /* 喇叭按钮统一播放 */
+    .audioBar audio{display:none;}
 
+    /* ===== Options ===== */
     .optGrid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:12px;
       margin-top:10px;
       align-items: stretch;
+      flex: 1 1 auto;          /* 占满剩余空间，让卡片整体稳定 */
     }
-    @media (max-width:640px){
-      .optGrid{ grid-template-columns:1fr; }
-    }
+    @media (max-width:640px){ .optGrid{grid-template-columns:1fr;} }
 
     .optCard{
       text-align:left;
@@ -158,7 +164,8 @@
       display:flex;
       gap:10px;
       align-items:flex-start;
-      min-height:200px; /* 基础高度（会被下面“统一页面高度”覆盖成撑满） */
+      min-height: 120px;       /* 文字题也不会太矮 */
+      overflow:hidden;         /* 关键：防止内部图片/内容溢出 */
     }
     .optCard:hover{ border-color:rgba(225,29,72,.35); }
     .optCard.selected{
@@ -166,87 +173,56 @@
       background:rgba(225,29,72,.07);
       box-shadow:0 0 0 4px rgba(225,29,72,.12);
     }
+
     .optLetter{
-      width:30px;height:30px;
-      border-radius:10px;
+      width:30px;height:30px;border-radius:10px;
       display:flex;align-items:center;justify-content:center;
-      font-weight:950;
-      color:#111827;
+      font-weight:950;color:#111827;
       border:1px solid rgba(17,24,39,.12);
       background:#fafafa;
       flex:0 0 auto;
     }
-    .optBody{ flex:1; min-width:0; }
+    .optBody{ flex:1; min-width:0; display:flex; flex-direction:column; }
+
     .optText{
       font-weight:900;
-      line-height:1.45;
+      line-height:1.35;
       color:#111827;
-      min-height:42px;
       font-size:15px;
     }
+
+    /* 图片永远被限制在卡片里，不再溢出 */
     .optImg{
-      margin-top:8px;
+      margin-top:10px;
       width:100%;
-      height:160px;
-      object-fit:contain;
+      max-height: 150px;       /* 关键：不再把卡片撑爆 */
+      object-fit: contain;
       border-radius:12px;
       border:1px solid rgba(17,24,39,.10);
       background:rgba(17,24,39,.03);
       display:block;
     }
 
-    .helpFold{
-      margin-top:14px;
-      border-top:1px dashed rgba(17,24,39,.18);
-      padding-top:12px;
-    }
-    .helpFold summary{
-      cursor:pointer;
-      font-weight:950;
-      color:rgba(17,24,39,.70);
-      list-style:none;
-    }
-    .helpFold summary::-webkit-details-marker{display:none}
-    .helpInner{ margin-top:10px; }
-
-    /* =========================================================
-       ✅ 关键：让所有题目页面“完全一样大”
-       - 固定 qCard 高度
-       - 固定 optGrid 高度
-       - optCard 撑满网格单元
-       ========================================================= */
-    #quizBox .qCard{
-      height: 520px;                 /* 你要更大就 560，更紧凑就 480 */
-      display:flex;
-      flex-direction:column;
-    }
-    #quizBox .optGrid{
-      height: 340px;                 /* 选项区域统一高度 */
-      align-content: stretch;
-    }
-    #quizBox .optCard{
-      height: 100%;
-      min-height: 0;                 /* 避免不同题型的 min-height 干扰 */
-    }
-    /* 把按钮区稳稳放在下面 */
-    .navRow{ margin-top:auto; }
-
-    /* =========================================================
-       ✅ 文字题字体更大（用 :has 自动识别“没有图片”）
-       但不再把卡片变矮（保证页面同高）
-       ========================================================= */
-    #quizBox .optCard:not(:has(.optImg)) .optText{
-      font-size: 18px;
-      font-weight: 950;
-      line-height: 1.35;
-      min-height: 0;
-    }
-    #quizBox .optCard:not(:has(.optImg)) .optBody{
-      display:flex;
-      align-items:center;
-    }
+    /* 文字题自动变大（用 :has 判断“没有图片”） */
     #quizBox .optCard:not(:has(.optImg)){
       align-items:center;
+    }
+    #quizBox .optCard:not(:has(.optImg)) .optBody{
+      justify-content:center;
+    }
+    #quizBox .optCard:not(:has(.optImg)) .optText{
+      font-size:18px;
+      font-weight:950;
+    }
+
+    /* Nav stays bottom */
+    .navRow{
+      margin-top:auto;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      padding-top:12px;
     }
   </style>
 </head>
@@ -267,7 +243,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card examCard">
       <div class="tabs">
         <button class="tab" data-section="listening">听力 Listening</button>
         <button class="tab" data-section="reading">语法题 Grammar</button>
@@ -276,7 +252,7 @@
       <div class="progressBar"><div id="progress" class="progressFill"></div></div>
       <div id="progressText" class="muted" style="margin-top:8px;">0 / 0</div>
 
-      <div id="quizBox" style="margin-top:12px;"></div>
+      <div id="quizBox"></div>
 
       <div class="navRow">
         <button id="prevBtn" class="btn btnGhost">上一题 / Previous</button>
