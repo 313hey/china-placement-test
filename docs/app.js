@@ -4,9 +4,8 @@
 // - supports: mcq / listening_mcq / listening_tf / short_text / info / practice_listening
 // - supports choices: "text" OR { text: "...", img: "img/xxx.png" }
 // - Listening UI: Question -> Speaker Play -> Options(2x2) -> Next
-// - Instructions/Example: collapsible details using q.helpHtml (collapsed by default)
 // - Audio: reset (pause + currentTime=0 + load) whenever a new question is rendered
-// - Practice listening (L00): must choose to unlock Next; show correct answer feedback
+// - Practice listening (L00): NOT scored, can skip, shows correct/incorrect if answered
 // ==============================
 
 const GOOGLE_FORM_ACTION_URL =
@@ -27,7 +26,7 @@ const LS = {
   answers: "quiz_answers",
   state: "quiz_state",
   result: "quiz_result",
-  practiceDone: "quiz_practice_done"
+  practiceDone: "quiz_practice_done" // 仍可记录，但不再作为 Next 门禁
 };
 
 function loadJSON(key, fallback) {
@@ -103,7 +102,6 @@ function renderOptionsGrid({ q, savedValue, onPick }) {
 }
 
 // ✅ 统一喇叭播放按钮（用于所有听力题）
-// 返回 { barEl, audioEl }
 function makeSpeakerBar(q) {
   const bar = document.createElement("div");
   bar.className = "audioBar";
@@ -129,21 +127,19 @@ function makeSpeakerBar(q) {
       audio.pause();
       audio.currentTime = 0;
       await audio.play();
-    } catch (e) {
-      // silent
-    }
+    } catch (e) {}
   });
 
   return { barEl: bar, audioEl: audio };
 }
 
-// ✅ 听力/选择题：题干 -> 喇叭按钮 -> 选项
+// ✅ 听力/语法题：题干 -> 喇叭按钮 -> 选项
 function renderMCQ(q, savedValue, onChange) {
   const wrap = document.createElement("div");
   wrap.className = "qCard";
 
   const stemMain = (q.prompt || "").trim();
-  const stemSub  = (q.subtext || "").trim(); // 可选：拼音/英文
+  const stemSub  = (q.subtext || "").trim();
 
   wrap.innerHTML = `
     <div class="panel">
@@ -165,12 +161,10 @@ function renderMCQ(q, savedValue, onChange) {
     </details>
   `;
 
-  // speaker bar
   const audioMount = wrap.querySelector("#audioMount");
   const { barEl } = makeSpeakerBar(q);
   audioMount.appendChild(barEl);
 
-  // options
   const gridMount = wrap.querySelector("#gridMount");
   gridMount.appendChild(renderOptionsGrid({
     q,
@@ -181,7 +175,7 @@ function renderMCQ(q, savedValue, onChange) {
   return wrap;
 }
 
-// ✅ 试听题：喇叭播放→必须选择→立即显示正确答案→做完才能 Next
+// ✅ 试听题（不计分）：可跳过；如果作答则显示对错
 function renderPracticeListening(q, savedValue, onChange) {
   const wrap = document.createElement("div");
   wrap.className = "qCard";
@@ -193,7 +187,9 @@ function renderPracticeListening(q, savedValue, onChange) {
     <div class="panel">
       <div class="panelTitle">${escapeHtml(q.title || "试听题 / Practice (Not scored)")}</div>
       <div class="stemMain">${escapeHtml(stemMain)}</div>
-      <div class="stemSub">点击喇叭听录音，再选择 / Click the speaker to listen, then choose</div>
+      <div class="stemSub">
+        试听题（不计分），可直接点“下一题”跳过。/ Practice (not scored). You may tap “Next” to skip.
+      </div>
     </div>
 
     <div id="audioMount"></div>
@@ -204,14 +200,8 @@ function renderPracticeListening(q, savedValue, onChange) {
     </div>
 
     <div id="feedback" class="muted" style="margin-top:12px"></div>
-
-    <details class="helpFold" ${q.helpHtml ? "" : "style='display:none'"} >
-      <summary>说明与示例 / Instructions & Example</summary>
-      <div class="helpInner">${q.helpHtml || ""}</div>
-    </details>
   `;
 
-  // speaker bar
   const audioMount = wrap.querySelector("#audioMount");
   const { barEl } = makeSpeakerBar(q);
   audioMount.appendChild(barEl);
@@ -301,7 +291,7 @@ function calcScore(questions, answersMap) {
     if (q.answer === null || typeof q.answer === "undefined") return;
 
     let correct = false;
-    if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf") {
+    if (q.type === "mcq" || q.type === "listening_mcq" || q.type === "listening_tf" || q.type === "practice_listening") {
       correct = Number(ans) === Number(q.answer);
     }
 
@@ -315,25 +305,20 @@ function calcScore(questions, answersMap) {
 }
 
 async function submitToGoogleForm(payload) {
-  // If not configured, skip silently.
   if (!GOOGLE_FORM_ACTION_URL || !FORM_ENTRY?.name) return { ok: false, skipped: true };
 
   const fd = new FormData();
 
-  // Basic info
   fd.append(FORM_ENTRY.name, payload.name || "");
   fd.append(FORM_ENTRY.school, payload.school || "");
 
-  // Scores
   fd.append(FORM_ENTRY.total, String(payload.totalScore ?? ""));
 
-  // Section breakdown: your app uses keys listening / reading
   const bd = payload.breakdown || {};
   fd.append(FORM_ENTRY.listening, String(bd.listening?.score ?? ""));
   fd.append(FORM_ENTRY.grammar, String(bd.reading?.score ?? ""));
 
   try {
-    // no-cors: response is opaque, but submission usually succeeds.
     await fetch(GOOGLE_FORM_ACTION_URL, { method: "POST", mode: "no-cors", body: fd });
     return { ok: true };
   } catch (e) {
@@ -418,8 +403,8 @@ async function submitToGoogleForm(payload) {
       node = renderPracticeListening(q, saved, (val) => {
         answers[q.id] = val;
         saveJSON(LS.answers, answers);
+        // 仍可记录，但不再作为门禁
         localStorage.setItem(LS.practiceDone, "1");
-        if (nextBtn) nextBtn.disabled = false;
       });
     } else if (q.type === "info") {
       node = renderInfo(q);
@@ -441,7 +426,7 @@ async function submitToGoogleForm(payload) {
 
     quizBox.appendChild(node);
 
-    // Reset audio on each render
+    // 切题重置音频（隐藏 audio 也会被归零）
     const a = quizBox.querySelector("audio");
     if (a) {
       try {
@@ -451,13 +436,8 @@ async function submitToGoogleForm(payload) {
       } catch (e) {}
     }
 
-    // Practice gate
-    if (q && q.type === "practice_listening") {
-      const done = localStorage.getItem(LS.practiceDone) === "1";
-      if (nextBtn) nextBtn.disabled = !done;
-    } else {
-      if (nextBtn) nextBtn.disabled = false;
-    }
+    // ✅ 试听题允许跳过：Next 永远可点
+    if (nextBtn) nextBtn.disabled = false;
 
     const pct = Math.round(((state.pageIndex + 1) / totalPages) * 100);
     if (progress) progress.style.width = `${pct}%`;
@@ -467,7 +447,6 @@ async function submitToGoogleForm(payload) {
   }
 
   function goPrev() {
-    const qs = currentQuestions();
     if (state.pageIndex > 0) {
       state.pageIndex -= 1;
     } else if (state.sectionIndex > 0) {
